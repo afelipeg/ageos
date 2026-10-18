@@ -8,6 +8,7 @@ import { appUser, attentionItem, job, membership, workflowRun } from "@/server/d
 import { withTenant } from "@/server/db/tenant"
 import { getCapability } from "@/server/capabilities/registry"
 import { listApprovals } from "@/server/domain/approvals"
+import { getBusinessDate } from "@/server/domain/presenter"
 
 import { isUuid, iso } from "./shared"
 
@@ -16,11 +17,10 @@ import { isUuid, iso } from "./shared"
 // to its evidence (the CTA, the approval or the run), never to an empty chat.
 
 /**
- * Assign / snooze / resolve commands for attention items belong to the
- * attention domain service (Core-1). Until it exposes them, the inbox shows
- * the actions disabled with that reason instead of faking a result.
+ * Assign / snooze / resolve are server commands of the attention service
+ * (server/domain/attention.ts), called through server/actions/ui/inbox.ts.
  */
-export const INBOX_COMMANDS_AVAILABLE = false
+export const INBOX_COMMANDS_AVAILABLE = true
 
 export const INBOX_VIEWS = ["for-me", "approvals", "blocked", "all"] as const
 export type InboxView = (typeof INBOX_VIEWS)[number]
@@ -144,7 +144,10 @@ export async function getInbox(ctx: AgencyContext, params: { view: InboxView; jo
     }),
   ]
 
-  const open = (i: InboxItem) => i.source !== "attention" || i.state !== "resolved"
+  // A snoozed item stays out of the working views until its business date.
+  const today = await getBusinessDate()
+  const open = (i: InboxItem) =>
+    i.source !== "attention" || (i.state !== "resolved" && !(i.state === "snoozed" && i.snoozedUntil !== null && i.snoozedUntil.slice(0, 10) > today))
   const inView = (i: InboxItem, v: InboxView) =>
     v === "all" ? true : v === "for-me" ? i.forMe && open(i) : v === "approvals" ? i.source === "approval" : i.blocked && open(i)
   const counts = Object.fromEntries(INBOX_VIEWS.map((v) => [v, all.filter((i) => inView(i, v)).length])) as Record<InboxView, number>

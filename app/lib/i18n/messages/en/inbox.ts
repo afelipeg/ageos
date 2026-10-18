@@ -18,8 +18,6 @@ export const inbox = {
   detailEmpty: "Select an item to see its evidence and actions.",
   openEvidence: { attention: "Open evidence", approval: "Review change", run: "Open run" },
   actions: {
-    pendingTitle: "Assign, snooze and resolve: service pending",
-    pendingBody: "These actions are server commands of the attention service, which is still being completed. They stay disabled until it confirms each change; nothing is changed from this screen meanwhile.",
     assign: "Assign to",
     choose: "Choose a member",
     save: "Save",
@@ -27,6 +25,8 @@ export const inbox = {
     snoozeCta: "Snooze",
     snoozeHelp: "A date is required. Snoozing hides the item until then; it does not clear the blocking condition.",
     resolve: "Mark resolved",
+    resolveNote: "Resolution note",
+    done: "Saved",
     resolveHelp: "Accepted only when the service confirms the condition no longer holds.",
   },
 }

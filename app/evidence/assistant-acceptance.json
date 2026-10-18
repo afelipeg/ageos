@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-18T15:48:42.300Z",
+  "generatedAt": "2026-10-18T16:02:29.261Z",
   "driver": "scripted · catalog erp-42@2.0.0",
   "test": "tests/integration/assistant-acceptance.test.ts",
   "cases": [

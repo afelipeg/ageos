@@ -1,12 +1,13 @@
 import "server-only"
 
 import { cache } from "react"
-import { cookies } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { notFound, redirect } from "next/navigation"
 
 import { env } from "@/server/env"
 
 import { resolveAgencyContext, type AgencyContext } from "./context"
+import { REQUESTED_PATH_HEADER, safeAppPath } from "./requested-path"
 import { isPlatformSession, loadSession, SESSION_COOKIE, type SessionInfo } from "./session"
 
 // Request-scoped helpers for Server Components, Server Actions and Route
@@ -27,11 +28,13 @@ export async function requireSession(nextPath?: string): Promise<SessionInfo> {
 
 /**
  * Resolves the actor for /a/:agencySlug. A missing session redirects to
- * sign-in; a slug the user has no membership in renders 404 so the existence
- * of other agencies is never revealed.
+ * sign-in with the full requested path + query as `next` (set by proxy.ts,
+ * validated as an in-app /a/ path); a slug the user has no membership in
+ * renders 404 so the existence of other agencies is never revealed.
  */
 export const requireAgency = cache(async (agencySlug: string): Promise<AgencyContext> => {
-  const session = await requireSession(`/a/${agencySlug}`)
+  const requested = safeAppPath((await headers()).get(REQUESTED_PATH_HEADER))
+  const session = await requireSession(requested ?? `/a/${agencySlug}`)
   const ctx = await resolveAgencyContext(session, agencySlug)
   if (!ctx) notFound()
   return ctx

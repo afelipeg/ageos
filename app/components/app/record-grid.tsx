@@ -27,9 +27,12 @@ export type GridColumn = {
   id: string
   /** i18n key or literal header */
   header: string
-  kind: "text" | "mono" | "link" | "money" | "bps" | "state" | "date" | "timestamp" | "number" | "tags"
-  /** For link: row key holding the href. */
+  kind: "text" | "mono" | "link" | "file" | "money" | "bps" | "state" | "date" | "timestamp" | "number" | "tags"
+  /** For link: row key holding the href. Without an href the cell is plain text. */
   hrefKey?: string
+  /** For file: row keys holding the type ("pdf") and the size in bytes. Both optional in the row. */
+  typeKey?: string
+  sizeKey?: string
   /** For money: row key holding the currency. */
   currencyKey?: string
   /** For state: i18n prefix for the label, e.g. "records.state" → records.state.<value>. */
@@ -48,6 +51,18 @@ function cellValue(row: GridRow, key: string) {
 /** Currency shown for a money cell; the sort uses the same value. */
 function currencyOf(row: GridRow, c: GridColumn) {
   return String(cellValue(row, c.currencyKey ?? "currency") ?? "USD")
+}
+
+/** "2 MB" / "340 KB" from a byte count. */
+function fileSize(bytes: number, locale: string) {
+  const units = ["B", "KB", "MB", "GB"]
+  let n = bytes
+  let i = 0
+  while (n >= 1024 && i < units.length - 1) {
+    n /= 1024
+    i++
+  }
+  return `${new Intl.NumberFormat(locale === "es" ? "es-MX" : "en-US", { maximumFractionDigits: i === 0 ? 0 : 1 }).format(n)} ${units[i]}`
 }
 
 export function RecordGrid({
@@ -109,13 +124,35 @@ export function RecordGrid({
           const sub = c.subKey ? (cellValue(r, c.subKey) as string | null) : null
           let main: React.ReactNode
           switch (c.kind) {
-            case "link":
+            case "link": {
+              const href = cellValue(r, c.hrefKey ?? "href")
+              main =
+                typeof href === "string" && href ? (
+                  <Link href={href} className="font-medium text-foreground underline-offset-3 hover:underline">
+                    {String(v ?? "—")}
+                  </Link>
+                ) : (
+                  <span className="font-medium text-foreground">{String(v ?? "—")}</span>
+                )
+              break
+            }
+            case "file": {
+              const type = cellValue(r, c.typeKey ?? "format")
+              const size = cellValue(r, c.sizeKey ?? "sizeBytes")
+              const meta = [
+                typeof type === "string" && type ? type.toUpperCase() : null,
+                typeof size === "number" && Number.isFinite(size) ? fileSize(size, locale) : null,
+              ]
+                .filter(Boolean)
+                .join(" · ")
               main = (
-                <Link href={String(cellValue(r, c.hrefKey ?? "href"))} className="font-medium text-foreground underline-offset-3 hover:underline">
-                  {String(v ?? "—")}
-                </Link>
+                <div className="flex min-w-0 flex-col">
+                  <span className="truncate font-medium text-foreground">{String(v ?? "—")}</span>
+                  {meta && <span className="truncate text-xs text-muted-foreground">{meta}</span>}
+                </div>
               )
               break
+            }
             case "money":
               main = <span className="ageos-figure tabular-nums">{money(v as string | null, currencyOf(r, c))}</span>
               break

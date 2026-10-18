@@ -1,11 +1,15 @@
 {
-  "generatedAt": "2026-10-18T15:16:56.828Z",
-  "startedAt": "2026-10-18T15:16:56.824Z",
-  "overall": "passed",
+  "generatedAt": "2026-10-18T16:10:53.656Z",
+  "startedAt": "2026-10-18T16:04:28.738Z",
+  "overall": "failed",
   "baseURL": "http://localhost:3100",
   "database": null,
-  "command": "pnpm exec playwright test",
-  "totals": {},
+  "command": "E2E_EVIDENCE=1 pnpm exec playwright test --grep-invert @mutating (shared dev server :3100, read-only)",
+  "totals": {
+    "skipped": 16,
+    "passed": 45,
+    "failed": 14
+  },
   "journeys": {
     "J01": {
       "name": "Build and activate an agency",
@@ -107,7 +111,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: revision_conflict / outdated_revision"
         ]
@@ -124,7 +128,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: connection_revoked / connection_revoked"
         ]
@@ -141,7 +145,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / self_role_change"
         ]
@@ -158,7 +162,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / conflicting_legal_identity"
         ]
@@ -175,7 +179,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / billing_identity_missing"
         ]
@@ -192,7 +196,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / job_close_gate"
         ]
@@ -209,7 +213,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / po_expired"
         ]
@@ -226,7 +230,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / budget_available"
         ]
@@ -243,7 +247,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / approved_budget_required"
         ]
@@ -260,7 +264,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / billing_requirements_missing"
         ]
@@ -277,7 +281,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / duplicate_timesheet"
         ]
@@ -294,7 +298,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / quote_incomplete"
         ]
@@ -311,7 +315,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / rights_expired"
         ]
@@ -328,7 +332,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / no_comparable_sources"
         ]
@@ -345,7 +349,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / exceeds_managed_media_authority"
         ]
@@ -362,7 +366,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / unsupported_duration"
         ]
@@ -379,7 +383,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / faces_unavailable"
         ]
@@ -396,7 +400,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / account_unmapped"
         ]
@@ -413,7 +417,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / below_commitment"
         ]
@@ -430,7 +434,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / rate_card_expired"
         ]
@@ -447,7 +451,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / plan_revision_not_approved"
         ]
@@ -464,7 +468,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: connection_revoked / connection_revoked"
         ]
@@ -481,7 +485,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / stale_metrics_source"
         ]
@@ -498,7 +502,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / missing_spots_require_makegood"
         ]
@@ -515,7 +519,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / face_overlap"
         ]
@@ -532,7 +536,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / no_order_for_supplier"
         ]
@@ -549,7 +553,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / duplicate_supplier_invoice"
         ]
@@ -566,7 +570,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: insufficient_funds / insufficient_funds"
         ]
@@ -583,7 +587,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / duplicate_bank_transaction"
         ]
@@ -600,7 +604,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / receipt_missing"
         ]
@@ -617,7 +621,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / media_recovery_not_recognized"
         ]
@@ -634,7 +638,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / allocation_exceeds_outstanding"
         ]
@@ -651,7 +655,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / outside_eligibility"
         ]
@@ -668,7 +672,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / no_fiscal_profile"
         ]
@@ -685,7 +689,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / journal_unbalanced"
         ]
@@ -702,7 +706,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / fx_rate_missing"
         ]
@@ -719,7 +723,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / residual_exceeds_cost"
         ]
@@ -736,7 +740,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / unmatched_supplier_invoice"
         ]
@@ -753,7 +757,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: not_found"
         ]
@@ -770,7 +774,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / baseline_locked"
         ]
@@ -787,7 +791,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / opening_cash_not_confirmed"
         ]
@@ -804,7 +808,7 @@
       "replay": "passed",
       "harness": {
         "test": "tests/integration/skills-acceptance.test.ts",
-        "ranAt": "2026-10-18T15:10:05.911Z",
+        "ranAt": "2026-10-18T16:02:21.038Z",
         "notes": [
           "negative blocked: blocked_by_rule / period_not_configured"
         ]
@@ -814,8 +818,1588 @@
       }
     }
   },
-  "routes": [],
-  "visual": [],
-  "assistant": [],
-  "tests": []
+  "routes": [
+    {
+      "title": "route contract › the contract declares exactly 31 route patterns and every one has a resolver or platform check",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › landing /",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › sign-in /sign-in",
+      "project": "desktop",
+      "status": "failed",
+      "error": "Error: /sign-in: /sign-in has no visible h1"
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › control-agencies /control/agencies",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › control-agency /control/agencies/:agencyId",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › setup-wizard /control/setup/:draftId/:step",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › activation /control/activations/:runId",
+      "project": "desktop",
+      "status": "skipped",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › workspace-home /a/:agencySlug",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › assistant /a/:agencySlug/assistant",
+      "project": "desktop",
+      "status": "failed",
+      "error": "Error: /a/rayo-de-sol/assistant: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › inbox /a/:agencySlug/inbox",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › jobs /a/:agencySlug/jobs",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › job-dossier /a/:agencySlug/jobs/:jobId",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › client-detail /a/:agencySlug/clients/:clientId",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › module-desk /a/:agencySlug/modules/:moduleKey",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › workflow-workbench /a/:agencySlug/modules/:moduleKey/workflows/:skillId",
+      "project": "desktop",
+      "status": "failed",
+      "error": "Error: /a/rayo-de-sol/modules/media-buying/workflows/agency-campaign-optimization: /a/rayo-de-sol/modules/media-buying/workflows/agency-campaign-optimization shows a Next.js error overlay"
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › business-record /a/:agencySlug/records/:recordType/:recordId",
+      "project": "desktop",
+      "status": "skipped",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › capabilities /a/:agencySlug/capabilities",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › approvals /a/:agencySlug/approvals",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › approval-detail /a/:agencySlug/approvals/:approvalId",
+      "project": "desktop",
+      "status": "skipped",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › runs /a/:agencySlug/runs",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › run-detail /a/:agencySlug/runs/:runId",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › connections /a/:agencySlug/connections",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › connection-detail /a/:agencySlug/connections/:connectionId",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › library /a/:agencySlug/library",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › file-detail /a/:agencySlug/library/:fileId",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › settings /a/:agencySlug/settings/:section",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › explore /a/:agencySlug/explore",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › report /a/:agencySlug/reports/:reportId",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "crawl all route patterns as the agency presenter › presenter-controls /demo/presenter",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "platform routes are isolated from the agency session › agency owner session gets 404 on /ops",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "platform routes are isolated from the agency session › agency owner session gets 404 on /ops/incidents/00000000-0000-4000-8000-000000000000",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "platform routes are isolated from the agency session › agency owner session gets 404 on /ops/changes/00000000-0000-4000-8000-000000000000",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "platform routes are isolated from the agency session › platform operator crawl of /ops and the incident detail (persona session, dedicated E2E DB)",
+      "project": "desktop",
+      "status": "skipped",
+      "error": null
+    },
+    {
+      "title": "cross-tenant deep links resolve to not-found, never to another agency's data › Norte job under Rayo",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "cross-tenant deep links resolve to not-found, never to another agency's data › Norte client under Rayo",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "cross-tenant deep links resolve to not-found, never to another agency's data › Norte file under Rayo",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "title": "cross-tenant deep links resolve to not-found, never to another agency's data › Norte agency slug",
+      "project": "desktop",
+      "status": "passed",
+      "error": null
+    }
+  ],
+  "visual": [
+    {
+      "project": "desktop",
+      "screen": "overview",
+      "url": "/a/rayo-de-sol",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/overview.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "jobs",
+      "url": "/a/rayo-de-sol/jobs",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/jobs.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "job-dossier-aurora",
+      "url": "/a/rayo-de-sol/jobs/c88349e2-4b0d-5c10-9b79-3fb363bcef22",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/job-dossier-aurora.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "desk-clients-contracts",
+      "url": "/a/rayo-de-sol/modules/clients-contracts",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/desk-clients-contracts.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "desk-media-buying",
+      "url": "/a/rayo-de-sol/modules/media-buying",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/desk-media-buying.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "workbench-fee-contracts",
+      "url": "/a/rayo-de-sol/modules/clients-contracts/workflows/agency-fee-contracts",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/workbench-fee-contracts.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "workbench-payment-run",
+      "url": "/a/rayo-de-sol/modules/suppliers-payments/workflows/agency-payment-run",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/workbench-payment-run.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "capabilities",
+      "url": "/a/rayo-de-sol/capabilities",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/capabilities.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "approvals",
+      "url": "/a/rayo-de-sol/approvals",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/approvals.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "runs",
+      "url": "/a/rayo-de-sol/runs",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/runs.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "library",
+      "url": "/a/rayo-de-sol/library",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/library.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "connections",
+      "url": "/a/rayo-de-sol/connections",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/connections.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "explore",
+      "url": "/a/rayo-de-sol/explore",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop/explore.png"
+    },
+    {
+      "project": "desktop",
+      "screen": "assistant",
+      "url": "/a/rayo-de-sol/assistant",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "failed",
+      "detail": "/a/rayo-de-sol/assistant has no visible h1",
+      "screenshot": "evidence/screenshots/desktop/assistant.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "overview",
+      "url": "/a/rayo-de-sol",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/overview.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "jobs",
+      "url": "/a/rayo-de-sol/jobs",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/jobs.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "job-dossier-aurora",
+      "url": "/a/rayo-de-sol/jobs/c88349e2-4b0d-5c10-9b79-3fb363bcef22",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/job-dossier-aurora.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "desk-clients-contracts",
+      "url": "/a/rayo-de-sol/modules/clients-contracts",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/desk-clients-contracts.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "desk-media-buying",
+      "url": "/a/rayo-de-sol/modules/media-buying",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/desk-media-buying.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "workbench-fee-contracts",
+      "url": "/a/rayo-de-sol/modules/clients-contracts/workflows/agency-fee-contracts",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/workbench-fee-contracts.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "workbench-payment-run",
+      "url": "/a/rayo-de-sol/modules/suppliers-payments/workflows/agency-payment-run",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/workbench-payment-run.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "capabilities",
+      "url": "/a/rayo-de-sol/capabilities",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/capabilities.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "approvals",
+      "url": "/a/rayo-de-sol/approvals",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/approvals.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "runs",
+      "url": "/a/rayo-de-sol/runs",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/runs.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "library",
+      "url": "/a/rayo-de-sol/library",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/library.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "connections",
+      "url": "/a/rayo-de-sol/connections",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/connections.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "explore",
+      "url": "/a/rayo-de-sol/explore",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/desktop-light/explore.png"
+    },
+    {
+      "project": "desktop-light",
+      "screen": "assistant",
+      "url": "/a/rayo-de-sol/assistant",
+      "locale": "en",
+      "theme": "light",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "failed",
+      "detail": "/a/rayo-de-sol/assistant has no visible h1",
+      "screenshot": "evidence/screenshots/desktop-light/assistant.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "overview",
+      "url": "/a/rayo-de-sol",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/overview.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "jobs",
+      "url": "/a/rayo-de-sol/jobs",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/jobs.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "job-dossier-aurora",
+      "url": "/a/rayo-de-sol/jobs/c88349e2-4b0d-5c10-9b79-3fb363bcef22",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/job-dossier-aurora.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "desk-clients-contracts",
+      "url": "/a/rayo-de-sol/modules/clients-contracts",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/desk-clients-contracts.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "desk-media-buying",
+      "url": "/a/rayo-de-sol/modules/media-buying",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/desk-media-buying.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "workbench-fee-contracts",
+      "url": "/a/rayo-de-sol/modules/clients-contracts/workflows/agency-fee-contracts",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/workbench-fee-contracts.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "workbench-payment-run",
+      "url": "/a/rayo-de-sol/modules/suppliers-payments/workflows/agency-payment-run",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/workbench-payment-run.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "capabilities",
+      "url": "/a/rayo-de-sol/capabilities",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/capabilities.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "approvals",
+      "url": "/a/rayo-de-sol/approvals",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/approvals.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "runs",
+      "url": "/a/rayo-de-sol/runs",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/runs.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "library",
+      "url": "/a/rayo-de-sol/library",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/library.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "connections",
+      "url": "/a/rayo-de-sol/connections",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/connections.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "explore",
+      "url": "/a/rayo-de-sol/explore",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "passed",
+      "detail": "",
+      "screenshot": "evidence/screenshots/mobile/explore.png"
+    },
+    {
+      "project": "mobile",
+      "screen": "assistant",
+      "url": "/a/rayo-de-sol/assistant",
+      "locale": "en",
+      "theme": "dark",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "failed",
+      "detail": "/a/rayo-de-sol/assistant has no visible h1",
+      "screenshot": "evidence/screenshots/mobile/assistant.png"
+    }
+  ],
+  "assistant": [
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › navigation Sheet opens with all 17 destinations, closes on Escape and returns focus [desktop]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › choosing a destination in the Sheet navigates and closes it [desktop]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › assistant panel opens as an accessible Sheet and Escape closes it [desktop]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol [desktop]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/jobs [desktop]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/jobs/c88349e2-4b0d-5c10-9b79-3fb363bcef22 [desktop]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/modules/clients-contracts [desktop]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/capabilities [desktop]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/assistant [desktop]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport [desktop]",
+      "status": "failed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/visual.spec.ts",
+      "detail": "Error: assistant: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "id": "A18",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport [desktop-es]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/visual.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport [desktop-light]",
+      "status": "failed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/visual.spec.ts",
+      "detail": "Error: assistant: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › navigation Sheet opens with all 17 destinations, closes on Escape and returns focus [mobile]",
+      "status": "failed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts",
+      "detail": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › choosing a destination in the Sheet navigates and closes it [mobile]",
+      "status": "passed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › assistant panel opens as an accessible Sheet and Escape closes it [mobile]",
+      "status": "passed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol [mobile]",
+      "status": "passed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/jobs [mobile]",
+      "status": "passed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/jobs/c88349e2-4b0d-5c10-9b79-3fb363bcef22 [mobile]",
+      "status": "passed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/modules/clients-contracts [mobile]",
+      "status": "passed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/capabilities [mobile]",
+      "status": "passed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport [mobile]",
+      "status": "failed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/visual.spec.ts",
+      "detail": "Error: assistant: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "id": "A18",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport [mobile-light-es]",
+      "status": "skipped",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/visual.spec.ts"
+    },
+    {
+      "id": "A18",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/assistant [mobile]",
+      "status": "failed",
+      "layer": "browser (playwright)",
+      "test": "tests/e2e/mobile-and-screens.spec.ts",
+      "detail": "Error: /a/rayo-de-sol/assistant has no visible h1"
+    }
+  ],
+  "tests": [
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › navigation Sheet opens with all 17 destinations, closes on Escape and returns focus",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 1,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › choosing a destination in the Sheet navigates and closes it",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "route contract › the contract declares exactly 31 route patterns and every one has a resolver or platform check",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 4,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › assistant panel opens as an accessible Sheet and Escape closes it",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/jobs",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/jobs/c88349e2-4b0d-5c10-9b79-3fb363bcef22",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/modules/clients-contracts",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/capabilities",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/assistant",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 0,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › landing /",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 934,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "evidence screenshots @screens › shell overview, module desk, job dossier, capabilities",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 8275,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › sign-in /sign-in",
+      "project": "desktop",
+      "status": "failed",
+      "durationMs": 16331,
+      "error": "Error: /sign-in: /sign-in has no visible h1"
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › control-agencies /control/agencies",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1899,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › control-agency /control/agencies/:agencyId",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1610,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › setup-wizard /control/setup/:draftId/:step",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1692,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "evidence screenshots @screens › assistant full page and right panel",
+      "project": "desktop",
+      "status": "failed",
+      "durationMs": 16052,
+      "error": "Error: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › activation /control/activations/:runId",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 1923,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "evidence screenshots @screens › mobile navigation sheet",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 428,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › workspace-home /a/:agencySlug",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 2762,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › assistant /a/:agencySlug/assistant",
+      "project": "desktop",
+      "status": "failed",
+      "durationMs": 17208,
+      "error": "Error: /a/rayo-de-sol/assistant: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › inbox /a/:agencySlug/inbox",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 20209,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › jobs /a/:agencySlug/jobs",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 2666,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › job-dossier /a/:agencySlug/jobs/:jobId",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 3255,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › client-detail /a/:agencySlug/clients/:clientId",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1846,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › module-desk /a/:agencySlug/modules/:moduleKey",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 8696,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › workflow-workbench /a/:agencySlug/modules/:moduleKey/workflows/:skillId",
+      "project": "desktop",
+      "status": "failed",
+      "durationMs": 45190,
+      "error": "Error: /a/rayo-de-sol/modules/media-buying/workflows/agency-campaign-optimization: /a/rayo-de-sol/modules/media-buying/workflows/agency-campaign-optimization shows a Next.js error overlay"
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › business-record /a/:agencySlug/records/:recordType/:recordId",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 1807,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › capabilities /a/:agencySlug/capabilities",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 20120,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › approvals /a/:agencySlug/approvals",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 5406,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › approval-detail /a/:agencySlug/approvals/:approvalId",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 3401,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › runs /a/:agencySlug/runs",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 4590,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › run-detail /a/:agencySlug/runs/:runId",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 4428,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › connections /a/:agencySlug/connections",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 2494,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/shell.spec.ts",
+      "title": "sidebar › has exactly the 17 contract destinations and each opens its screen as the active entry",
+      "project": "desktop",
+      "status": "failed",
+      "durationMs": 152342,
+      "error": "Error: /a/rayo-de-sol/assistant: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed"
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › connection-detail /a/:agencySlug/connections/:connectionId",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 6083,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › library /a/:agencySlug/library",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 2728,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › file-detail /a/:agencySlug/library/:fileId",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 11970,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/shell.spec.ts",
+      "title": "sidebar › back/forward keep the route and the active entry",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 17841,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/shell.spec.ts",
+      "title": "theme › server HTML applies the dark default before any body markup can paint (deterministic FOUC guard)",
+      "project": "desktop",
+      "status": "failed",
+      "durationMs": 563,
+      "error": "Error: /sign-in: <html> has no server \"dark\" class and the theme script runs after <body> starts (index 3491 vs body 2779) — a frame can paint light first"
+    },
+    {
+      "file": "tests/e2e/shell.spec.ts",
+      "title": "theme › first visit with no stored theme is dark before paint (no light flash), even when the OS prefers light",
+      "project": "desktop",
+      "status": "failed",
+      "durationMs": 2989,
+      "error": "Error: /sign-in: html.dark missing at first frame"
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › settings /a/:agencySlug/settings/:section",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 10295,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › explore /a/:agencySlug/explore",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 4561,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › report /a/:agencySlug/reports/:reportId",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 8811,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/shell.spec.ts",
+      "title": "theme › toggle to light persists across reload and navigation, and back to dark",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 13737,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/shell.spec.ts",
+      "title": "theme › public sign-in page also offers the toggle",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1510,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "crawl all route patterns as the agency presenter › presenter-controls /demo/presenter",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1914,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "platform routes are isolated from the agency session › agency owner session gets 404 on /ops",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 787,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "platform routes are isolated from the agency session › agency owner session gets 404 on /ops/incidents/00000000-0000-4000-8000-000000000000",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1488,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/shell.spec.ts",
+      "title": "keyboard › Tab reaches the sidebar links with a visible focus indicator and Enter navigates",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 3113,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "platform routes are isolated from the agency session › agency owner session gets 404 on /ops/changes/00000000-0000-4000-8000-000000000000",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1097,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "platform routes are isolated from the agency session › platform operator crawl of /ops and the incident detail (persona session, dedicated E2E DB)",
+      "project": "desktop",
+      "status": "skipped",
+      "durationMs": 2,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "cross-tenant deep links resolve to not-found, never to another agency's data › Norte job under Rayo",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 5287,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "cross-tenant deep links resolve to not-found, never to another agency's data › Norte client under Rayo",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 3188,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "cross-tenant deep links resolve to not-found, never to another agency's data › Norte file under Rayo",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 2174,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/routes.spec.ts",
+      "title": "cross-tenant deep links resolve to not-found, never to another agency's data › Norte agency slug",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 1420,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/shell.spec.ts",
+      "title": "keyboard › header search opens as a dialog with focus inside and Escape closes it, returning focus",
+      "project": "desktop",
+      "status": "failed",
+      "durationMs": 20972,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed"
+    },
+    {
+      "file": "tests/e2e/shell.spec.ts",
+      "title": "sign-in gate › an anonymous visitor is redirected to sign-in and a wrong code is rejected",
+      "project": "desktop",
+      "status": "passed",
+      "durationMs": 4255,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/visual.spec.ts",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport",
+      "project": "desktop",
+      "status": "failed",
+      "durationMs": 48340,
+      "error": "Error: assistant: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "file": "tests/e2e/visual.spec.ts",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport",
+      "project": "desktop-es",
+      "status": "skipped",
+      "durationMs": 652,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/visual.spec.ts",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport",
+      "project": "desktop-light",
+      "status": "failed",
+      "durationMs": 45148,
+      "error": "Error: assistant: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › navigation Sheet opens with all 17 destinations, closes on Escape and returns focus",
+      "project": "mobile",
+      "status": "failed",
+      "durationMs": 18630,
+      "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeHidden\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed"
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › choosing a destination in the Sheet navigates and closes it",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 5698,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › assistant panel opens as an accessible Sheet and Escape closes it",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 3653,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 2474,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/jobs",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 2369,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/jobs/c88349e2-4b0d-5c10-9b79-3fb363bcef22",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 2346,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/modules/clients-contracts",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 2134,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/capabilities",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 1959,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/visual.spec.ts",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport",
+      "project": "mobile",
+      "status": "failed",
+      "durationMs": 42438,
+      "error": "Error: assistant: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "file": "tests/e2e/visual.spec.ts",
+      "title": "visual matrix @visual › key screens render in the project's language, theme and viewport",
+      "project": "mobile-light-es",
+      "status": "skipped",
+      "durationMs": 472,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "mobile shell @mobile › no page-level horizontal overflow at 390px: /a/rayo-de-sol/assistant",
+      "project": "mobile",
+      "status": "failed",
+      "durationMs": 16459,
+      "error": "Error: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "evidence screenshots @screens › shell overview, module desk, job dossier, capabilities",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 6908,
+      "error": null
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "evidence screenshots @screens › assistant full page and right panel",
+      "project": "mobile",
+      "status": "failed",
+      "durationMs": 16184,
+      "error": "Error: /a/rayo-de-sol/assistant has no visible h1"
+    },
+    {
+      "file": "tests/e2e/mobile-and-screens.spec.ts",
+      "title": "evidence screenshots @screens › mobile navigation sheet",
+      "project": "mobile",
+      "status": "passed",
+      "durationMs": 3034,
+      "error": null
+    }
+  ]
 }

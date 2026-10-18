@@ -5,9 +5,9 @@ import { ArrowUpRightIcon } from "lucide-react"
 
 import { PageHeader } from "@/components/app/page-header"
 import { RecordGrid } from "@/components/app/record-grid"
-import { PendingHandlerState } from "@/components/app/states"
 import { BrandForm } from "@/components/settings/brand-form"
 import { DomainSimulator } from "@/components/settings/domain-simulator"
+import { PlanChange } from "@/components/settings/plan-change"
 import { Badge } from "@/components/reui/badge"
 import { Frame, FrameDescription, FrameHeader, FramePanel, FrameTitle } from "@/components/reui/frame"
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,7 @@ import { PERMISSIONS } from "@/lib/policy"
 import { eventLabel } from "@/components/records/code-label"
 import { MESSAGES } from "@/lib/i18n/messages"
 import { requireAgency } from "@/server/auth/request"
+import { CONFIG_PROPOSER_ROLES, DEMO_PLAN_KEYS, DEMO_PLANS, demoPlanOf, listConfigurationRevisions } from "@/server/domain/configuration"
 import { getI18n } from "@/server/i18n"
 import { getSettingsView, resolveSection, SETTINGS_SECTIONS } from "@/server/queries/settings"
 import { aggregateHref } from "@/server/queries/shared"
@@ -34,6 +35,20 @@ export default async function SettingsPage({ params }: { params: Promise<{ agenc
   const v = await getSettingsView(ctx, section)
   const base = `/a/${ctx.tenant.slug}`
   const isOwner = ctx.role === "owner"
+  // Brand and plan changes: configuration revisions awaiting an owner's decision.
+  const revisions = section === "brand" || section === "plan" ? await listConfigurationRevisions(ctx) : []
+  const canPropose = CONFIG_PROPOSER_ROLES.includes(ctx.role)
+  const pendingOf = (kind: "brand" | "plan") =>
+    revisions
+      .filter((r) => r.kind === kind && r.state === "awaiting_approval")
+      .map((r) => {
+        const c = (r.change ?? {}) as { brand?: { after?: { accent?: string; logoText?: string } }; plan?: { before?: string | null; after?: string } }
+        const summary =
+          kind === "brand"
+            ? `${c.brand?.after?.accent ?? "—"} · ${c.brand?.after?.logoText ?? "—"}`
+            : `${c.plan?.before ? t(`settings.plan.plans.${c.plan.before}`) : "—"} → ${c.plan?.after ? t(`settings.plan.plans.${c.plan.after}`) : "—"}`
+        return { id: r.id, number: r.number, payloadDigest: r.payloadDigest, reason: r.reason, summary, canDecide: r.canDecide }
+      })
 
   return (
     <>
@@ -74,7 +89,15 @@ export default async function SettingsPage({ params }: { params: Promise<{ agenc
               <FrameDescription>{t("settings.brand.brandHelp")}</FrameDescription>
             </FrameHeader>
             <FramePanel>
-              <BrandForm agencySlug={ctx.tenant.slug} appName={v.agency.appName} accent={v.brand.accent} logoText={v.brand.logoText} publishAvailable={false} />
+              <BrandForm
+                agencySlug={ctx.tenant.slug}
+                appName={v.agency.appName}
+                accent={v.brand.accent}
+                logoText={v.brand.logoText}
+                publishAvailable={canPropose && Boolean(v.published)}
+                publishedNumber={v.published?.number ?? null}
+                pending={pendingOf("brand")}
+              />
             </FramePanel>
           </Frame>
         </div>
@@ -246,7 +269,22 @@ export default async function SettingsPage({ params }: { params: Promise<{ agenc
               />
             </FramePanel>
           </Frame>
-          <PendingHandlerState title={t("settings.plan.changeTitle")} description={t("settings.plan.changeBody")} />
+          <Frame spacing="default">
+            <FrameHeader>
+              <FrameTitle>{t("settings.plan.changeTitle")}</FrameTitle>
+              <FrameDescription>{t("settings.plan.changeBody")}</FrameDescription>
+            </FrameHeader>
+            <FramePanel>
+              <PlanChange
+                agencySlug={ctx.tenant.slug}
+                plans={DEMO_PLAN_KEYS.map((k) => ({ key: k, ...DEMO_PLANS[k] }))}
+                currentPlan={demoPlanOf(v.limits)}
+                publishedNumber={v.published?.number ?? null}
+                canPropose={canPropose && Boolean(v.published)}
+                pending={pendingOf("plan")}
+              />
+            </FramePanel>
+          </Frame>
         </div>
       )}
 

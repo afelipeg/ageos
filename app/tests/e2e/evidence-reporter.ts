@@ -51,7 +51,8 @@ export default class EvidenceReporter implements Reporter {
       status: status(result),
       durationMs: result.duration,
       error: result.error?.message?.split("\n")[0]?.slice(0, 300) ?? null,
-      annotations: [...test.annotations, ...result.annotations],
+      // test.info().annotations surface on both the test and the result: dedupe.
+      annotations: [...new Map([...test.annotations, ...result.annotations].map((a) => [`${a.type}:${a.description ?? ""}`, a])).values()],
     })
   }
 

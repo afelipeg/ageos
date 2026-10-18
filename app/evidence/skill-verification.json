@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-10-18T15:40:09.177Z",
+  "generatedAt": "2026-10-18T16:02:21.038Z",
   "handlerVersion": "chassis-2",
   "harness": "tests/integration/skills-acceptance.test.ts",
-  "database": "ageos_test_coord",
+  "database": "ageos_test_qa",
   "summary": {
     "skills": 42,
     "positivePassed": 42,
@@ -17,7 +17,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:44.720Z",
+      "ranAt": "2026-10-18T16:02:02.813Z",
       "notes": [
         "negative blocked: revision_conflict / outdated_revision"
       ]
@@ -28,7 +28,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:45.460Z",
+      "ranAt": "2026-10-18T16:02:03.603Z",
       "notes": [
         "negative blocked: connection_revoked / connection_revoked"
       ]
@@ -39,7 +39,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:46.146Z",
+      "ranAt": "2026-10-18T16:02:04.050Z",
       "notes": [
         "negative blocked: blocked_by_rule / self_role_change"
       ]
@@ -50,7 +50,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:46.562Z",
+      "ranAt": "2026-10-18T16:02:04.450Z",
       "notes": [
         "negative blocked: blocked_by_rule / conflicting_legal_identity"
       ]
@@ -61,7 +61,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:47.038Z",
+      "ranAt": "2026-10-18T16:02:04.835Z",
       "notes": [
         "negative blocked: blocked_by_rule / billing_identity_missing"
       ]
@@ -72,7 +72,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:47.747Z",
+      "ranAt": "2026-10-18T16:02:05.240Z",
       "notes": [
         "negative blocked: blocked_by_rule / job_close_gate"
       ]
@@ -83,7 +83,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:48.267Z",
+      "ranAt": "2026-10-18T16:02:05.654Z",
       "notes": [
         "negative blocked: blocked_by_rule / po_expired"
       ]
@@ -94,7 +94,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:48.749Z",
+      "ranAt": "2026-10-18T16:02:06.058Z",
       "notes": [
         "negative blocked: blocked_by_rule / budget_available"
       ]
@@ -105,7 +105,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:49.391Z",
+      "ranAt": "2026-10-18T16:02:06.630Z",
       "notes": [
         "negative blocked: blocked_by_rule / approved_budget_required"
       ]
@@ -116,7 +116,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:49.781Z",
+      "ranAt": "2026-10-18T16:02:07.087Z",
       "notes": [
         "negative blocked: blocked_by_rule / billing_requirements_missing"
       ]
@@ -127,7 +127,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:50.154Z",
+      "ranAt": "2026-10-18T16:02:07.496Z",
       "notes": [
         "negative blocked: blocked_by_rule / duplicate_timesheet"
       ]
@@ -138,7 +138,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:50.886Z",
+      "ranAt": "2026-10-18T16:02:07.958Z",
       "notes": [
         "negative blocked: blocked_by_rule / quote_incomplete"
       ]
@@ -149,7 +149,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:51.436Z",
+      "ranAt": "2026-10-18T16:02:08.393Z",
       "notes": [
         "negative blocked: blocked_by_rule / rights_expired"
       ]
@@ -160,7 +160,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "query",
-      "ranAt": "2026-10-18T15:39:51.867Z",
+      "ranAt": "2026-10-18T16:02:08.762Z",
       "notes": [
         "negative blocked: blocked_by_rule / no_comparable_sources"
       ]
@@ -171,7 +171,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:52.354Z",
+      "ranAt": "2026-10-18T16:02:09.103Z",
       "notes": [
         "negative blocked: blocked_by_rule / exceeds_managed_media_authority"
       ]
@@ -182,7 +182,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:52.952Z",
+      "ranAt": "2026-10-18T16:02:09.512Z",
       "notes": [
         "negative blocked: blocked_by_rule / unsupported_duration"
       ]
@@ -193,7 +193,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:53.434Z",
+      "ranAt": "2026-10-18T16:02:09.860Z",
       "notes": [
         "negative blocked: blocked_by_rule / faces_unavailable"
       ]
@@ -204,7 +204,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "query",
-      "ranAt": "2026-10-18T15:39:53.911Z",
+      "ranAt": "2026-10-18T16:02:10.228Z",
       "notes": [
         "negative blocked: blocked_by_rule / account_unmapped"
       ]
@@ -215,7 +215,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:54.286Z",
+      "ranAt": "2026-10-18T16:02:10.599Z",
       "notes": [
         "negative blocked: blocked_by_rule / below_commitment"
       ]
@@ -226,7 +226,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:54.809Z",
+      "ranAt": "2026-10-18T16:02:10.976Z",
       "notes": [
         "negative blocked: blocked_by_rule / rate_card_expired"
       ]
@@ -237,7 +237,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:55.353Z",
+      "ranAt": "2026-10-18T16:02:11.359Z",
       "notes": [
         "negative blocked: blocked_by_rule / plan_revision_not_approved"
       ]
@@ -248,7 +248,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:55.769Z",
+      "ranAt": "2026-10-18T16:02:11.766Z",
       "notes": [
         "negative blocked: connection_revoked / connection_revoked"
       ]
@@ -259,7 +259,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:56.163Z",
+      "ranAt": "2026-10-18T16:02:12.247Z",
       "notes": [
         "negative blocked: blocked_by_rule / stale_metrics_source"
       ]
@@ -270,7 +270,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:56.655Z",
+      "ranAt": "2026-10-18T16:02:12.619Z",
       "notes": [
         "negative blocked: blocked_by_rule / missing_spots_require_makegood"
       ]
@@ -281,7 +281,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:57.124Z",
+      "ranAt": "2026-10-18T16:02:12.966Z",
       "notes": [
         "negative blocked: blocked_by_rule / face_overlap"
       ]
@@ -292,7 +292,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:57.595Z",
+      "ranAt": "2026-10-18T16:02:13.336Z",
       "notes": [
         "negative blocked: blocked_by_rule / no_order_for_supplier"
       ]
@@ -303,7 +303,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:58.020Z",
+      "ranAt": "2026-10-18T16:02:13.718Z",
       "notes": [
         "negative blocked: blocked_by_rule / duplicate_supplier_invoice"
       ]
@@ -314,7 +314,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:58.435Z",
+      "ranAt": "2026-10-18T16:02:14.111Z",
       "notes": [
         "negative blocked: insufficient_funds / insufficient_funds"
       ]
@@ -325,7 +325,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:59.157Z",
+      "ranAt": "2026-10-18T16:02:14.887Z",
       "notes": [
         "negative blocked: blocked_by_rule / duplicate_bank_transaction"
       ]
@@ -336,7 +336,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:39:59.902Z",
+      "ranAt": "2026-10-18T16:02:15.621Z",
       "notes": [
         "negative blocked: blocked_by_rule / receipt_missing"
       ]
@@ -347,7 +347,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:40:00.265Z",
+      "ranAt": "2026-10-18T16:02:15.956Z",
       "notes": [
         "negative blocked: blocked_by_rule / media_recovery_not_recognized"
       ]
@@ -358,7 +358,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:40:00.865Z",
+      "ranAt": "2026-10-18T16:02:16.562Z",
       "notes": [
         "negative blocked: blocked_by_rule / allocation_exceeds_outstanding"
       ]
@@ -369,7 +369,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:40:01.587Z",
+      "ranAt": "2026-10-18T16:02:17.258Z",
       "notes": [
         "negative blocked: blocked_by_rule / outside_eligibility"
       ]
@@ -380,7 +380,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "query",
-      "ranAt": "2026-10-18T15:40:01.946Z",
+      "ranAt": "2026-10-18T16:02:17.576Z",
       "notes": [
         "negative blocked: blocked_by_rule / no_fiscal_profile"
       ]
@@ -391,7 +391,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:40:02.324Z",
+      "ranAt": "2026-10-18T16:02:17.907Z",
       "notes": [
         "negative blocked: blocked_by_rule / journal_unbalanced"
       ]
@@ -402,7 +402,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:40:04.152Z",
+      "ranAt": "2026-10-18T16:02:18.319Z",
       "notes": [
         "negative blocked: blocked_by_rule / fx_rate_missing"
       ]
@@ -413,7 +413,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:40:05.164Z",
+      "ranAt": "2026-10-18T16:02:18.712Z",
       "notes": [
         "negative blocked: blocked_by_rule / residual_exceeds_cost"
       ]
@@ -424,7 +424,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:40:05.957Z",
+      "ranAt": "2026-10-18T16:02:19.089Z",
       "notes": [
         "negative blocked: blocked_by_rule / unmatched_supplier_invoice"
       ]
@@ -435,7 +435,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "query",
-      "ranAt": "2026-10-18T15:40:06.828Z",
+      "ranAt": "2026-10-18T16:02:19.614Z",
       "notes": [
         "negative blocked: not_found"
       ]
@@ -446,7 +446,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:40:07.406Z",
+      "ranAt": "2026-10-18T16:02:19.939Z",
       "notes": [
         "negative blocked: blocked_by_rule / baseline_locked"
       ]
@@ -457,7 +457,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "query",
-      "ranAt": "2026-10-18T15:40:08.188Z",
+      "ranAt": "2026-10-18T16:02:20.259Z",
       "notes": [
         "negative blocked: blocked_by_rule / opening_cash_not_confirmed"
       ]
@@ -468,7 +468,7 @@
       "replay": "passed",
       "handlerVersion": "chassis-2",
       "handlerKind": "command",
-      "ranAt": "2026-10-18T15:40:08.763Z",
+      "ranAt": "2026-10-18T16:02:20.611Z",
       "notes": [
         "negative blocked: blocked_by_rule / period_not_configured"
       ]

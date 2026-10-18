@@ -149,6 +149,8 @@ export const states: typeof en.states = {
   unsavedChanges: "Tiene cambios sin guardar",
   pendingHandler: "Handler pendiente",
   pendingHandlerBody: "Esta capacidad está registrada con su contrato, ruta y entradas. Su handler de servidor corresponde a la instrucción 2, por lo que esta acción no se ejecuta ni informa resultados.",
+  // Labels for StateBadge tones whose states have no records.state entry.
+  badge: { enabled: "Activa", needs_setup: "Requiere configuración", disabled: "Desactivada" },
 }
 
 export const errors: typeof en.errors = {

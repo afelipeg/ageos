@@ -147,6 +147,8 @@ export const states = {
   unsavedChanges: "You have unsaved changes",
   pendingHandler: "Handler pending",
   pendingHandlerBody: "This capability is registered with its contract, route and inputs. Its server handler is scheduled for instruction 2, so this action does not run and reports no result.",
+  // Labels for StateBadge tones whose states have no records.state entry.
+  badge: { enabled: "Enabled", needs_setup: "Needs setup", disabled: "Disabled" },
 }
 
 export const errors = {

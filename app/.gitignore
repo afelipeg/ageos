@@ -57,3 +57,6 @@ AGENTS.md
 
 # playwright artifacts saved before outputDir moved under .data/
 /tests/e2e/.output/
+
+# Playwright storageState (signed session cookies) — never commit
+/tests/e2e/.auth/

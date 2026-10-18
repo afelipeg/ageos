@@ -20,8 +20,6 @@ export const inbox: typeof en = {
   detailEmpty: "Seleccione un pendiente para ver su evidencia y acciones.",
   openEvidence: { attention: "Abrir evidencia", approval: "Revisar cambio", run: "Abrir ejecución" },
   actions: {
-    pendingTitle: "Asignar, posponer y resolver: servicio pendiente",
-    pendingBody: "Estas acciones son comandos del servicio de pendientes, que aún se está completando. Permanecen desactivadas hasta que confirme cada cambio; mientras tanto no se modifica nada desde esta pantalla.",
     assign: "Asignar a",
     choose: "Elija un miembro",
     save: "Guardar",
@@ -29,6 +27,8 @@ export const inbox: typeof en = {
     snoozeCta: "Posponer",
     snoozeHelp: "La fecha es obligatoria. Posponer oculta el pendiente hasta entonces; no elimina la condición que bloquea.",
     resolve: "Marcar como resuelto",
+    resolveNote: "Nota de resolución",
+    done: "Guardado",
     resolveHelp: "Solo se acepta cuando el servicio confirma que la condición ya no se cumple.",
   },
 }

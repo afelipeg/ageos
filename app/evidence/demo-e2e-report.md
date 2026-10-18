@@ -1,8 +1,8 @@
 # AgeOS demo E2E report
 
-Generated 2026-10-18T15:16:56.828Z · server http://localhost:3100 · database not a dedicated e2e database (mutating specs skipped) · Playwright overall: **passed**
+Generated 2026-10-18T16:10:53.656Z · server http://localhost:3100 · database not a dedicated e2e database (mutating specs skipped) · Playwright overall: **failed**
 
-Totals: 
+Totals: skipped 16 · passed 45 · failed 14
 
 ## Journeys J01–J10
 
@@ -70,8 +70,8 @@ Harness (Vitest, isolated DB): positive passed 42/42 · negative passed 42/42 ·
 
 ## Routes, visual matrix, assistant
 
-Routes: 0 passed / 0 (skipped 0).
-Visual (screen × project): 0/0 passed; screenshots under evidence/screenshots/<project>/.
-Assistant browser cases: 0/0 passed (see assistant-acceptance.md).
+Routes: 30 passed / 37 (skipped 4).
+Visual (screen × project): 39/42 passed; screenshots under evidence/screenshots/<project>/.
+Assistant browser cases: 7/23 passed (see assistant-acceptance.md).
 
 Limitations: results describe this run only. `not_run`/`skipped` are not passes. Mutating specs run only against a dedicated e2e database.

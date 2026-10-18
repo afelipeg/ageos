@@ -14,7 +14,7 @@ import { PROVIDERS } from "@/server/adapters/simulated-provider"
 import type { AgencyContext } from "@/server/auth/context"
 import type { SessionInfo } from "@/server/auth/session"
 import { db, type Tx } from "@/server/db/client"
-import { activationRun, agency, businessEvent, configurationRevision, membership } from "@/server/db/schema"
+import { activationRun, agency, businessEvent, configurationRevision, fileObject, membership } from "@/server/db/schema"
 import { withTenant } from "@/server/db/tenant"
 import { isDemoMode } from "@/server/env"
 import { digestOf } from "@/server/kernel/approvals"
@@ -942,7 +942,7 @@ export const decideCapabilityChangeCommand = defineCommand({
       throw new DomainError("approver_not_eligible", "Your role cannot decide this change", { eligibleRoles: CONFIG_APPROVER_ROLES, role: ctx.role })
     }
     const a = await lockAgency(tx, ctx.tenant.id)
-    const recomputed = changeDigest(ctx.tenant.id, rev.basedOnRevisionId, rev.enabledCapabilities)
+    const recomputed = revisionChangeDigest(ctx.tenant.id, rev)
     const stale = recomputed !== rev.payloadDigest || input.reviewedDigest !== rev.payloadDigest || a.publishedConfigRevisionId !== rev.basedOnRevisionId
     if (stale) {
       await tx.update(configurationRevision).set({ state: "stale", updatedAt: new Date(), revision: sql`${configurationRevision.revision} + 1` }).where(eq(configurationRevision.id, rev.id))
@@ -1003,6 +1003,204 @@ export async function decideCapabilityChange(
   return executeCommand(ctx, decideCapabilityChangeCommand, { idempotencyKey, payload, origin: "ui" })
 }
 
+// ── Brand and demo plan changes on an active agency ──
+// Same pattern as capability changes: a new configuration revision awaiting
+// approval by an owner other than the proposer (an account manager proposes,
+// the owner approves — D18), bound to a digest of exactly what it publishes.
+// Publishing supersedes the previous revision; a change computed against an
+// older published revision becomes stale.
+
+/** Demo plans: sample quotas only (never prices or billing); all keep the nine modules. */
+export const DEMO_PLANS = {
+  demo_lite: { storageMb: 50, filesPerJob: 20, assistantRunsPerHour: 60 },
+  demo_standard: { storageMb: 100, filesPerJob: 50, assistantRunsPerHour: 120 },
+  demo_plus: { storageMb: 250, filesPerJob: 100, assistantRunsPerHour: 240 },
+} as const satisfies Record<string, { storageMb: number; filesPerJob: number; assistantRunsPerHour: number }>
+export type DemoPlanKey = keyof typeof DEMO_PLANS
+export const DEMO_PLAN_KEYS = Object.keys(DEMO_PLANS) as DemoPlanKey[]
+
+/** Plan of a limits object: its explicit key, or the catalog entry with the same quotas. */
+export function demoPlanOf(limits: unknown): DemoPlanKey | null {
+  const l = (limits ?? {}) as Record<string, unknown>
+  if (typeof l.plan === "string" && l.plan in DEMO_PLANS) return l.plan as DemoPlanKey
+  return DEMO_PLAN_KEYS.find((k) => Object.entries(DEMO_PLANS[k]).every(([q, v]) => l[q] === v)) ?? null
+}
+
+type ChangeDiff = { kind?: "brand" | "plan"; enabled: string[]; disabled: string[] }
+
+function brandDigest(tenantId: string, basedOnRevisionId: string, brandAccess: unknown) {
+  return digestOf({ kind: "brand_change", tenantId, basedOnRevisionId, brandAccess })
+}
+
+function planDigest(tenantId: string, basedOnRevisionId: string, limits: unknown) {
+  return digestOf({ kind: "plan_change", tenantId, basedOnRevisionId, limits })
+}
+
+/** Digest of what a pending change revision would publish, by kind. */
+function revisionChangeDigest(tenantId: string, rev: RevisionRow) {
+  const kind = (rev.diff as ChangeDiff | null)?.kind
+  if (kind === "brand") return brandDigest(tenantId, rev.basedOnRevisionId!, rev.brandAccess)
+  if (kind === "plan") return planDigest(tenantId, rev.basedOnRevisionId!, rev.limits)
+  return changeDigest(tenantId, rev.basedOnRevisionId!, rev.enabledCapabilities)
+}
+
+async function publishedForChange(tx: Tx, ctx: AgencyContext, expectedRevision: number | undefined) {
+  if (!CONFIG_PROPOSER_ROLES.includes(ctx.role)) {
+    throw new DomainError("forbidden", `Role ${ctx.role} cannot propose configuration changes`, { roles: CONFIG_PROPOSER_ROLES })
+  }
+  const a = await lockAgency(tx, ctx.tenant.id)
+  const [published] = await tx.select().from(configurationRevision).where(eq(configurationRevision.id, a.publishedConfigRevisionId ?? randomUUID())).limit(1)
+  if (!published) throw new DomainError("blocked_by_rule", "No published configuration", { rule: "no_published_configuration" })
+  assertRevision(published.number, expectedRevision, "published_configuration")
+  const [maxRow] = await tx
+    .select({ n: sql<number>`max(${configurationRevision.number})::int` })
+    .from(configurationRevision)
+    .where(eq(configurationRevision.tenantId, ctx.tenant.id))
+  return { published, nextNumber: (maxRow?.n ?? 0) + 1 }
+}
+
+async function insertChangeRevision(
+  tx: Tx,
+  ctx: AgencyContext,
+  published: RevisionRow,
+  number: number,
+  patch: { brandAccess?: object; limits?: object },
+  diff: ChangeDiff & Record<string, unknown>,
+  reason: string,
+  digest: string
+) {
+  const [rev] = await tx
+    .insert(configurationRevision)
+    .values({
+      tenantId: ctx.tenant.id,
+      number,
+      state: "awaiting_approval",
+      schemaVersion: published.schemaVersion,
+      agencyProfile: published.agencyProfile as object,
+      operations: published.operations as object,
+      connections: published.connections as object,
+      brandAccess: patch.brandAccess ?? (published.brandAccess as object),
+      enabledCapabilities: published.enabledCapabilities,
+      approvalPolicy: published.approvalPolicy as object,
+      limits: patch.limits ?? (published.limits as object),
+      lastCompletedStep: 5,
+      basedOnRevisionId: published.id,
+      diff,
+      changeReason: reason,
+      payloadDigest: digest,
+      createdBy: ctx.user.id,
+    })
+    .returning()
+  return rev!
+}
+
+export const ProposeBrandChangeInput = z
+  .object({
+    accent: z.string().regex(/^#[0-9a-fA-F]{6}$/, "accent_format").transform((v) => v.toLowerCase()),
+    logoText: z.string().trim().regex(/^[A-Z0-9]{1,3}$/, "logo_text_format"),
+    reason: z.string().trim().min(3).max(500),
+  })
+  .strict()
+
+export const proposeBrandChangeCommand = defineCommand({
+  type: "configuration.proposeBrandChange",
+  skillId: null,
+  permission: "workspace.view",
+  input: ProposeBrandChangeInput,
+  handler: async (tx, ctx, input, meta) => {
+    const ratio = Math.round(contrastRatio(input.accent, "#ffffff") * 100) / 100
+    if (ratio < 4.5) throw new DomainError("blocked_by_rule", "The accent does not reach 4.5:1 contrast with white", { rule: "contrast_below_4_5", ratio })
+    const { published, nextNumber } = await publishedForChange(tx, ctx, meta.expectedRevision)
+    const current = (published.brandAccess ?? {}) as { accent?: string; logoText?: string }
+    if (current.accent === input.accent && current.logoText === input.logoText) {
+      throw new DomainError("validation", "The brand equals the published brand", { issues: [{ path: "", code: "no_change" }] })
+    }
+    const brandAccess = { ...(published.brandAccess as object), accent: input.accent, logoText: input.logoText }
+    const diff = { kind: "brand" as const, enabled: [], disabled: [], brand: { before: { accent: current.accent ?? null, logoText: current.logoText ?? null }, after: { accent: input.accent, logoText: input.logoText } }, contrast: ratio }
+    const digest = brandDigest(ctx.tenant.id, published.id, brandAccess)
+    const rev = await insertChangeRevision(tx, ctx, published, nextNumber, { brandAccess }, diff, input.reason, digest)
+    return {
+      result: { revisionId: rev.id, number: rev.number, state: rev.state, payloadDigest: digest, diff, eligibleRoles: CONFIG_APPROVER_ROLES },
+      events: [
+        {
+          eventType: "configuration.change_proposed",
+          aggregateType: "configuration_revision",
+          aggregateId: rev.id,
+          aggregateRevision: rev.revision,
+          payload: { kind: "brand", number: rev.number, basedOn: published.number, diff, payloadDigest: digest, reason: input.reason },
+        },
+      ],
+    }
+  },
+})
+
+export const ProposePlanChangeInput = z
+  .object({
+    plan: z.enum(DEMO_PLAN_KEYS as [DemoPlanKey, ...DemoPlanKey[]]),
+    reason: z.string().trim().min(3).max(500),
+  })
+  .strict()
+
+export const proposePlanChangeCommand = defineCommand({
+  type: "configuration.proposePlanChange",
+  skillId: null,
+  permission: "workspace.view",
+  input: ProposePlanChangeInput,
+  handler: async (tx, ctx, input, meta) => {
+    const { published, nextNumber } = await publishedForChange(tx, ctx, meta.expectedRevision)
+    const from = demoPlanOf(published.limits)
+    if (from === input.plan) throw new DomainError("validation", "This is already the agency's demo plan", { issues: [{ path: "plan", code: "no_change" }] })
+    // Limits come only from the catalog; the demo label stays on the record.
+    const limits = { ...DEMO_PLANS[input.plan], plan: input.plan, demo: true }
+    // Impact on current usage: downgrading never deletes files, it blocks new
+    // uploads while the agency is over quota.
+    const [usage] = await tx
+      .select({ bytes: sql<string>`coalesce(sum(${fileObject.sizeBytes}), 0)::text` })
+      .from(fileObject)
+      .where(eq(fileObject.tenantId, ctx.tenant.id))
+    const [perJob] = await tx
+      .select({ n: sql<number>`coalesce(max(c), 0)::int` })
+      .from(sql`(select count(*) as c from ${fileObject} where ${fileObject.tenantId} = ${ctx.tenant.id} and ${fileObject.jobId} is not null group by ${fileObject.jobId}) t`)
+    const usedBytes = Number(usage?.bytes ?? 0)
+    const impact = {
+      usedMb: Math.round((usedBytes / 1048576) * 10) / 10,
+      maxFilesInAJob: perJob?.n ?? 0,
+      overStorage: usedBytes > limits.storageMb * 1048576,
+      overFilesPerJob: (perJob?.n ?? 0) > limits.filesPerJob,
+      filesDeleted: 0,
+      note: "Files are never deleted; new uploads are blocked while over quota.",
+    }
+    const diff = { kind: "plan" as const, enabled: [], disabled: [], plan: { before: from, after: input.plan }, limits: { before: published.limits, after: limits }, impact, billing: "none_demo_only" }
+    const digest = planDigest(ctx.tenant.id, published.id, limits)
+    const rev = await insertChangeRevision(tx, ctx, published, nextNumber, { limits }, diff, input.reason, digest)
+    return {
+      result: { revisionId: rev.id, number: rev.number, state: rev.state, payloadDigest: digest, diff, eligibleRoles: CONFIG_APPROVER_ROLES },
+      events: [
+        {
+          eventType: "configuration.change_proposed",
+          aggregateType: "configuration_revision",
+          aggregateId: rev.id,
+          aggregateRevision: rev.revision,
+          payload: { kind: "plan", number: rev.number, basedOn: published.number, diff, payloadDigest: digest, reason: input.reason },
+        },
+      ],
+    }
+  },
+})
+
+export async function proposeBrandChange(
+  ctx: AgencyContext,
+  input: { accent: string; logoText: string; reason: string; idempotencyKey: string; expectedRevision: number }
+) {
+  const { idempotencyKey, expectedRevision, ...payload } = input
+  return executeCommand(ctx, proposeBrandChangeCommand, { idempotencyKey, payload, origin: "ui", expectedRevision })
+}
+
+export async function proposePlanChange(ctx: AgencyContext, input: { plan: string; reason: string; idempotencyKey: string; expectedRevision: number }) {
+  const { idempotencyKey, expectedRevision, ...payload } = input
+  return executeCommand(ctx, proposePlanChangeCommand, { idempotencyKey, payload, origin: "ui", expectedRevision })
+}
+
 /** Configuration history of the agency (published, pending, superseded…) for Settings. */
 export async function listConfigurationRevisions(ctx: AgencyContext) {
   return withTenant(ctx.tenant.id, async (tx) => {
@@ -1014,6 +1212,9 @@ export async function listConfigurationRevisions(ctx: AgencyContext) {
       published: r.id === ctx.tenant.publishedConfigRevisionId,
       enabled: r.enabledCapabilities.length,
       diff: (r.diff ?? null) as { enabled: string[]; disabled: string[] } | null,
+      // capabilities | brand | plan (setup revisions have no base revision).
+      kind: ((r.diff as ChangeDiff | null)?.kind ?? (r.basedOnRevisionId ? "capabilities" : "setup")) as "capabilities" | "brand" | "plan" | "setup",
+      change: (r.diff ?? null) as Record<string, unknown> | null,
       reason: r.changeReason,
       payloadDigest: r.payloadDigest,
       createdBy: r.createdBy,
