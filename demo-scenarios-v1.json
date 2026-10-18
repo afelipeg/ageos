@@ -1,0 +1,1649 @@
+{
+  "schema_version": "1.0.0-scripted-demo",
+  "date": "2026-10-17",
+  "status": "specification_not_implemented",
+  "implemented": false,
+  "assistant_mode": "scripted",
+  "external_mode": "simulated",
+  "requires_model_credentials": false,
+  "source": "cobertura-42-skills.json + demo-fixtures.json",
+  "scope": {
+    "modules": 9,
+    "skills": 42,
+    "skill_cases": 42,
+    "required_positive_tests": 42,
+    "required_negative_tests": 42,
+    "product_journeys": 10
+  },
+  "determinism": {
+    "seed": "demo-fixtures.json",
+    "business_clock": "fixed fixture date; audit uses actual timestamp",
+    "response_templates": "hardcoded wording with authorized server result interpolation",
+    "unknown_input": "explicit demo limitation with supported choices",
+    "randomness": "no unseeded randomness",
+    "isolation": "demo_run_id + tenant + scenario; primary and demo-lab metrics separated",
+    "side_effects": "shared domain commands; fake external adapters return persistent sim_* receipts"
+  },
+  "journeys": [
+    {
+      "id": "J01",
+      "name": "Build and activate agency",
+      "module_keys": [
+        "setup"
+      ],
+      "steps": "Configurar servicios, equipo, política, conexiones demo, marca y dominio; revisión; activar; ruta real de agencia.",
+      "expected_result": "Cambiar configuración modifica navegación/capacidades; dominio simulado no hace DNS real.",
+      "implemented": false
+    },
+    {
+      "id": "J02",
+      "name": "Client to production",
+      "module_keys": [
+        "clients-contracts",
+        "work-production"
+      ],
+      "steps": "Brief → cliente/contrato/PO → abrir trabajo → presupuesto → tareas/horas → producción y evidencia.",
+      "expected_result": "Job conserva identidad/revisiones; horas producen cambio de costo y margen.",
+      "implemented": false
+    },
+    {
+      "id": "J03",
+      "name": "Media plan to campaign",
+      "module_keys": [
+        "media-planning",
+        "media-buying"
+      ],
+      "steps": "Audiencias/specs sintéticos → plan digital/TV/radio/OOH → revisión → órdenes → creativos → campaña demo → entrega → optimización y revisión de plan.",
+      "expected_result": "Total medios USD30,000; revisión aprobada/cuenta demo correcta; sin gasto externo.",
+      "implemented": false
+    },
+    {
+      "id": "J04",
+      "name": "Scope change protects margin",
+      "module_keys": [
+        "clients-contracts",
+        "work-production",
+        "profitability"
+      ],
+      "steps": "Checkpoint initial_plan →40h extra → propuesta +USD3,000 → autoridad cliente PO rev2 + aprobación interna → aplicar.",
+      "expected_result": "45.0% →35.0% →43.5%, fee20k→23k, costo11k→13k, medios30k separados.",
+      "implemented": false
+    },
+    {
+      "id": "J05",
+      "name": "Supplier reconciliation and payment",
+      "module_keys": [
+        "suppliers-payments",
+        "billing-collections"
+      ],
+      "steps": "Factura6,000 vs entrega5,500 bloqueada → corregir → emitir factura cliente53,000 → cobrar40,000 → liberar pagos aprobados → cobrar13,000.",
+      "expected_result": "No sobregiro: caja10k+53k−43k=20k. Orden/entrega/factura/pago no duplican costos.",
+      "implemented": false
+    },
+    {
+      "id": "J06",
+      "name": "Accounting close and reporting",
+      "module_keys": [
+        "accounting-close",
+        "profitability",
+        "billing-collections"
+      ],
+      "steps": "Reconocer y conciliar → provisiones/FX/activos en demo-lab cuando corresponde → checklist → cierre → P&L/aging/caja/reporte.",
+      "expected_result": "15 asientos principales equilibrados y saldo final exacto; jurisdicción y tipos fiscales son demo.",
+      "implemented": false
+    },
+    {
+      "id": "J07",
+      "name": "Assistant page and right panel",
+      "module_keys": [
+        "setup"
+      ],
+      "steps": "Sidebar chat → consulta margen → abrir expediente → mismo hilo en panel → preparar cambio → aprobación elegible → refrescar datos → recargar.",
+      "expected_result": "Mismo orquestador/hilo; sin doble ejecución; respuestas guionizadas con datos del estado vigente.",
+      "implemented": false
+    },
+    {
+      "id": "J08",
+      "name": "Files, connections and isolation",
+      "module_keys": [
+        "setup"
+      ],
+      "steps": "Cargar/abrir archivos sintéticos → vincular expediente → conexión revocada → bloqueo → cambiar agencia → acceso ajeno denegado → restaurar.",
+      "expected_result": "Ningún archivo/mensaje/registro cruza tenants; no OAuth real.",
+      "implemented": false
+    },
+    {
+      "id": "J09",
+      "name": "Operate platform",
+      "module_keys": [
+        "setup"
+      ],
+      "steps": "CSV demo con delimitador erróneo → incidente → propuesta → aprobación plataforma independiente → aplicar perfil allowlisted → reparse.",
+      "expected_result": "1 columna→6 columnas y1fila; sin importar órdenes ni gastar; no agrega skill43.",
+      "implemented": false
+    },
+    {
+      "id": "J10",
+      "name": "All capabilities and guarded failures",
+      "module_keys": [
+        "setup",
+        "clients-contracts",
+        "work-production",
+        "media-planning",
+        "media-buying",
+        "suppliers-payments",
+        "billing-collections",
+        "accounting-close",
+        "profitability"
+      ],
+      "steps": "Recorrer ERP-01 aERP-42 con caso positivo/negativo, reset de escenario y evidencia.",
+      "expected_result": "42/42 implementadas y verificadas; sin Coming soon, controles muertos ni éxito automático.",
+      "implemented": false
+    }
+  ],
+  "skills": [
+    {
+      "scenario_id": "ERP-01",
+      "skill_id": "agency-orchestrator",
+      "module_key": "setup",
+      "route": "/a/:agencySlug/modules/setup/workflows/agency-orchestrator",
+      "specialist_key": "coordinador",
+      "command_or_query": "recomputeJobReadiness",
+      "input_requirement": "Job, revisions, dependencies and period state",
+      "output_requirement": "Persisted checkpoint, next steps and blockers",
+      "repository_outputs": [
+        "job_state",
+        "dependency_graph",
+        "period_gate_status",
+        "task_assignments",
+        "blockers",
+        "approval_requests",
+        "checkpoints",
+        "next_stage"
+      ],
+      "calculator_dependencies": [
+        "payload_digest",
+        "job_number",
+        "approval_route"
+      ],
+      "positive": "A completed checkpoint survives refresh and action retry creates no duplicate",
+      "negative": "An outdated plan revision blocks its dependent purchase",
+      "test_id": "skill.orchestrator",
+      "assistant_entry": {
+        "en": "Run demo: agency-orchestrator",
+        "es": "Ejecuta demo: agency-orchestrator",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-02",
+      "skill_id": "agency-integrations",
+      "module_key": "setup",
+      "route": "/a/:agencySlug/modules/setup/workflows/agency-integrations",
+      "specialist_key": "coordinador",
+      "command_or_query": "configureDemoConnection",
+      "input_requirement": "Provider, fictitious account, supported capabilities and granted scopes",
+      "output_requirement": "Saved connection, capability matrix and affected workflows",
+      "repository_outputs": [
+        "capability_inventory",
+        "stage_wiring_plan",
+        "access_matrix",
+        "schema_review",
+        "connection_requests",
+        "file_mode_plan",
+        "gaps"
+      ],
+      "calculator_dependencies": [],
+      "positive": "Connected · Demo persists; dependent actions use the selected fictitious account",
+      "negative": "Revoked scope blocks only dependent actions and never falls through to another provider",
+      "test_id": "skill.integrations",
+      "assistant_entry": {
+        "en": "Run demo: agency-integrations",
+        "es": "Ejecuta demo: agency-integrations",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-03",
+      "skill_id": "agency-access-governance",
+      "module_key": "setup",
+      "route": "/a/:agencySlug/modules/setup/workflows/agency-access-governance",
+      "specialist_key": "coordinador",
+      "command_or_query": "proposeAccessChange",
+      "input_requirement": "Member, proposed role, effective scope, reason",
+      "output_requirement": "Diff, segregation-of-duties check and approval request",
+      "repository_outputs": [
+        "access_matrix",
+        "capability_register",
+        "sod_conflicts",
+        "access_change_requests",
+        "config_change_requests",
+        "offboarding_plan",
+        "audit_evidence_pack"
+      ],
+      "calculator_dependencies": [
+        "payload_digest",
+        "approval_route"
+      ],
+      "positive": "Another authorized person approves and permissions update server-side",
+      "negative": "Cross-tenant role change and self-approved finance escalation are rejected",
+      "test_id": "skill.access-governance",
+      "assistant_entry": {
+        "en": "Run demo: agency-access-governance",
+        "es": "Ejecuta demo: agency-access-governance",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-04",
+      "skill_id": "agency-master-data",
+      "module_key": "setup",
+      "route": "/a/:agencySlug/modules/setup/workflows/agency-master-data",
+      "specialist_key": "coordinador",
+      "command_or_query": "upsertMasterRecord",
+      "input_requirement": "Client/supplier code, normalized identity and external mapping",
+      "output_requirement": "Saved master, duplicate candidates and code map",
+      "repository_outputs": [
+        "master_change_set",
+        "validation_report",
+        "duplicate_candidates",
+        "ledger_link_map",
+        "external_code_map",
+        "deactivation_plan",
+        "provisional_approval_requests"
+      ],
+      "calculator_dependencies": [
+        "job_number",
+        "approval_route"
+      ],
+      "positive": "Repeated import of same provider/account/external ID resolves to one master",
+      "negative": "Conflicting legal identity cannot be silently merged",
+      "test_id": "skill.master-data",
+      "assistant_entry": {
+        "en": "Run demo: agency-master-data",
+        "es": "Ejecuta demo: agency-master-data",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-05",
+      "skill_id": "agency-onboarding",
+      "module_key": "clients-contracts",
+      "route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-onboarding",
+      "specialist_key": "clientes",
+      "command_or_query": "createClientIntake",
+      "input_requirement": "Company, billing profile, brand, brief and contacts",
+      "output_requirement": "Persistent client/brief with intake gaps",
+      "repository_outputs": [
+        "intake_pack",
+        "owner_client_draft",
+        "billing_client_links",
+        "product_drafts",
+        "attention_group_plan",
+        "provisional_approval_requests",
+        "brief_draft",
+        "intake_gaps"
+      ],
+      "calculator_dependencies": [
+        "job_number"
+      ],
+      "positive": "Aurora client and brief link to its job without a duplicate",
+      "negative": "Missing billing identity is a visible blocker, not fabricated data",
+      "test_id": "skill.onboarding",
+      "assistant_entry": {
+        "en": "Run demo: agency-onboarding",
+        "es": "Ejecuta demo: agency-onboarding",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-06",
+      "skill_id": "agency-job-lifecycle",
+      "module_key": "clients-contracts",
+      "route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-job-lifecycle",
+      "specialist_key": "clientes",
+      "command_or_query": "openOrCloseJob",
+      "input_requirement": "Client/product, typology, period, JobNumber parts or close request",
+      "output_requirement": "Unique JobNumber, status and close readiness",
+      "repository_outputs": [
+        "job_proposal",
+        "job_code_check",
+        "move_or_substitution_plan",
+        "close_readiness",
+        "inactive_job_list",
+        "job_audit_note"
+      ],
+      "calculator_dependencies": [
+        "job_number",
+        "approval_route"
+      ],
+      "positive": "AURSL7AF0001 is generated and RDS-2027-001 remains only display reference",
+      "negative": "Close fails while an order commitment or invoice issue remains",
+      "test_id": "skill.job-lifecycle",
+      "assistant_entry": {
+        "en": "Run demo: agency-job-lifecycle",
+        "es": "Ejecuta demo: agency-job-lifecycle",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-07",
+      "skill_id": "agency-contract-po",
+      "module_key": "clients-contracts",
+      "route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-contract-po",
+      "specialist_key": "clientes",
+      "command_or_query": "recordClientAuthority",
+      "input_requirement": "Agreement evidence, PO amount/currency/validity and billing route",
+      "output_requirement": "Versioned terms, authority balance and evidence link",
+      "repository_outputs": [
+        "commercial_terms",
+        "po_limits",
+        "po_link_decisions",
+        "po_transfer_proposal",
+        "reserve_setup",
+        "billing_route",
+        "scope_exceptions"
+      ],
+      "calculator_dependencies": [
+        "budget_check",
+        "installment_schedule",
+        "approval_route"
+      ],
+      "positive": "Initial PO authorizes USD50,000 and approved amendment raises to USD53,000",
+      "negative": "Expired/missing approval or mixed-currency PO cannot authorize a new commitment",
+      "test_id": "skill.contract-po",
+      "assistant_entry": {
+        "en": "Run demo: agency-contract-po",
+        "es": "Ejecuta demo: agency-contract-po",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-08",
+      "skill_id": "agency-budget-control",
+      "module_key": "clients-contracts",
+      "route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-budget-control",
+      "specialist_key": "clientes",
+      "command_or_query": "reserveBudget",
+      "input_requirement": "Authorized balance, disjoint consumed/committed/reserved amounts and request",
+      "output_requirement": "Atomic reservation and refreshed availability",
+      "repository_outputs": [
+        "budget_check",
+        "credit_check",
+        "reservation_proposal",
+        "balance_revision",
+        "blocking_exceptions"
+      ],
+      "calculator_dependencies": [
+        "budget_check",
+        "credit_exposure",
+        "approval_route"
+      ],
+      "positive": "In concurrent USD700 reservations against USD1,000, only one succeeds",
+      "negative": "Same request repeated cannot reserve twice; stale revision returns conflict",
+      "test_id": "skill.budget-control",
+      "assistant_entry": {
+        "en": "Run demo: agency-budget-control",
+        "es": "Ejecuta demo: agency-budget-control",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-09",
+      "skill_id": "agency-fee-contracts",
+      "module_key": "clients-contracts",
+      "route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-fee-contracts",
+      "specialist_key": "clientes",
+      "command_or_query": "calculateFeeSchedule",
+      "input_requirement": "Fixed fee or approved hours/rate, instalments and allocation",
+      "output_requirement": "Saved fee schedule and settlement lines",
+      "repository_outputs": [
+        "fee_contract_draft",
+        "instalment_schedule",
+        "job_allocation",
+        "hourly_settlement",
+        "approval_proposal",
+        "fee_exceptions"
+      ],
+      "calculator_dependencies": [
+        "hourly_fee_settlement",
+        "installment_schedule",
+        "allocate",
+        "approval_route"
+      ],
+      "positive": "Fixed USD20,000 plus USD3,000 amendment, internally approved by finance and supported by separately reviewed synthetic client POv2, yields fee23,000",
+      "negative": "Unapproved hours and allocations not totaling source amount are rejected",
+      "test_id": "skill.fee-contracts",
+      "assistant_entry": {
+        "en": "Run demo: agency-fee-contracts",
+        "es": "Ejecuta demo: agency-fee-contracts",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-10",
+      "skill_id": "agency-billing-requirements",
+      "module_key": "clients-contracts",
+      "route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-billing-requirements",
+      "specialist_key": "clientes",
+      "command_or_query": "evaluateBillingReadiness",
+      "input_requirement": "Client checklist, PO, accepted deliverable and attachments",
+      "output_requirement": "Per-requirement evidence and issuance readiness",
+      "repository_outputs": [
+        "requirement_matrix",
+        "evidence_matches",
+        "missing_requirements",
+        "issuance_ready",
+        "locked_field_changes",
+        "owner_requests"
+      ],
+      "calculator_dependencies": [],
+      "positive": "Final invoice becomes ready only after acceptance is linked",
+      "negative": "Removing required evidence makes issuance blocked server-side",
+      "test_id": "skill.billing-requirements",
+      "assistant_entry": {
+        "en": "Run demo: agency-billing-requirements",
+        "es": "Ejecuta demo: agency-billing-requirements",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-11",
+      "skill_id": "agency-tasks-timesheets",
+      "module_key": "work-production",
+      "route": "/a/:agencySlug/modules/work-production/workflows/agency-tasks-timesheets",
+      "specialist_key": "produccion",
+      "command_or_query": "submitAndApproveTimesheet",
+      "input_requirement": "Open job, task, staff, date, minutes and rate revision",
+      "output_requirement": "Timesheet, approval and valued cost",
+      "repository_outputs": [
+        "task_actions",
+        "task_delay_report",
+        "timesheet_validation",
+        "hour_approval_queue",
+        "hour_valuation",
+        "chargeability_report",
+        "timesheet_close_proposal"
+      ],
+      "calculator_dependencies": [
+        "allocate",
+        "hourly_fee_settlement"
+      ],
+      "positive": "140 approved hours at USD50 produce USD7,000 once",
+      "negative": "Duplicate imported timesheet or time in closed period is blocked",
+      "test_id": "skill.tasks-timesheets",
+      "assistant_entry": {
+        "en": "Run demo: agency-tasks-timesheets",
+        "es": "Ejecuta demo: agency-tasks-timesheets",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-12",
+      "skill_id": "agency-production-estimating",
+      "module_key": "work-production",
+      "route": "/a/:agencySlug/modules/work-production/workflows/agency-production-estimating",
+      "specialist_key": "produccion",
+      "command_or_query": "createProductionEstimate",
+      "input_requirement": "Scope, internal hours, vendor quotes and expense lines",
+      "output_requirement": "Versioned estimate, comparison and purchase proposal",
+      "repository_outputs": [
+        "estimate_draft",
+        "estimate_totals",
+        "supplier_comparison",
+        "client_approval_pack",
+        "purchase_order_drafts",
+        "post_buy_variance"
+      ],
+      "calculator_dependencies": [
+        "estimate_totals",
+        "allocate",
+        "credit_exposure"
+      ],
+      "positive": "100h×50 plus5,500 vendor plus500 expenses total11,000",
+      "negative": "A quote without currency/quantity cannot be approved",
+      "test_id": "skill.production-estimating",
+      "assistant_entry": {
+        "en": "Run demo: agency-production-estimating",
+        "es": "Ejecuta demo: agency-production-estimating",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-13",
+      "skill_id": "agency-production",
+      "module_key": "work-production",
+      "route": "/a/:agencySlug/modules/work-production/workflows/agency-production",
+      "specialist_key": "produccion",
+      "command_or_query": "reviewProductionDelivery",
+      "input_requirement": "Task dates, creative version, rights and QC measurements",
+      "output_requirement": "Delivery checklist, asset state and evidence",
+      "repository_outputs": [
+        "production_schedule",
+        "asset_manifest",
+        "qa_findings",
+        "rights_check",
+        "staff_assignment",
+        "release_candidates"
+      ],
+      "calculator_dependencies": [
+        "payload_digest",
+        "approval_route"
+      ],
+      "positive": "Approved asset version and rights evidence unlock delivery",
+      "negative": "An expired right or failed spec holds release of that version",
+      "test_id": "skill.production",
+      "assistant_entry": {
+        "en": "Run demo: agency-production",
+        "es": "Ejecuta demo: agency-production",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-14",
+      "skill_id": "agency-media-ranking",
+      "module_key": "media-planning",
+      "route": "/a/:agencySlug/modules/media-planning/workflows/agency-media-ranking",
+      "specialist_key": "planificacion",
+      "command_or_query": "rankMediaOptions",
+      "input_requirement": "Synthetic audience sources, objective, weights and costs",
+      "output_requirement": "Reproducible ranking with methodology/as-of/source",
+      "repository_outputs": [
+        "rating_book_manifest",
+        "ranking_spec",
+        "candidate_table",
+        "data_quality_exceptions",
+        "commercial_inheritance",
+        "planning_handoff"
+      ],
+      "calculator_dependencies": [
+        "audience_metrics"
+      ],
+      "positive": "Same inputs/weights yield same ranked candidates and source trace",
+      "negative": "Missing licensing/freshness or incomparable audience bases are flagged",
+      "test_id": "skill.media-ranking",
+      "assistant_entry": {
+        "en": "Run demo: agency-media-ranking",
+        "es": "Ejecuta demo: agency-media-ranking",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-15",
+      "skill_id": "agency-media-planning",
+      "module_key": "media-planning",
+      "route": "/a/:agencySlug/modules/media-planning/workflows/agency-media-planning",
+      "specialist_key": "planificacion",
+      "command_or_query": "saveMediaPlanRevision",
+      "input_requirement": "Channel lines, schedule, cost, audiences and approvals",
+      "output_requirement": "Versioned plan, totals, budget checks and approval request",
+      "repository_outputs": [
+        "media_plan",
+        "schedule_register",
+        "item_pricing",
+        "plan_totals",
+        "objective_summary",
+        "approval_payload",
+        "billing_release"
+      ],
+      "calculator_dependencies": [
+        "media_line_cost",
+        "discount_cascade",
+        "audience_metrics",
+        "credit_exposure",
+        "plan_diff"
+      ],
+      "positive": "Six Aurora lines sum to30,000 and are linked to the correct job",
+      "negative": "Plan above PO authority cannot advance to client-approved",
+      "test_id": "skill.media-planning",
+      "assistant_entry": {
+        "en": "Run demo: agency-media-planning",
+        "es": "Ejecuta demo: agency-media-planning",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-16",
+      "skill_id": "agency-tv-radio-planning",
+      "module_key": "media-planning",
+      "route": "/a/:agencySlug/modules/media-planning/workflows/agency-tv-radio-planning",
+      "specialist_key": "planificacion",
+      "command_or_query": "buildBroadcastSchedule",
+      "input_requirement": "Fictitious station/program, spot counts, rate, dates and materials",
+      "output_requirement": "Spot schedule, cost and traffic instructions",
+      "repository_outputs": [
+        "broadcast_schedule",
+        "spot_register",
+        "rate_basis",
+        "material_distribution",
+        "traffic_instructions",
+        "evaluation_report"
+      ],
+      "calculator_dependencies": [
+        "media_line_cost",
+        "discount_cascade",
+        "audience_metrics"
+      ],
+      "positive": "20 radio spots at100 give2,000 and material duration is validated",
+      "negative": "Duplicate spot IDs or unsupported creative duration are rejected",
+      "test_id": "skill.tv-radio-planning",
+      "assistant_entry": {
+        "en": "Run demo: agency-tv-radio-planning",
+        "es": "Ejecuta demo: agency-tv-radio-planning",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-17",
+      "skill_id": "agency-ooh-planning",
+      "module_key": "media-planning",
+      "route": "/a/:agencySlug/modules/media-planning/workflows/agency-ooh-planning",
+      "specialist_key": "planificacion",
+      "command_or_query": "proposeOOHPlan",
+      "input_requirement": "Site faces, dates, unit rates, availability and evidence requirements",
+      "output_requirement": "Site plan, costs and reservation proposal",
+      "repository_outputs": [
+        "site_plan",
+        "ooh_line_pricing",
+        "cost_schedule",
+        "evidence_requirements",
+        "booking_proposals",
+        "exceptions"
+      ],
+      "calculator_dependencies": [
+        "media_line_cost",
+        "discount_cascade",
+        "allocate"
+      ],
+      "positive": "Two synthetic faces at1,000 total2,000",
+      "negative": "Overlapping exclusive reservation on same face is blocked",
+      "test_id": "skill.ooh-planning",
+      "assistant_entry": {
+        "en": "Run demo: agency-ooh-planning",
+        "es": "Ejecuta demo: agency-ooh-planning",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-18",
+      "skill_id": "agency-digital-planning",
+      "module_key": "media-planning",
+      "route": "/a/:agencySlug/modules/media-planning/workflows/agency-digital-planning",
+      "specialist_key": "planificacion",
+      "command_or_query": "validateDigitalPlan",
+      "input_requirement": "Platform/account, objective, placements, taxonomy, currency, creative specs",
+      "output_requirement": "Digital plan with ad-spec validation and account mapping",
+      "repository_outputs": [
+        "digital_plan",
+        "taxonomy_strings",
+        "adserver_costs",
+        "actuals_snapshot",
+        "invoice_match_register",
+        "order_adjustment_proposal"
+      ],
+      "calculator_dependencies": [
+        "media_line_cost",
+        "discount_cascade",
+        "reconcile",
+        "invoice_check"
+      ],
+      "positive": "Meta/Google/TikTok/CTV lines retain stable IDs and fictional accounts",
+      "negative": "Unmapped advertiser account or invalid placement spec blocks submission",
+      "test_id": "skill.digital-planning",
+      "assistant_entry": {
+        "en": "Run demo: agency-digital-planning",
+        "es": "Ejecuta demo: agency-digital-planning",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-19",
+      "skill_id": "agency-plan-changes",
+      "module_key": "media-planning",
+      "route": "/a/:agencySlug/modules/media-planning/workflows/agency-plan-changes",
+      "specialist_key": "planificacion",
+      "command_or_query": "proposePlanRevisionChange",
+      "input_requirement": "Before/after revision, line changes, commitments and reason",
+      "output_requirement": "Diff, deltas, affected orders and approval",
+      "repository_outputs": [
+        "baseline_revision",
+        "proposed_revision",
+        "line_diff",
+        "lock_report",
+        "currency_deltas",
+        "order_version_actions",
+        "approval_pack",
+        "verified_receipts",
+        "blocked_actions"
+      ],
+      "calculator_dependencies": [
+        "plan_diff",
+        "budget_check",
+        "approval_route"
+      ],
+      "positive": "Moving1,000 from Meta to Google preserves total30,000 and creates revision2",
+      "negative": "Cannot reduce a line below delivered/committed authority without explicit release",
+      "test_id": "skill.plan-changes",
+      "assistant_entry": {
+        "en": "Run demo: agency-plan-changes",
+        "es": "Ejecuta demo: agency-plan-changes",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-20",
+      "skill_id": "agency-rate-cards-contracts",
+      "module_key": "media-buying",
+      "route": "/a/:agencySlug/modules/media-buying/workflows/agency-rate-cards-contracts",
+      "specialist_key": "compra",
+      "command_or_query": "saveRateCardAgreement",
+      "input_requirement": "Supplier, validity, channel rates, discount cascade and currency",
+      "output_requirement": "Versioned rate card and net pricing",
+      "repository_outputs": [
+        "rate_card_drafts",
+        "contract_drafts",
+        "installment_schedules",
+        "contract_balance_report",
+        "adjustment_transfer_proposals",
+        "pricing_exceptions"
+      ],
+      "calculator_dependencies": [
+        "discount_cascade",
+        "media_line_cost",
+        "installment_schedule",
+        "budget_check",
+        "approval_route"
+      ],
+      "positive": "Successive10% and5% discounts on1,000 yield855",
+      "negative": "Expired rate card cannot price a new approved order",
+      "test_id": "skill.rate-cards-contracts",
+      "assistant_entry": {
+        "en": "Run demo: agency-rate-cards-contracts",
+        "es": "Ejecuta demo: agency-rate-cards-contracts",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-21",
+      "skill_id": "agency-media-buying",
+      "module_key": "media-buying",
+      "route": "/a/:agencySlug/modules/media-buying/workflows/agency-media-buying",
+      "specialist_key": "compra",
+      "command_or_query": "issueMediaOrder",
+      "input_requirement": "Approved plan line, supplier, rate revision, account and approval",
+      "output_requirement": "Order, disjoint commitment and simulated receipt",
+      "repository_outputs": [
+        "order_drafts",
+        "order_versions",
+        "send_packs",
+        "close_reopen_proposals",
+        "commitment_updates",
+        "supplier_exceptions"
+      ],
+      "calculator_dependencies": [
+        "discount_cascade",
+        "media_line_cost",
+        "credit_exposure",
+        "plan_diff",
+        "approval_route"
+      ],
+      "positive": "Repeating same approved issue command creates one order and commitment",
+      "negative": "Unapproved plan or changed account invalidates execution",
+      "test_id": "skill.media-buying",
+      "assistant_entry": {
+        "en": "Run demo: agency-media-buying",
+        "es": "Ejecuta demo: agency-media-buying",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-22",
+      "skill_id": "agency-campaign-activation",
+      "module_key": "media-buying",
+      "route": "/a/:agencySlug/modules/media-buying/workflows/agency-campaign-activation",
+      "specialist_key": "compra",
+      "command_or_query": "activateDemoCampaign",
+      "input_requirement": "Approved campaign payload, account, creative QA and exact revision",
+      "output_requirement": "Preflight report, simulated external ID and receipt",
+      "repository_outputs": [
+        "activation_proposal",
+        "taxonomy_names",
+        "preflight_results",
+        "external_ids",
+        "readback_report",
+        "execution_receipts",
+        "uncertain_actions"
+      ],
+      "calculator_dependencies": [
+        "payload_digest",
+        "budget_check",
+        "approval_route"
+      ],
+      "positive": "Simulated activation records one campaign effect and persistent receipt",
+      "negative": "Changed budget after approval or revoked scope blocks launch",
+      "test_id": "skill.campaign-activation",
+      "assistant_entry": {
+        "en": "Run demo: agency-campaign-activation",
+        "es": "Ejecuta demo: agency-campaign-activation",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-23",
+      "skill_id": "agency-campaign-optimization",
+      "module_key": "media-buying",
+      "route": "/a/:agencySlug/modules/media-buying/workflows/agency-campaign-optimization",
+      "specialist_key": "compra",
+      "command_or_query": "proposeCampaignOptimization",
+      "input_requirement": "Campaign/day synthetic metrics, objective, ceilings and approved plan",
+      "output_requirement": "Evidence-based deterministic proposal and revised budget diff",
+      "repository_outputs": [
+        "diagnostic",
+        "objective_deviation",
+        "optimization_proposal",
+        "experiment_plan",
+        "constraint_check",
+        "verified_change_receipts"
+      ],
+      "calculator_dependencies": [
+        "audience_metrics",
+        "budget_check",
+        "plan_diff",
+        "approval_route"
+      ],
+      "positive": "Rule detects lower CPA and proposes1,000 reallocation, pending approval",
+      "negative": "No automatic spend change occurs when only generating a proposal",
+      "test_id": "skill.campaign-optimization",
+      "assistant_entry": {
+        "en": "Run demo: agency-campaign-optimization",
+        "es": "Ejecuta demo: agency-campaign-optimization",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-24",
+      "skill_id": "agency-transmission-control",
+      "module_key": "media-buying",
+      "route": "/a/:agencySlug/modules/media-buying/workflows/agency-transmission-control",
+      "specialist_key": "compra",
+      "command_or_query": "reconcileBroadcastDelivery",
+      "input_requirement": "Booked spots, synthetic emission records and tolerance",
+      "output_requirement": "Matched/missing spots and make-good request",
+      "repository_outputs": [
+        "emission_match",
+        "missing_or_extra_insertions",
+        "material_exceptions",
+        "makegood_register",
+        "close_readiness",
+        "postbuy_report",
+        "finance_handoff"
+      ],
+      "calculator_dependencies": [
+        "spot_match",
+        "reconcile"
+      ],
+      "positive": "19/20 emissions produce one missing spot and a corrective request",
+      "negative": "Duplicate emission cannot count twice; missing spot is not marked delivered",
+      "test_id": "skill.transmission-control",
+      "assistant_entry": {
+        "en": "Run demo: agency-transmission-control",
+        "es": "Ejecuta demo: agency-transmission-control",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-25",
+      "skill_id": "agency-ooh-inventory",
+      "module_key": "media-buying",
+      "route": "/a/:agencySlug/modules/media-buying/workflows/agency-ooh-inventory",
+      "specialist_key": "compra",
+      "command_or_query": "reserveOOHFace",
+      "input_requirement": "Fictitious face, availability interval, operator and job",
+      "output_requirement": "Versioned availability, reservation and operator order",
+      "repository_outputs": [
+        "availability_report",
+        "reservations",
+        "ooh_orders",
+        "monthly_suborders",
+        "face_motif_assignments",
+        "posting_batches",
+        "agreement_balances",
+        "inventory_exceptions"
+      ],
+      "calculator_dependencies": [
+        "media_line_cost",
+        "discount_cascade",
+        "allocate",
+        "installment_schedule"
+      ],
+      "positive": "Two distinct faces reserve once and link to plan lines",
+      "negative": "Concurrent overlapping reservation on same face has one winner",
+      "test_id": "skill.ooh-inventory",
+      "assistant_entry": {
+        "en": "Run demo: agency-ooh-inventory",
+        "es": "Ejecuta demo: agency-ooh-inventory",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-26",
+      "skill_id": "agency-delivery-reconciliation",
+      "module_key": "suppliers-payments",
+      "route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-delivery-reconciliation",
+      "specialist_key": "proveedores",
+      "command_or_query": "reconcileDeliveryInvoice",
+      "input_requirement": "Order5,500, accepted delivery5,500, invoice6,000 and tolerance0",
+      "output_requirement": "Three-way match with500 difference and payment hold",
+      "repository_outputs": [
+        "match_result",
+        "discrepancies",
+        "evidence_links",
+        "payable_candidate",
+        "writeoff_proposals"
+      ],
+      "calculator_dependencies": [
+        "reconcile",
+        "invoice_check",
+        "spot_match",
+        "approval_route"
+      ],
+      "positive": "Corrected invoice5,500 matches existing cost item",
+      "negative": "Invoice6,000 cannot enter payment run until discrepancy resolved",
+      "test_id": "skill.delivery-reconciliation",
+      "assistant_entry": {
+        "en": "Run demo: agency-delivery-reconciliation",
+        "es": "Ejecuta demo: agency-delivery-reconciliation",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-27",
+      "skill_id": "agency-payables",
+      "module_key": "suppliers-payments",
+      "route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-payables",
+      "specialist_key": "proveedores",
+      "command_or_query": "approveSupplierInvoice",
+      "input_requirement": "Supplier, invoice number/currency/date, lines, delivery and period",
+      "output_requirement": "Normalized invoice, duplicate check and payable",
+      "repository_outputs": [
+        "reception_log",
+        "duplicate_check",
+        "normalized_invoice",
+        "registration_proposal",
+        "holds",
+        "posting_receipt"
+      ],
+      "calculator_dependencies": [
+        "invoice_check",
+        "reconcile",
+        "payment_terms",
+        "tiered_commission",
+        "approval_route"
+      ],
+      "positive": "One corrected payable5,500 posts against the existing cost source",
+      "negative": "Same supplier/invoice number repeated is held rather than duplicated",
+      "test_id": "skill.payables",
+      "assistant_entry": {
+        "en": "Run demo: agency-payables",
+        "es": "Ejecuta demo: agency-payables",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-28",
+      "skill_id": "agency-payment-run",
+      "module_key": "suppliers-payments",
+      "route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-payment-run",
+      "specialist_key": "proveedores",
+      "command_or_query": "executeDemoPaymentBatch",
+      "input_requirement": "Eligible invoices, confirmed available cash, active holds, beneficiary accounts, currency and exact approvals",
+      "output_requirement": "Batch, simulated payments, receipts and status",
+      "repository_outputs": [
+        "payment_list_proposal",
+        "payment_orders_draft",
+        "withholding_schedule",
+        "release_proposal",
+        "bank_file_request",
+        "approval_requests"
+      ],
+      "calculator_dependencies": [
+        "withholding",
+        "payment_terms",
+        "aging",
+        "fx_revaluation",
+        "approval_route"
+      ],
+      "positive": "After collection40,000 raises cash to50,000, atomically reserve and execute approved payments43,000 once, leaving7,000 before final collection",
+      "negative": "Payments43,000 against opening cash10,000 are blocked; timeout after effect remains held/unknown until reconciliation, never blindly re-sent",
+      "test_id": "skill.payment-run",
+      "assistant_entry": {
+        "en": "Run demo: agency-payment-run",
+        "es": "Ejecuta demo: agency-payment-run",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-29",
+      "skill_id": "agency-cash-settlement",
+      "module_key": "suppliers-payments",
+      "route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-cash-settlement",
+      "specialist_key": "proveedores",
+      "command_or_query": "reconcileBankTransaction",
+      "input_requirement": "Synthetic bank lines, amounts, candidate payments and allocations",
+      "output_requirement": "Matched/unapplied balances and accounting links",
+      "repository_outputs": [
+        "deposit_proposals",
+        "bank_charge_entries",
+        "reconciliation_report",
+        "cheque_actions",
+        "card_statement_match",
+        "availability_snapshot",
+        "unapplied_cash"
+      ],
+      "calculator_dependencies": [
+        "reconcile",
+        "allocate",
+        "journal_check",
+        "approval_route"
+      ],
+      "positive": "One bank debit clears one simulated liability without new expense",
+      "negative": "Allocation beyond transaction amount and duplicate bank ID are rejected",
+      "test_id": "skill.cash-settlement",
+      "assistant_entry": {
+        "en": "Run demo: agency-cash-settlement",
+        "es": "Ejecuta demo: agency-cash-settlement",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-30",
+      "skill_id": "agency-expenses",
+      "module_key": "suppliers-payments",
+      "route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-expenses",
+      "specialist_key": "proveedores",
+      "command_or_query": "submitAndApproveExpense",
+      "input_requirement": "Job, claimant, receipt, date, amount and category",
+      "output_requirement": "Approved expense, allocation and reimbursement state",
+      "repository_outputs": [
+        "expense_request_drafts",
+        "contract_schedule",
+        "sheet_review",
+        "settlement_proposal",
+        "deferral_schedule",
+        "budget_check_result",
+        "approval_requests"
+      ],
+      "calculator_dependencies": [
+        "allocate",
+        "installment_schedule",
+        "invoice_check",
+        "budget_check",
+        "approval_route"
+      ],
+      "positive": "USD500 expense contributes once to Aurora cost and once to reimbursement cash",
+      "negative": "No receipt when required blocks approval; reimbursement never adds second expense",
+      "test_id": "skill.expenses",
+      "assistant_entry": {
+        "en": "Run demo: agency-expenses",
+        "es": "Ejecuta demo: agency-expenses",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-31",
+      "skill_id": "agency-client-billing",
+      "module_key": "billing-collections",
+      "route": "/a/:agencySlug/modules/billing-collections/workflows/agency-client-billing",
+      "specialist_key": "facturacion",
+      "command_or_query": "issueDemoClientInvoice",
+      "input_requirement": "Approved fee23,000, media recovery30,000, requirements and tax profile",
+      "output_requirement": "Demo invoice53,000, AR and agency/pass-through split",
+      "repository_outputs": [
+        "billing_selection",
+        "invoice_drafts",
+        "credit_debit_note_drafts",
+        "fee_calculation",
+        "split_allocation",
+        "billing_exceptions"
+      ],
+      "calculator_dependencies": [
+        "discount_cascade",
+        "estimate_totals",
+        "payment_terms",
+        "allocate",
+        "invoice_check",
+        "approval_route"
+      ],
+      "positive": "Issuance persists and credits fee23,000 separately from30,000 media recovery",
+      "negative": "Missing acceptance, closed period or changed approved payload blocks issue",
+      "test_id": "skill.client-billing",
+      "assistant_entry": {
+        "en": "Run demo: agency-client-billing",
+        "es": "Ejecuta demo: agency-client-billing",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-32",
+      "skill_id": "agency-collections",
+      "module_key": "billing-collections",
+      "route": "/a/:agencySlug/modules/billing-collections/workflows/agency-collections",
+      "specialist_key": "facturacion",
+      "command_or_query": "allocateCollection",
+      "input_requirement": "Invoice53,000 and receipts40,000 then13,000",
+      "output_requirement": "Applied collections, open balance and aging",
+      "repository_outputs": [
+        "receipt_proposal",
+        "application_plan",
+        "withholding_certificates",
+        "advance_applications",
+        "aging_report",
+        "credit_exposure",
+        "followup_worklist"
+      ],
+      "calculator_dependencies": [
+        "aging",
+        "credit_exposure",
+        "allocate",
+        "withholding",
+        "payment_terms",
+        "approval_route"
+      ],
+      "positive": "Unique receipt40,000 credits cash once and allocates AR to13,000 before payments; final receipt13,000 after payments clears AR and cash becomes20,000",
+      "negative": "Duplicate provider receipt or idempotency retry cannot credit cash twice; allocations above receipt or invoice outstanding rejected",
+      "test_id": "skill.collections",
+      "assistant_entry": {
+        "en": "Run demo: agency-collections",
+        "es": "Ejecuta demo: agency-collections",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-33",
+      "skill_id": "agency-rebates",
+      "module_key": "billing-collections",
+      "route": "/a/:agencySlug/modules/billing-collections/workflows/agency-rebates",
+      "specialist_key": "facturacion",
+      "command_or_query": "calculateRebateSettlement",
+      "input_requirement": "Eligible synthetic base, tiers/rate and client share",
+      "output_requirement": "Accrual proposal, client share and agency retention",
+      "repository_outputs": [
+        "eligible_base",
+        "rebate_calculation",
+        "pending_register",
+        "provision_proposal",
+        "client_rebates",
+        "rebate_exceptions"
+      ],
+      "calculator_dependencies": [
+        "tiered_commission",
+        "flat_rebate",
+        "allocate",
+        "approval_route"
+      ],
+      "positive": "Separate lab base10,000 at2% gives200, split100/100",
+      "negative": "Rebate outside eligibility dates is excluded; no change to Aurora fixture",
+      "test_id": "skill.rebates",
+      "assistant_entry": {
+        "en": "Run demo: agency-rebates",
+        "es": "Ejecuta demo: agency-rebates",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-34",
+      "skill_id": "agency-tax-compliance",
+      "module_key": "billing-collections",
+      "route": "/a/:agencySlug/modules/billing-collections/workflows/agency-tax-compliance",
+      "specialist_key": "facturacion",
+      "command_or_query": "validateDemoTaxProfile",
+      "input_requirement": "Entity country, explicit demo profile, invoice basis and tax fields",
+      "output_requirement": "Validation, demo tax calculation and export package",
+      "repository_outputs": [
+        "authorization_requests",
+        "numbering_report",
+        "vat_books_reconciliation",
+        "withholding_perception_schedule",
+        "certificate_register",
+        "tax_positions",
+        "statutory_exports"
+      ],
+      "calculator_dependencies": [
+        "invoice_check",
+        "withholding",
+        "approval_route"
+      ],
+      "positive": "Synthetic100 net at5% yields105 gross with non-fiscal demo label",
+      "negative": "Unsupported country/profile blocks fiscal emission; no universal LATAM tax claim",
+      "test_id": "skill.tax-compliance",
+      "assistant_entry": {
+        "en": "Run demo: agency-tax-compliance",
+        "es": "Ejecuta demo: agency-tax-compliance",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-35",
+      "skill_id": "agency-general-ledger",
+      "module_key": "accounting-close",
+      "route": "/a/:agencySlug/modules/accounting-close/workflows/agency-general-ledger",
+      "specialist_key": "contabilidad",
+      "command_or_query": "postDemoJournal",
+      "input_requirement": "Balanced lines, accounts, currency, period, dimensions and approval",
+      "output_requirement": "Demo ledger journal and reconciliation reference",
+      "repository_outputs": [
+        "journal_entry_proposal",
+        "journal_check_report",
+        "coa_change_proposal",
+        "opening_balance_reconciliation",
+        "integration_difference_report"
+      ],
+      "calculator_dependencies": [
+        "journal_check",
+        "allocate",
+        "approval_route"
+      ],
+      "positive": "Approved balanced journal posts once and reports debit=credit",
+      "negative": "Unbalanced entry or closed period cannot post",
+      "test_id": "skill.general-ledger",
+      "assistant_entry": {
+        "en": "Run demo: agency-general-ledger",
+        "es": "Ejecuta demo: agency-general-ledger",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-36",
+      "skill_id": "agency-accruals-revaluation",
+      "module_key": "accounting-close",
+      "route": "/a/:agencySlug/modules/accounting-close/workflows/agency-accruals-revaluation",
+      "specialist_key": "contabilidad",
+      "command_or_query": "proposeAccrualOrFXAdjustment",
+      "input_requirement": "Uninvoiced delivered cost or foreign balance with two FX rates",
+      "output_requirement": "Accrual/revaluation proposal and reversal schedule",
+      "repository_outputs": [
+        "fx_revaluation_proposal",
+        "gross_income_provision_proposal",
+        "wip_reclass_proposal",
+        "expense_provision_proposal",
+        "overcommission_provision_proposal",
+        "ot_close_proposal",
+        "ic_reclass_proposal",
+        "close_job_checklist"
+      ],
+      "calculator_dependencies": [
+        "fx_revaluation",
+        "journal_check",
+        "tiered_commission",
+        "allocate",
+        "approval_route"
+      ],
+      "positive": "Lab CAD1,000 at0.75→0.78 USD generates USD30 payable increase",
+      "negative": "Missing FX date/rate or already-reversed accrual cannot be silently processed",
+      "test_id": "skill.accruals-revaluation",
+      "assistant_entry": {
+        "en": "Run demo: agency-accruals-revaluation",
+        "es": "Ejecuta demo: agency-accruals-revaluation",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-37",
+      "skill_id": "agency-fixed-assets",
+      "module_key": "accounting-close",
+      "route": "/a/:agencySlug/modules/accounting-close/workflows/agency-fixed-assets",
+      "specialist_key": "contabilidad",
+      "command_or_query": "calculateAssetDepreciation",
+      "input_requirement": "Asset cost, residual, useful life, start date and method",
+      "output_requirement": "Schedule and proposed monthly journals",
+      "repository_outputs": [
+        "asset_register_changes",
+        "depreciation_run_proposal",
+        "disposal_proposal",
+        "fixed_asset_annex"
+      ],
+      "calculator_dependencies": [
+        "depreciation_schedule",
+        "journal_check",
+        "approval_route"
+      ],
+      "positive": "Lab asset1,200 over12months residual0 gives100 monthly",
+      "negative": "Depreciation beyond depreciable base or duplicate month is blocked",
+      "test_id": "skill.fixed-assets",
+      "assistant_entry": {
+        "en": "Run demo: agency-fixed-assets",
+        "es": "Ejecuta demo: agency-fixed-assets",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-38",
+      "skill_id": "agency-period-close",
+      "module_key": "accounting-close",
+      "route": "/a/:agencySlug/modules/accounting-close/workflows/agency-period-close",
+      "specialist_key": "contabilidad",
+      "command_or_query": "closeAccountingPeriod",
+      "input_requirement": "Subledger readiness, trial balance, open proposals and reconciliations",
+      "output_requirement": "Close checklist, blockers, approval and immutable snapshot",
+      "repository_outputs": [
+        "close_checklist",
+        "close_job_status",
+        "post_close_reconciliations",
+        "unresolved_balances",
+        "lock_proposal",
+        "reopen_plan",
+        "adjustment_plan"
+      ],
+      "calculator_dependencies": [
+        "journal_check",
+        "fx_revaluation",
+        "aging",
+        "approval_route"
+      ],
+      "positive": "After all checks pass, closing locks March demo period",
+      "negative": "Open unmatched payable or unbalanced journal blocks close",
+      "test_id": "skill.period-close",
+      "assistant_entry": {
+        "en": "Run demo: agency-period-close",
+        "es": "Ejecuta demo: agency-period-close",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-39",
+      "skill_id": "agency-profitability",
+      "module_key": "profitability",
+      "route": "/a/:agencySlug/modules/profitability/workflows/agency-profitability",
+      "specialist_key": "rentabilidad",
+      "command_or_query": "calculateJobProfitability",
+      "input_requirement": "Job, period, basis, fee, agency costs and managed spend",
+      "output_requirement": "Margin bridge with source links and clear forecast/actual basis",
+      "repository_outputs": [
+        "job_pnl",
+        "client_profitability",
+        "overhead_allocation",
+        "margin_bridge",
+        "managed_spend",
+        "completeness_gaps"
+      ],
+      "calculator_dependencies": [
+        "margin",
+        "allocate"
+      ],
+      "positive": "20k−11k=9k/45%;20k−13k=7k/35%;23k−13k=10k/43.48%",
+      "negative": "Managed media30k cannot enter net agency revenue or agency-cost denominator",
+      "test_id": "skill.profitability",
+      "assistant_entry": {
+        "en": "Run demo: agency-profitability",
+        "es": "Ejecuta demo: agency-profitability",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-40",
+      "skill_id": "agency-revenue-budget",
+      "module_key": "profitability",
+      "route": "/a/:agencySlug/modules/profitability/workflows/agency-revenue-budget",
+      "specialist_key": "rentabilidad",
+      "command_or_query": "saveRevenueBudgetScenario",
+      "input_requirement": "Period, approved opportunities/contracts, allocation drivers and scenario",
+      "output_requirement": "Versioned forecast, assumption table and actual variance",
+      "repository_outputs": [
+        "budget_version",
+        "budget_lines",
+        "income_projection",
+        "plan_vs_actual",
+        "version_lock_proposal",
+        "budget_exceptions"
+      ],
+      "calculator_dependencies": [
+        "allocate",
+        "margin"
+      ],
+      "positive": "New scenario changes projected revenue without changing posted revenue",
+      "negative": "Mixed currencies or overwritten approved baseline rejected",
+      "test_id": "skill.revenue-budget",
+      "assistant_entry": {
+        "en": "Run demo: agency-revenue-budget",
+        "es": "Ejecuta demo: agency-revenue-budget",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-41",
+      "skill_id": "agency-cash-forecast",
+      "module_key": "profitability",
+      "route": "/a/:agencySlug/modules/profitability/workflows/agency-cash-forecast",
+      "specialist_key": "rentabilidad",
+      "command_or_query": "calculateCashScenario",
+      "input_requirement": "Opening cash, expected dated receipts/payments, probabilities and cut-off",
+      "output_requirement": "Dated cash table, assumptions and downside scenario",
+      "repository_outputs": [
+        "cash_forecast",
+        "currency_buckets",
+        "undated_pipeline",
+        "collection_scenarios",
+        "supplier_exposure",
+        "liquidity_gaps"
+      ],
+      "calculator_dependencies": [
+        "cash_projection",
+        "payment_terms",
+        "aging"
+      ],
+      "positive": "Final fixture10k+53k−43k=20k; forecast distinguished from bank balance",
+      "negative": "Counting same collection as invoice and receipt is prevented",
+      "test_id": "skill.cash-forecast",
+      "assistant_entry": {
+        "en": "Run demo: agency-cash-forecast",
+        "es": "Ejecuta demo: agency-cash-forecast",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    },
+    {
+      "scenario_id": "ERP-42",
+      "skill_id": "agency-management-reporting",
+      "module_key": "profitability",
+      "route": "/a/:agencySlug/modules/profitability/workflows/agency-management-reporting",
+      "specialist_key": "rentabilidad",
+      "command_or_query": "generateManagementSnapshot",
+      "input_requirement": "Tenant/legal entity, period, currency, basis and metric definitions",
+      "output_requirement": "Persistent report snapshot, sources and downloadable export",
+      "repository_outputs": [
+        "management_pack",
+        "mapping_coverage",
+        "export_files",
+        "kpi_summary",
+        "variance_commentary"
+      ],
+      "calculator_dependencies": [
+        "margin",
+        "aging",
+        "allocate"
+      ],
+      "positive": "Exported totals equal query at snapshot revision and disclose synthetic data",
+      "negative": "No unlabelled stale report or cross-tenant source appears",
+      "test_id": "skill.management-reporting",
+      "assistant_entry": {
+        "en": "Run demo: agency-management-reporting",
+        "es": "Ejecuta demo: agency-management-reporting",
+        "parameter_input": "Validated form/clarification with fixture defaults; same schema as page"
+      },
+      "seed_scope": "primary journey if applicable; otherwise isolated demo-lab scenario snapshot excluded from primary metrics",
+      "persistence": "Domain writes and audit persist in PostgreSQL; read calculations use persisted source revisions and optional report snapshot.",
+      "definition_of_done": "Working route + meaningful server action/query + validated input + output/evidence + persistence where applicable + positive and negative tests.",
+      "implemented": false
+    }
+  ],
+  "acceptance_artifacts": [
+    "app/evidence/demo-e2e-results.json",
+    "app/evidence/demo-e2e-report.md",
+    "app/evidence/assistant-acceptance.md",
+    "app/evidence/assistant-tool-coverage.json"
+  ],
+  "coverage_rule": "84 positive/negative skill cases minimum, plus cross-cutting journeys/assistant cases. This count is a requirement, not a claim of tests run."
+}

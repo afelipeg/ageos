@@ -1,0 +1,15 @@
+{
+  "snapshot_date": "2026-10-17",
+  "purpose": "Arquitectura objetivo de referencia; demo actual determinista, asistente scripted y conectores simulados. Instrucción 1: chasis; instrucción 2: recorridos E2E de las 42 skills.",
+  "sha256": {
+    "ageos-arquitectura-v1.json": "7b64360fda1a0c15cdde1b2caf51538a9d91edf8a411bdd0529c85cd9852e386",
+    "agency-erp-matriz-42-skills.json": "32ce93ff5ae43a0aba2411b94535ec6ac3ff777a43c3c7b12af8602ef52be037",
+    "agency-erp-matriz-42-skills.md": "0679e37dcbc4ea664273be6a6efb54459b202956b7737b1ab33dbe3d0b6bbac7",
+    "agency-erp-eve-tools-sandboxes-v1.json": "6f22150f89b9870d6cb7cdd70580a85b7d378b638c1fa2d2236f9e29ec974588",
+    "agency-erp-catalogo-conexiones-v1.json": "3ea80cae7d1d21d1ee1e5ef31b554b1dddcf25cdb11239f3133f925b22761df4",
+    "agency-erp-guia-de-implementacion.txt": "b11e7b22950adcdda00dfbbba762c6bc66d4f16a6db242e0f0f0b357a898637d",
+    "agency-erp-arquitectura.svg": "a9dd4540f8644290e5860d67ede2da1be4ab21efa25855103741a86549004ca5",
+    "agency-erp-all-skills.zip": "8d2bfcb326aa69490d65c4b175c06169ad62b74e1557c9b2fb09500829c7b2bd"
+  },
+  "source_archive_note": "Copia del ZIP local existente con 42 ZIPs de skills; no se afirma identidad byte a byte con el commit de GitHub sin comprobación independiente."
+}

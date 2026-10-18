@@ -1,0 +1,961 @@
+{
+  "schema_version": "1.1.0",
+  "date": "2026-10-17",
+  "status": "specification_not_implemented",
+  "product": "AgeOS",
+  "feature": "global_erp_assistant",
+  "scope_change": {
+    "mandatory": true,
+    "supersedes": "Explicit user correction: deterministic hardcoded demo; no live model required or called",
+    "kernel": "Real deterministic ERP commands, calculations, approvals and persistence",
+    "assistant_driver": "ScriptedAssistantDriver using versioned scenarios, fixtures, explicit EN/ES aliases and validated parameters",
+    "inference": "Out of scope; do not call a model",
+    "external_erp_integrations": "simulated",
+    "acceptance": "All scripted E2E cases, real domain outcomes and all 42 skills without external provider credentials",
+    "unknown_input": "Explain supported demo scenarios and offer choices; no simulated general NLU",
+    "extra_erp_modules": 0,
+    "extra_erp_skills": 0,
+    "extra_generic_agents": 0
+  },
+  "orchestration": {
+    "existing_entrypoint_skill": "agency-orchestrator",
+    "existing_orchestrator_key": "coordinador",
+    "specialist_keys_from_coverage": [
+      "coordinador",
+      "clientes",
+      "produccion",
+      "planificacion",
+      "compra",
+      "proveedores",
+      "facturacion",
+      "contabilidad",
+      "rentabilidad"
+    ],
+    "specialist_source": "cobertura-42-skills.json:skills[].future_agent",
+    "new_agent_required": false,
+    "target_runtime": "Future Eve target, outside current demo acceptance",
+    "initial_adapter": "ScriptedAssistantDriver, no model or Eve runtime required",
+    "single_run_owner": true,
+    "delegation_contract": [
+      "parent_run_id",
+      "child_run_id",
+      "catalog_subagent_key",
+      "scenario_id",
+      "scenario_version",
+      "bounded_objective",
+      "allowed_skill_ids",
+      "effective_permissions",
+      "simulation",
+      "state",
+      "source_references"
+    ],
+    "delegation_may_elevate_permissions": false,
+    "delegation_mode": "scripted_simulation",
+    "delegation_acceptance": "At least one labeled simulated delegation runs a real authorized domain command and records audit"
+  },
+  "ui": {
+    "name_en": "AgeOS Assistant",
+    "name_es": "Asistente AgeOS",
+    "sidebar_label_en": "Assistant",
+    "sidebar_label_es": "Asistente",
+    "icon": "MessagesSquare",
+    "icon_library": "lucide-react",
+    "sidebar_destination": "/a/:agencySlug/assistant",
+    "page_implementation": "Next.js App Router page.tsx matching canonical route; share conversation component with shell panel",
+    "panel_entrypoints": [
+      "app_shell_header",
+      "contextual_record_action"
+    ],
+    "panel_placement": "right",
+    "panel_pages": "Every authenticated agency page; dedicated chat page suppresses duplicate panel",
+    "same_runtime_and_thread": true,
+    "desktop": "Docked panel, preserve main content and navigation state",
+    "mobile": "Full-screen Sheet using verified template primitives",
+    "expand": "Navigate panel to full chat with same conversation_id",
+    "return": "Restore authorized originating route and same thread",
+    "primary_block": "ai-chat-6",
+    "shell_pattern_reference": "app-shell-18",
+    "activity_only_block": "agent-activity-1",
+    "replace_demo_arrays": [
+      "SOURCES",
+      "PLAN_STEPS",
+      "FORK_CHOICES",
+      "OWNERS",
+      "MODELS",
+      "PICKABLE_FILES"
+    ],
+    "primary_block_preview": "https://reui.io/preview/base/ai-chat-6?ref=mcp",
+    "shell_preview": "https://reui.io/preview/base/app-shell-18?ref=mcp",
+    "details": "04A-direccion-producto-y-mapa-ui.md",
+    "mode_label_en": "Scripted demo",
+    "mode_label_es": "Demo guionada",
+    "model_selector": false,
+    "demo_arrays_policy": "Replace with authorized ERP data or explicit versioned scenario steps; remove fake model options"
+  },
+  "context": {
+    "route_is_untrusted_hint": true,
+    "server_resolves": [
+      "session_actor",
+      "active_membership",
+      "tenant_id",
+      "record_scope",
+      "allowed_fields",
+      "allowed_filters",
+      "current_revisions",
+      "capability_configuration"
+    ],
+    "snapshot_per_run": true,
+    "follow_navigation_for_next_message": true,
+    "allow_authorized_pinned_record": true,
+    "do_not_retarget_inflight_action": true,
+    "on_agency_or_actor_change": [
+      "unsubscribe_old_stream",
+      "clear_visible_chat_and_context",
+      "reauthorize_current_user",
+      "load_only_current_scope"
+    ],
+    "control_plane": "Separate control scope with onboarding-only authorized tools if enabled",
+    "platform_ops": "No inherited access to /ops"
+  },
+  "semantic_access": {
+    "module_count": 9,
+    "skill_count": 42,
+    "module_keys": [
+      "setup",
+      "clients-contracts",
+      "work-production",
+      "media-planning",
+      "media-buying",
+      "suppliers-payments",
+      "billing-collections",
+      "accounting-close",
+      "profitability"
+    ],
+    "catalog_source": "cobertura-42-skills.json",
+    "arbitrary_sql": false,
+    "full_database_dump": false,
+    "allowed_fields_and_relationships": true,
+    "bounded_pagination": true,
+    "metric_authority": "Deterministic domain calculators and query services",
+    "every_tool_call_reauthorizes": true,
+    "source_fields": [
+      "record_or_document_id",
+      "version_or_revision",
+      "as_of",
+      "basis",
+      "currency",
+      "authorized_internal_link"
+    ],
+    "database_credentials_to_assistant": false
+  },
+  "tool_families": [
+    {
+      "name": "describe_capabilities",
+      "effect": "read",
+      "purpose": "Filtered semantic catalog and handler schemas"
+    },
+    {
+      "name": "query_records",
+      "effect": "read",
+      "purpose": "Allowlisted domain queries, no arbitrary SQL"
+    },
+    {
+      "name": "get_source_evidence",
+      "effect": "read",
+      "purpose": "Authorized records/document fragments"
+    },
+    {
+      "name": "prepare_action",
+      "effect": "proposal_only",
+      "purpose": "Persist editable canonical action proposal, no business mutation"
+    },
+    {
+      "name": "save_confirmed_draft",
+      "effect": "local_domain_command",
+      "requires": "Exact human confirmation plus current policy"
+    },
+    {
+      "name": "request_approval",
+      "effect": "approval_request",
+      "requires": "Canonical proposal revision; never grants approval"
+    },
+    {
+      "name": "execute_approved_action",
+      "effect": "existing_domain_command_or_simulated_adapter",
+      "requires": "Current permissions, exact confirmation, approval when required, revision, policy, idempotency and available funds"
+    },
+    {
+      "name": "get_operation_status",
+      "effect": "read",
+      "purpose": "Existing run/action outcome"
+    },
+    {
+      "name": "reconcile_operation",
+      "effect": "authorized_reconciliation",
+      "purpose": "Resolve unknown outcome before resend"
+    }
+  ],
+  "tool_contract_notice": "These are AgeOS contract names, not asserted Eve/AI SDK APIs.",
+  "skill_bindings": [
+    {
+      "skill_id": "agency-orchestrator",
+      "module_key": "setup",
+      "existing_subagent_key": "coordinador",
+      "canonical_action_id": "recomputeJobReadiness",
+      "domain_route": "/a/:agencySlug/modules/setup/workflows/agency-orchestrator",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.orchestrator"
+    },
+    {
+      "skill_id": "agency-integrations",
+      "module_key": "setup",
+      "existing_subagent_key": "coordinador",
+      "canonical_action_id": "configureDemoConnection",
+      "domain_route": "/a/:agencySlug/modules/setup/workflows/agency-integrations",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.integrations"
+    },
+    {
+      "skill_id": "agency-access-governance",
+      "module_key": "setup",
+      "existing_subagent_key": "coordinador",
+      "canonical_action_id": "proposeAccessChange",
+      "domain_route": "/a/:agencySlug/modules/setup/workflows/agency-access-governance",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.access-governance"
+    },
+    {
+      "skill_id": "agency-master-data",
+      "module_key": "setup",
+      "existing_subagent_key": "coordinador",
+      "canonical_action_id": "upsertMasterRecord",
+      "domain_route": "/a/:agencySlug/modules/setup/workflows/agency-master-data",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.master-data"
+    },
+    {
+      "skill_id": "agency-onboarding",
+      "module_key": "clients-contracts",
+      "existing_subagent_key": "clientes",
+      "canonical_action_id": "createClientIntake",
+      "domain_route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-onboarding",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.onboarding"
+    },
+    {
+      "skill_id": "agency-job-lifecycle",
+      "module_key": "clients-contracts",
+      "existing_subagent_key": "clientes",
+      "canonical_action_id": "openOrCloseJob",
+      "domain_route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-job-lifecycle",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.job-lifecycle"
+    },
+    {
+      "skill_id": "agency-contract-po",
+      "module_key": "clients-contracts",
+      "existing_subagent_key": "clientes",
+      "canonical_action_id": "recordClientAuthority",
+      "domain_route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-contract-po",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.contract-po"
+    },
+    {
+      "skill_id": "agency-budget-control",
+      "module_key": "clients-contracts",
+      "existing_subagent_key": "clientes",
+      "canonical_action_id": "reserveBudget",
+      "domain_route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-budget-control",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.budget-control"
+    },
+    {
+      "skill_id": "agency-fee-contracts",
+      "module_key": "clients-contracts",
+      "existing_subagent_key": "clientes",
+      "canonical_action_id": "calculateFeeSchedule",
+      "domain_route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-fee-contracts",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.fee-contracts"
+    },
+    {
+      "skill_id": "agency-billing-requirements",
+      "module_key": "clients-contracts",
+      "existing_subagent_key": "clientes",
+      "canonical_action_id": "evaluateBillingReadiness",
+      "domain_route": "/a/:agencySlug/modules/clients-contracts/workflows/agency-billing-requirements",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.billing-requirements"
+    },
+    {
+      "skill_id": "agency-tasks-timesheets",
+      "module_key": "work-production",
+      "existing_subagent_key": "produccion",
+      "canonical_action_id": "submitAndApproveTimesheet",
+      "domain_route": "/a/:agencySlug/modules/work-production/workflows/agency-tasks-timesheets",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.tasks-timesheets"
+    },
+    {
+      "skill_id": "agency-production-estimating",
+      "module_key": "work-production",
+      "existing_subagent_key": "produccion",
+      "canonical_action_id": "createProductionEstimate",
+      "domain_route": "/a/:agencySlug/modules/work-production/workflows/agency-production-estimating",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.production-estimating"
+    },
+    {
+      "skill_id": "agency-production",
+      "module_key": "work-production",
+      "existing_subagent_key": "produccion",
+      "canonical_action_id": "reviewProductionDelivery",
+      "domain_route": "/a/:agencySlug/modules/work-production/workflows/agency-production",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.production"
+    },
+    {
+      "skill_id": "agency-media-ranking",
+      "module_key": "media-planning",
+      "existing_subagent_key": "planificacion",
+      "canonical_action_id": "rankMediaOptions",
+      "domain_route": "/a/:agencySlug/modules/media-planning/workflows/agency-media-ranking",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.media-ranking"
+    },
+    {
+      "skill_id": "agency-media-planning",
+      "module_key": "media-planning",
+      "existing_subagent_key": "planificacion",
+      "canonical_action_id": "saveMediaPlanRevision",
+      "domain_route": "/a/:agencySlug/modules/media-planning/workflows/agency-media-planning",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.media-planning"
+    },
+    {
+      "skill_id": "agency-tv-radio-planning",
+      "module_key": "media-planning",
+      "existing_subagent_key": "planificacion",
+      "canonical_action_id": "buildBroadcastSchedule",
+      "domain_route": "/a/:agencySlug/modules/media-planning/workflows/agency-tv-radio-planning",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.tv-radio-planning"
+    },
+    {
+      "skill_id": "agency-ooh-planning",
+      "module_key": "media-planning",
+      "existing_subagent_key": "planificacion",
+      "canonical_action_id": "proposeOOHPlan",
+      "domain_route": "/a/:agencySlug/modules/media-planning/workflows/agency-ooh-planning",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.ooh-planning"
+    },
+    {
+      "skill_id": "agency-digital-planning",
+      "module_key": "media-planning",
+      "existing_subagent_key": "planificacion",
+      "canonical_action_id": "validateDigitalPlan",
+      "domain_route": "/a/:agencySlug/modules/media-planning/workflows/agency-digital-planning",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.digital-planning"
+    },
+    {
+      "skill_id": "agency-plan-changes",
+      "module_key": "media-planning",
+      "existing_subagent_key": "planificacion",
+      "canonical_action_id": "proposePlanRevisionChange",
+      "domain_route": "/a/:agencySlug/modules/media-planning/workflows/agency-plan-changes",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.plan-changes"
+    },
+    {
+      "skill_id": "agency-rate-cards-contracts",
+      "module_key": "media-buying",
+      "existing_subagent_key": "compra",
+      "canonical_action_id": "saveRateCardAgreement",
+      "domain_route": "/a/:agencySlug/modules/media-buying/workflows/agency-rate-cards-contracts",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.rate-cards-contracts"
+    },
+    {
+      "skill_id": "agency-media-buying",
+      "module_key": "media-buying",
+      "existing_subagent_key": "compra",
+      "canonical_action_id": "issueMediaOrder",
+      "domain_route": "/a/:agencySlug/modules/media-buying/workflows/agency-media-buying",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.media-buying"
+    },
+    {
+      "skill_id": "agency-campaign-activation",
+      "module_key": "media-buying",
+      "existing_subagent_key": "compra",
+      "canonical_action_id": "activateDemoCampaign",
+      "domain_route": "/a/:agencySlug/modules/media-buying/workflows/agency-campaign-activation",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.campaign-activation"
+    },
+    {
+      "skill_id": "agency-campaign-optimization",
+      "module_key": "media-buying",
+      "existing_subagent_key": "compra",
+      "canonical_action_id": "proposeCampaignOptimization",
+      "domain_route": "/a/:agencySlug/modules/media-buying/workflows/agency-campaign-optimization",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.campaign-optimization"
+    },
+    {
+      "skill_id": "agency-transmission-control",
+      "module_key": "media-buying",
+      "existing_subagent_key": "compra",
+      "canonical_action_id": "reconcileBroadcastDelivery",
+      "domain_route": "/a/:agencySlug/modules/media-buying/workflows/agency-transmission-control",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.transmission-control"
+    },
+    {
+      "skill_id": "agency-ooh-inventory",
+      "module_key": "media-buying",
+      "existing_subagent_key": "compra",
+      "canonical_action_id": "reserveOOHFace",
+      "domain_route": "/a/:agencySlug/modules/media-buying/workflows/agency-ooh-inventory",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.ooh-inventory"
+    },
+    {
+      "skill_id": "agency-delivery-reconciliation",
+      "module_key": "suppliers-payments",
+      "existing_subagent_key": "proveedores",
+      "canonical_action_id": "reconcileDeliveryInvoice",
+      "domain_route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-delivery-reconciliation",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.delivery-reconciliation"
+    },
+    {
+      "skill_id": "agency-payables",
+      "module_key": "suppliers-payments",
+      "existing_subagent_key": "proveedores",
+      "canonical_action_id": "approveSupplierInvoice",
+      "domain_route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-payables",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.payables"
+    },
+    {
+      "skill_id": "agency-payment-run",
+      "module_key": "suppliers-payments",
+      "existing_subagent_key": "proveedores",
+      "canonical_action_id": "executeDemoPaymentBatch",
+      "domain_route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-payment-run",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.payment-run"
+    },
+    {
+      "skill_id": "agency-cash-settlement",
+      "module_key": "suppliers-payments",
+      "existing_subagent_key": "proveedores",
+      "canonical_action_id": "reconcileBankTransaction",
+      "domain_route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-cash-settlement",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.cash-settlement"
+    },
+    {
+      "skill_id": "agency-expenses",
+      "module_key": "suppliers-payments",
+      "existing_subagent_key": "proveedores",
+      "canonical_action_id": "submitAndApproveExpense",
+      "domain_route": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-expenses",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.expenses"
+    },
+    {
+      "skill_id": "agency-client-billing",
+      "module_key": "billing-collections",
+      "existing_subagent_key": "facturacion",
+      "canonical_action_id": "issueDemoClientInvoice",
+      "domain_route": "/a/:agencySlug/modules/billing-collections/workflows/agency-client-billing",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.client-billing"
+    },
+    {
+      "skill_id": "agency-collections",
+      "module_key": "billing-collections",
+      "existing_subagent_key": "facturacion",
+      "canonical_action_id": "allocateCollection",
+      "domain_route": "/a/:agencySlug/modules/billing-collections/workflows/agency-collections",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.collections"
+    },
+    {
+      "skill_id": "agency-rebates",
+      "module_key": "billing-collections",
+      "existing_subagent_key": "facturacion",
+      "canonical_action_id": "calculateRebateSettlement",
+      "domain_route": "/a/:agencySlug/modules/billing-collections/workflows/agency-rebates",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.rebates"
+    },
+    {
+      "skill_id": "agency-tax-compliance",
+      "module_key": "billing-collections",
+      "existing_subagent_key": "facturacion",
+      "canonical_action_id": "validateDemoTaxProfile",
+      "domain_route": "/a/:agencySlug/modules/billing-collections/workflows/agency-tax-compliance",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.tax-compliance"
+    },
+    {
+      "skill_id": "agency-general-ledger",
+      "module_key": "accounting-close",
+      "existing_subagent_key": "contabilidad",
+      "canonical_action_id": "postDemoJournal",
+      "domain_route": "/a/:agencySlug/modules/accounting-close/workflows/agency-general-ledger",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.general-ledger"
+    },
+    {
+      "skill_id": "agency-accruals-revaluation",
+      "module_key": "accounting-close",
+      "existing_subagent_key": "contabilidad",
+      "canonical_action_id": "proposeAccrualOrFXAdjustment",
+      "domain_route": "/a/:agencySlug/modules/accounting-close/workflows/agency-accruals-revaluation",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.accruals-revaluation"
+    },
+    {
+      "skill_id": "agency-fixed-assets",
+      "module_key": "accounting-close",
+      "existing_subagent_key": "contabilidad",
+      "canonical_action_id": "calculateAssetDepreciation",
+      "domain_route": "/a/:agencySlug/modules/accounting-close/workflows/agency-fixed-assets",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.fixed-assets"
+    },
+    {
+      "skill_id": "agency-period-close",
+      "module_key": "accounting-close",
+      "existing_subagent_key": "contabilidad",
+      "canonical_action_id": "closeAccountingPeriod",
+      "domain_route": "/a/:agencySlug/modules/accounting-close/workflows/agency-period-close",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.period-close"
+    },
+    {
+      "skill_id": "agency-profitability",
+      "module_key": "profitability",
+      "existing_subagent_key": "rentabilidad",
+      "canonical_action_id": "calculateJobProfitability",
+      "domain_route": "/a/:agencySlug/modules/profitability/workflows/agency-profitability",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.profitability"
+    },
+    {
+      "skill_id": "agency-revenue-budget",
+      "module_key": "profitability",
+      "existing_subagent_key": "rentabilidad",
+      "canonical_action_id": "saveRevenueBudgetScenario",
+      "domain_route": "/a/:agencySlug/modules/profitability/workflows/agency-revenue-budget",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.revenue-budget"
+    },
+    {
+      "skill_id": "agency-cash-forecast",
+      "module_key": "profitability",
+      "existing_subagent_key": "rentabilidad",
+      "canonical_action_id": "calculateCashScenario",
+      "domain_route": "/a/:agencySlug/modules/profitability/workflows/agency-cash-forecast",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.cash-forecast"
+    },
+    {
+      "skill_id": "agency-management-reporting",
+      "module_key": "profitability",
+      "existing_subagent_key": "rentabilidad",
+      "canonical_action_id": "generateManagementSnapshot",
+      "domain_route": "/a/:agencySlug/modules/profitability/workflows/agency-management-reporting",
+      "assistant_implementation_required": true,
+      "implemented": false,
+      "tools_share_ui_services": true,
+      "approval": "Enforced by current server domain policy, not model or client history",
+      "test_reference": "skill.management-reporting"
+    }
+  ],
+  "approval": {
+    "authority": "ERP approval records and domain handlers",
+    "client_approved_flag_is_authority": false,
+    "human_confirmation_is_financial_approval": false,
+    "stale_proposal_requires_new_confirmation": true,
+    "stale_approval_requires_new_approval": true,
+    "self_approval": "Blocked for protected budget/payment/journal actions",
+    "required_bindings": [
+      "actor",
+      "tenant",
+      "action_id",
+      "revision",
+      "canonical_payload_digest",
+      "policy_revision",
+      "currency",
+      "amount",
+      "destination",
+      "expiry"
+    ],
+    "scripted_message_may_approve": false
+  },
+  "persistence": {
+    "store": "PostgreSQL with tenant boundaries and RLS",
+    "private_history_by_default": true,
+    "conversation_scope": [
+      "tenant_id",
+      "owner_user_id",
+      "scope"
+    ],
+    "entities": [
+      "assistant_conversation",
+      "assistant_message",
+      "assistant_run",
+      "assistant_delegation",
+      "assistant_context_snapshot",
+      "assistant_tool_call",
+      "assistant_source_reference",
+      "assistant_run_event"
+    ],
+    "client_can_replace_server_history": false,
+    "recheck_history_sources_after_permission_revocation": true,
+    "run_states": [
+      "queued",
+      "running",
+      "waiting_input",
+      "waiting_confirmation",
+      "waiting_approval",
+      "completed",
+      "failed",
+      "cancelled",
+      "interrupted",
+      "blocked"
+    ],
+    "run_fields": [
+      "scenario_id",
+      "scenario_version",
+      "current_step",
+      "status",
+      "cancel_requested_at"
+    ]
+  },
+  "execution": {
+    "deduplicate_by": [
+      "conversation_id",
+      "client_message_id",
+      "request_id"
+    ],
+    "domain_idempotency": "Stable proposal/action ID, never scripted message text",
+    "close_panel_cancels_run": false,
+    "stop_requires_server_cancel": true,
+    "cancel_rolls_back_committed_effect": false,
+    "reconnect": "Recover persisted current scenario step, events and results; never repeat committed commands",
+    "unknown_outcome": "Keep existing operation/reservation, reconcile before re-execution",
+    "mutable_state_from_chat": "Server domain commands only",
+    "one_active_run_per_conversation": true,
+    "streaming": "Optional server events/polling; progressive scripted text labeled demo, never LLM streaming"
+  },
+  "attachments": {
+    "source": "Private ERP library or validated uploads",
+    "formats": [
+      "pdf",
+      "docx",
+      "xlsx",
+      "csv"
+    ],
+    "arbitrary_url_fetch": false,
+    "embedded_instructions": "Untrusted source content; never permissions or tool instructions",
+    "vision_ocr": "No general AI understanding required; use implemented parser or clearly labeled prepared fixture extraction",
+    "source_citations": "Built from authorized handler results, never fake links in scripted copy"
+  },
+  "acceptance_cases": [
+    {
+      "id": "A01",
+      "case": "Full page and right panel share orchestrator, thread and context without duplicate run"
+    },
+    {
+      "id": "A02",
+      "case": "Supported EN/ES margin aliases query actual checkpoint and cite sources"
+    },
+    {
+      "id": "A03",
+      "case": "Scripted job-creation case validates missing parameters, previews, confirms and persists one job"
+    },
+    {
+      "id": "A04",
+      "case": "Scripted media-plan case yields exact 30000 USD draft and approval gate"
+    },
+    {
+      "id": "A05",
+      "case": "Scripted campaign case binds plan revision then policy-authorized simulated activation"
+    },
+    {
+      "id": "A06",
+      "case": "All 42 skill bindings and labeled simulated delegation executing real domain command with audit"
+    },
+    {
+      "id": "A07",
+      "case": "Viewer writes and self-approval rejected server-side"
+    },
+    {
+      "id": "A08",
+      "case": "Stale proposal/approval blocks execution"
+    },
+    {
+      "id": "A09",
+      "case": "Agency/role switch and forged conversation IDs cannot expose cross-scope messages/files"
+    },
+    {
+      "id": "A10",
+      "case": "Navigation updates next context but never retargets an inflight scenario action"
+    },
+    {
+      "id": "A11",
+      "case": "Double submit/reconnect/retry produces single command/effect"
+    },
+    {
+      "id": "A12",
+      "case": "Persistence/reconnect and explicit server cancel preserve committed outcomes"
+    },
+    {
+      "id": "A13",
+      "case": "Timeout after simulated effect reconciles without duplicate"
+    },
+    {
+      "id": "A14",
+      "case": "Malicious file text or unsupported fixture cannot grant permission or exfiltrate"
+    },
+    {
+      "id": "A15",
+      "case": "Revoked access prevents historical content from leaking through citations"
+    },
+    {
+      "id": "A16",
+      "case": "Unknown alias, ambiguous case or wrong checkpoint offers supported scenarios without effects"
+    },
+    {
+      "id": "A17",
+      "case": "Forged client tool output/approval/history rejected"
+    },
+    {
+      "id": "A18",
+      "case": "Responsive keyboard-accessible EN/ES page and panel with scripted-demo label"
+    }
+  ],
+  "evidence": [
+    "app/evidence/assistant-acceptance.md",
+    "app/evidence/assistant-tool-coverage.json",
+    "app/evidence/screenshots/",
+    "app/evidence/assistant-evals.md"
+  ],
+  "validation_layers": [
+    "deterministic_domain_and_tool_tests",
+    "scripted_driver_ui_tests",
+    "complete_scripted_e2e_case_walkthroughs"
+  ],
+  "sources": [
+    {
+      "title": "ReUI Agentic Task Panel",
+      "url": "https://reui.io/preview/base/ai-chat-6?ref=mcp"
+    },
+    {
+      "title": "ReUI app shell docking pattern",
+      "url": "https://reui.io/preview/base/app-shell-18?ref=mcp"
+    }
+  ],
+  "implementation_sequence": {
+    "instruction_1": "Build chassis, page/panel shell, shared conversation, persistence, permissions and driver contracts",
+    "instruction_2": "Program and test complete deterministic E2E scenario catalog",
+    "instruction_2_files": [
+      "08-instruccion-2-demo-e2e.md",
+      "PROMPT-2-DEMO-E2E.txt"
+    ],
+    "final_scope": "9 modules and 42 skill cases, no reduction"
+  },
+  "runtime_configuration": {
+    "application_variables": [
+      "AGEOS_ASSISTANT_MODE",
+      "AGEOS_ASSISTANT_MAX_STEPS",
+      "AGEOS_ASSISTANT_MAX_REQUESTS_PER_MINUTE"
+    ],
+    "default_mode": "scripted",
+    "required_modes": [
+      "scripted"
+    ],
+    "model_required": false,
+    "model_credentials_required": false,
+    "outbound_inference": false,
+    "future_live_mode": "Out of current scope and acceptance",
+    "limits": [
+      "concurrency",
+      "context_and_attachment_size",
+      "step_count",
+      "request_rate",
+      "query_size",
+      "timeout"
+    ],
+    "usage": "Measure actual scenario operations; no fake tokens/inference cost",
+    "erp_connector_mode": "simulated"
+  },
+  "scenario_contract": {
+    "source": "08-instruccion-2-demo-e2e.md and coverage-42 matrix",
+    "required_fields": [
+      "scenario_id",
+      "version",
+      "title_en",
+      "title_es",
+      "skill_ids",
+      "supported_aliases_en",
+      "supported_aliases_es",
+      "parameter_schema",
+      "allowed_checkpoints",
+      "context_entity",
+      "preconditions",
+      "eligible_roles",
+      "steps",
+      "expected_results",
+      "negative_variants",
+      "reset_or_recovery"
+    ],
+    "allowed_step_types": [
+      "query",
+      "request_input",
+      "prepare_action",
+      "confirm",
+      "request_approval",
+      "scripted_delegation",
+      "execute_command",
+      "reconcile",
+      "show_result"
+    ],
+    "matching": "Presets and explicit aliases; documented normalization only; ambiguity asks user to select",
+    "unknown_input_mutates_data": false,
+    "messages": "Hardcoded templates populated only from validated server results",
+    "fixture_final_results_seeded_as_live_outcomes": false,
+    "coverage": "Union of scenario skill IDs equals all 42 canonical IDs"
+  }
+}

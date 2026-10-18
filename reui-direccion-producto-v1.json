@@ -1,0 +1,592 @@
+{
+  "date": "2026-10-17",
+  "status": "specified_not_implemented",
+  "product_direction": "04A-direccion-producto-y-mapa-ui.md",
+  "mcp_plan": "ultimate",
+  "template": "Verve",
+  "template_preview": "https://verve-crm.reui.io",
+  "template_download": "https://reui.io/template/verve-crm",
+  "resource_count": 22,
+  "resources": [
+    {
+      "name": "onboarding-1",
+      "preview_url": "https://reui.io/preview/base/onboarding-1?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "solution-agents-5",
+      "preview_url": "https://reui.io/preview/base/solution-agents-5?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "solution-files-1",
+      "preview_url": "https://reui.io/preview/base/solution-files-1?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "gantt-1",
+      "preview_url": "https://reui.io/preview/base/gantt-1?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "gantt-4",
+      "preview_url": "https://reui.io/preview/base/gantt-4?ref=mcp",
+      "priority": "reference_not_initial"
+    },
+    {
+      "name": "solution-dev-ops-6",
+      "preview_url": "https://reui.io/preview/base/solution-dev-ops-6?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "solution-agents-4",
+      "preview_url": "https://reui.io/preview/base/solution-agents-4?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "agent-activity-1",
+      "preview_url": "https://reui.io/preview/base/agent-activity-1?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "data-grid-advanced-1",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-1?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "data-grid-advanced-2",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-2?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "data-grid-advanced-3",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-3?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "data-grid-editing-5",
+      "preview_url": "https://reui.io/preview/base/data-grid-editing-5?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "chart-48",
+      "preview_url": "https://reui.io/preview/base/chart-48?ref=mcp",
+      "priority": "reference_not_initial"
+    },
+    {
+      "name": "ai-usage-2",
+      "preview_url": "https://reui.io/preview/base/ai-usage-2?ref=mcp",
+      "priority": "reference_not_initial"
+    },
+    {
+      "name": "c-trace-4",
+      "preview_url": "https://reui.io/preview/base/components/c-trace-4?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "c-trace-5",
+      "preview_url": "https://reui.io/preview/base/components/c-trace-5?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "c-data-grid-3",
+      "preview_url": "https://reui.io/preview/base/components/c-data-grid-3?ref=mcp",
+      "priority": "initial"
+    },
+    {
+      "name": "card-28",
+      "preview_url": "https://reui.io/preview/base/card-28?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/card-28-light.webp",
+      "components": [
+        "badge",
+        "frame"
+      ],
+      "priority": "initial",
+      "agent_notes": [
+        "Replace `CARDS` in data.tsx; each figure is pre split into `valueBold` and `valueFaint`, so split your formatted number at the decimal point"
+      ]
+    },
+    {
+      "name": "data-grid-filtering-2",
+      "preview_url": "https://reui.io/preview/base/data-grid-filtering-2?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/data-grid-filtering-2-light.webp",
+      "components": [
+        "badge",
+        "data-grid",
+        "filters",
+        "frame",
+        "rating"
+      ],
+      "priority": "initial",
+      "agent_notes": [
+        "`AUTOMATIONS` is the demo library held in `useState`; the enable switch and Archive change that local copy only, so persist them through your API"
+      ]
+    },
+    {
+      "name": "data-grid-filtering-1",
+      "preview_url": "https://reui.io/preview/base/data-grid-filtering-1?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/data-grid-filtering-1-light.webp",
+      "components": [
+        "badge",
+        "data-grid",
+        "filters",
+        "frame"
+      ],
+      "priority": "initial",
+      "agent_notes": [
+        "`simulateAsyncFiltering` fakes a 400 ms fetch with `setTimeout`; replace it with your API call and keep `isLoading` driving the skeleton"
+      ]
+    },
+    {
+      "name": "ai-chat-6",
+      "preview_url": "https://reui.io/preview/base/ai-chat-6?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/ai-chat-6-light.webp",
+      "priority": "initial",
+      "purpose": "shared_assistant_page_and_panel_conversation",
+      "components": [
+        "badge",
+        "code-block",
+        "icon-stack"
+      ],
+      "shadcn_primitives": [
+        "message",
+        "bubble",
+        "message-scroller",
+        "input-group",
+        "attachment",
+        "questionnaire"
+      ],
+      "agent_notes": [
+        "Replace SOURCES, PLAN_STEPS, FORK_CHOICES and OWNERS with authorized scenario/runtime data; remove MODELS.",
+        "PICKABLE_FILES must use private authorized files or an explicit fixture.",
+        "Bound root height within the agency shell; do not nest h-svh.",
+        "Use one centralized scripted driver with presets, aliases and typed parameters; render server-derived values and real domain handler results.",
+        "No LLM or model credentials required. Do not claim general intelligence or fabricate business states.",
+        "Page and panel share one orchestrator and conversation; do not create duplicate agents.",
+        "Build chassis first; apply 08-instruccion-2-demo-e2e.md and demo-scenarios-v1.json as instruction 2."
+      ]
+    },
+    {
+      "name": "app-shell-18",
+      "preview_url": "https://reui.io/preview/base/app-shell-18?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/app-shell-18-light.webp",
+      "priority": "reference_docking_only",
+      "purpose": "desktop_in_flow_right_panel_mobile_sheet",
+      "components": [
+        "badge"
+      ],
+      "agent_notes": [
+        "Reference docking only; preserve Verve shell and sidebar.",
+        "Do not copy TASK_LISTS, TAGS, FOCUS, USER or another theme provider."
+      ]
+    }
+  ],
+  "sidebar_icons": [
+    {
+      "group": "Workspace",
+      "label": "Overview",
+      "icon": "LayoutDashboard",
+      "preview_url": "https://lucide.dev/icons/layout-dashboard"
+    },
+    {
+      "group": "Workspace",
+      "label": "Assistant",
+      "icon": "MessagesSquare",
+      "preview_url": "https://lucide.dev/icons/messages-square",
+      "navigation": "/a/:agencySlug/assistant",
+      "header_action": "open_assistant_panel"
+    },
+    {
+      "group": "Workspace",
+      "label": "Inbox",
+      "icon": "Inbox",
+      "preview_url": "https://lucide.dev/icons/inbox"
+    },
+    {
+      "group": "Workspace",
+      "label": "Jobs",
+      "icon": "BriefcaseBusiness",
+      "preview_url": "https://lucide.dev/icons/briefcase-business"
+    },
+    {
+      "group": "Operations",
+      "label": "Clients & contracts",
+      "icon": "ContactRound",
+      "preview_url": "https://lucide.dev/icons/contact-round"
+    },
+    {
+      "group": "Operations",
+      "label": "Work & production",
+      "icon": "Clapperboard",
+      "preview_url": "https://lucide.dev/icons/clapperboard"
+    },
+    {
+      "group": "Operations",
+      "label": "Media planning",
+      "icon": "CalendarRange",
+      "preview_url": "https://lucide.dev/icons/calendar-range"
+    },
+    {
+      "group": "Operations",
+      "label": "Media buying",
+      "icon": "Megaphone",
+      "preview_url": "https://lucide.dev/icons/megaphone"
+    },
+    {
+      "group": "Finance",
+      "label": "Suppliers & payments",
+      "icon": "WalletCards",
+      "preview_url": "https://lucide.dev/icons/wallet-cards"
+    },
+    {
+      "group": "Finance",
+      "label": "Billing & collections",
+      "icon": "ReceiptText",
+      "preview_url": "https://lucide.dev/icons/receipt-text"
+    },
+    {
+      "group": "Finance",
+      "label": "Accounting & close",
+      "icon": "BookOpenCheck",
+      "preview_url": "https://lucide.dev/icons/book-open-check"
+    },
+    {
+      "group": "Finance",
+      "label": "Profitability",
+      "icon": "ChartNoAxesCombined",
+      "preview_url": "https://lucide.dev/icons/chart-no-axes-combined"
+    },
+    {
+      "group": "Manage",
+      "label": "Agency setup",
+      "icon": "SlidersHorizontal",
+      "preview_url": "https://lucide.dev/icons/sliders-horizontal"
+    },
+    {
+      "group": "Manage",
+      "label": "Connections",
+      "icon": "Plug",
+      "preview_url": "https://lucide.dev/icons/plug"
+    },
+    {
+      "group": "Manage",
+      "label": "Library",
+      "icon": "FolderOpen",
+      "preview_url": "https://lucide.dev/icons/folder-open"
+    },
+    {
+      "group": "Manage",
+      "label": "Settings",
+      "icon": "Settings",
+      "preview_url": "https://lucide.dev/icons/settings"
+    },
+    {
+      "group": "Catalog",
+      "label": "All capabilities",
+      "icon": "Workflow",
+      "preview_url": "https://lucide.dev/icons/workflow"
+    }
+  ],
+  "icon_library": "lucide-react",
+  "motion_icons_required": false,
+  "validation": {
+    "ok": true,
+    "components": [
+      {
+        "name": "file-type",
+        "exists": true
+      },
+      {
+        "name": "date-selector",
+        "exists": true,
+        "props": [
+          {
+            "prop": "maxYear",
+            "documented": true
+          }
+        ]
+      },
+      {
+        "name": "badge",
+        "exists": true,
+        "props": [
+          {
+            "prop": "variant",
+            "documented": true
+          }
+        ]
+      },
+      {
+        "name": "alert",
+        "exists": true
+      },
+      {
+        "name": "data-grid",
+        "exists": true
+      },
+      {
+        "name": "filters",
+        "exists": true
+      },
+      {
+        "name": "stepper",
+        "exists": true
+      },
+      {
+        "name": "gantt",
+        "exists": true
+      },
+      {
+        "name": "kanban",
+        "exists": true
+      },
+      {
+        "name": "color-picker",
+        "exists": true
+      },
+      {
+        "name": "number-field",
+        "exists": true,
+        "externalDocsUrl": "https://base-ui.com/react/components/number-field#api-reference"
+      },
+      {
+        "name": "message",
+        "exists": true,
+        "kind": "shadcn",
+        "apiDocumented": false,
+        "props_checked": false,
+        "externalDocsUrl": "https://ui.shadcn.com/docs/components/base/message",
+        "note": "Read installed ui source before writing props; ReUI confirms existence only."
+      },
+      {
+        "name": "bubble",
+        "exists": true,
+        "kind": "shadcn",
+        "apiDocumented": false,
+        "props_checked": false,
+        "externalDocsUrl": "https://ui.shadcn.com/docs/components/base/bubble",
+        "note": "Read installed ui source before writing props; ReUI confirms existence only."
+      },
+      {
+        "name": "message-scroller",
+        "exists": true,
+        "kind": "shadcn",
+        "apiDocumented": false,
+        "props_checked": false,
+        "externalDocsUrl": "https://ui.shadcn.com/docs/components/base/message-scroller",
+        "note": "Read installed ui source before writing props; ReUI confirms existence only."
+      },
+      {
+        "name": "input-group",
+        "exists": true,
+        "kind": "shadcn",
+        "apiDocumented": false,
+        "props_checked": false,
+        "externalDocsUrl": "https://ui.shadcn.com/docs/components/base/input-group",
+        "note": "Read installed ui source before writing props; ReUI confirms existence only."
+      },
+      {
+        "name": "trace",
+        "exists": true,
+        "kind": "shadcn",
+        "apiDocumented": false,
+        "props_checked": false,
+        "externalDocsUrl": "https://ui.shadcn.com/docs/components/base/trace",
+        "note": "Read installed ui source before writing props; ReUI confirms existence only."
+      }
+    ],
+    "items": [
+      {
+        "name": "onboarding-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "solution-agents-5",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "solution-files-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "gantt-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "gantt-4",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "solution-dev-ops-6",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "solution-agents-4",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "agent-activity-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-advanced-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-advanced-2",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-advanced-3",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-editing-5",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "chart-48",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "ai-usage-2",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "c-trace-4",
+        "exists": true,
+        "type": "example",
+        "free": true
+      },
+      {
+        "name": "c-trace-5",
+        "exists": true,
+        "type": "example",
+        "free": true
+      },
+      {
+        "name": "c-data-grid-3",
+        "exists": true,
+        "type": "example",
+        "free": true
+      },
+      {
+        "name": "card-28",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-filtering-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-filtering-2",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "ai-chat-6",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "app-shell-18",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      }
+    ],
+    "note": "Checked against the indexed API docs. notDocumented = the name appears nowhere in the component's documented API, so stop and read it. documented = the name appears in those docs, which is evidence and not proof it is a prop of this component; a `reason` is the docs saying outright that it is not one. Read the api from get_component before writing anything you have not seen in it.",
+    "assistant_addendum": {
+      "date": "2026-10-17",
+      "mcp_plan": "ultimate",
+      "skill_version": "68f0e6fa91",
+      "selected_items_validated": [
+        "ai-chat-6",
+        "app-shell-18"
+      ],
+      "alternatives_reviewed": [
+        "ai-chat-2",
+        "ai-chat-8",
+        "sheet-10"
+      ],
+      "no_installation": true,
+      "no_runtime_or_visual_verification": true
+    }
+  },
+  "browser_review": {
+    "verve_home": "visually_inspected",
+    "advanced_media": "loading_screen_only_not_visually_verified",
+    "assistant": "mcp_verified_not_browser_visually_verified"
+  },
+  "notes": [
+    "Three additions extend the earlier inventory without replacing its research record.",
+    "No licensed source installed or app built.",
+    "Sidebar exports verified against current official Lucide documentation; installed version compilation remains pending.",
+    "Assistant adds two catalog resources and one sidebar entry; app-shell-18 is a docking reference, not a replacement template.",
+    "MessagesSquare verified on official Lucide icon page; installed export compilation remains pending.",
+    "Assistant uses a scripted deterministic demo driver without LLM or model credentials; response templates call real domain handlers and render server-derived values.",
+    "One agency-orchestrator entrypoint serves full page and right panel; all nine modules and 42 skills remain unchanged."
+  ],
+  "sidebar_entry_count": 17,
+  "assistant_delivery": {
+    "driver": "scripted",
+    "llm_required": false,
+    "instruction_2": "08-instruccion-2-demo-e2e.md",
+    "prompt": "PROMPT-2-DEMO-E2E.txt",
+    "scenarios": "demo-scenarios-v1.json",
+    "no_fake_business_state": true
+  }
+}

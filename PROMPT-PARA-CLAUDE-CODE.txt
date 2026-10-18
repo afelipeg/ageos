@@ -1,0 +1,177 @@
+INSTRUCCIÓN 1 — CONSTRUIR EL CHASIS DETERMINISTA DE AGEOS
+
+Actúa como líder de producto, diseñador UX/UI y desarrollador full-stack responsable de implementar y verificar esta aplicación.
+
+DIRECTORIO DE TRABAJO
+
+El proyecto está en:
+/Users/andresgutierrez/Documents/Proyectos_ai/AgencyOS - ERP Agentico
+
+El paquete de instrucciones está en:
+/Users/andresgutierrez/Documents/Proyectos_ai/AgencyOS - ERP Agentico/claude-code-chasis-v1
+
+Trabaja desde ese paquete y construye la aplicación dentro de su carpeta app/. Si el paquete se trasladó a otra máquina, usa la ubicación actual conservando la estructura. La fuente licenciada Verve debe estar en inputs/reui/verve/. No sobrescribas la documentación ni la fuente original. Respeta las instrucciones de repositorio aplicables.
+
+LÍMITE DE ESTA EJECUCIÓN
+
+Ejecuta exclusivamente la INSTRUCCIÓN 1. Los documentos 03 y 06 describen reglas y criterios del producto completo; 08, demo-scenarios-v1.json y PROMPT-2-DEMO-E2E.txt describen la etapa posterior. Puedes leerlos para preparar contratos, pero no ejecutes todavía el catálogo completo de escenarios ni ensayes la demo comercial. Esta delimitación rige para esta ejecución.
+
+Entrega un chasis funcional y verificado, con todos los módulos y capacidades registrados, y detente con un punto de continuación claro. El usuario regresará para autorizar la INSTRUCCIÓN 2. No declares terminada la demo E2E por haber construido su chasis.
+
+Construye el chasis determinista de AgeOS siguiendo este paquete. No te quedes en un plan o una landing page: implementa la aplicación ejecutable, su persistencia, reglas y pantallas, y valida el resultado.
+
+Empieza leyendo CLAUDE.md y 01-brief-y-plan-de-construccion.md. Lee después las especificaciones por fase: pantallas y rutas, chasis/fixtures/cobertura42, selección ReUI, criterios de aceptación y guion de demo. Las referencias contienen la arquitectura objetivo; el alcance inmediato aprobado es una demo funcional con integraciones externas simuladas. Mantén los nueve módulos y las 42 skills dentro del alcance; registra todos sus contratos y rutas en esta etapa.
+
+La interfaz debe estar en inglés con opción de español. El objetivo comercial es “Build your agency on AgeOS”: configurar una agencia, activar su espacio y operar un trabajo completo con sus datos, reglas y marca. Las operaciones, cálculos, aprobaciones y persistencia son reales; Ads, pagos, contabilidad externa, OAuth y DNS se simulan y se identifican claramente. Toda la demo es determinista y hardcodeada: datos sintéticos, escenarios preprogramados y orquestador guionizado; no necesita modelo ni credenciales. Los cambios de estado, cálculos y permisos se procesan con servicios reales del chasis.
+
+Usa Verve como base ReUI desde inputs/reui/verve/ y crea la aplicación en app/. Explora el MCP de ReUI antes de programar: get_agent_skill, get_project_context, compose_page, search, get_block/get_example, get_component/get_examples y get_install_command. Usa los IDs verificados del inventario, preserva el diseño y las APIs instaladas. No fusiones varias aplicaciones ni inventes componentes. Lee primero 04A-direccion-producto-y-mapa-ui.md: contiene las decisiones de producto obligatorias. Usa 04-reui-seleccion-e-instalacion.md para instalación y referencias.
+
+Inspecciona lo disponible y empieza por núcleo, migraciones, seed y pruebas. Si falta el archivo licenciado, señala exactamente cuál y continúa el backend y los contratos que no dependen de él. No solicites una clave en el chat, no imprimas secretos y no cambies la estética por una genérica sin necesidad.
+
+Implementa servicios de comandos y consultas comunes para la UI y el orquestador con sus subagentes: autorización por agencia, dinero exacto, estados/versiones, aprobaciones ligadas al payload, idempotencia, conciliación y auditoría. Registra las 42 capacidades con sus entradas, salidas, handler, permisos, dependencias y rutas. Construye el núcleo común y verifica operaciones representativas; la implementación y comprobación exhaustiva de los 42 escenarios corresponde a la instrucción 2. Distingue registered, handler implemented y scenario verified: ninguno implica automáticamente los demás.
+
+Reutiliza familias de pantalla y conecta las acciones implementadas al backend. Una acción pendiente de su escenario debe mostrar su estado de implementación y no devolver un éxito ficticio. No uses localStorage como ERP ni cifras decorativas. Verifica que los registros y cálculos mínimos del chasis coincidan entre pantallas y asistente, incluso después de recargar.
+
+Trabaja por fases completas y actualiza IMPLEMENTATION_STATUS.md. Toma decisiones técnicas rutinarias sin detenerte; pregunta solo por dependencias externas indispensables o decisiones de alcance que los documentos no resuelvan. Respeta las aprobaciones del entorno. No compres servicios, no actives campañas ni publiques en producción.
+
+Antes de entregar, ejecuta las comprobaciones de ReUI, typecheck, lint, pruebas de dominio, pruebas de navegador y build. Prueba aislamiento, revisiones, reintentos, EN/ES, móvil, archivos y reset. Entrega la aplicación, instrucciones de arranque, registro de las 42 capacidades con estado técnico real, evidencia de las pruebas del chasis y el punto de continuación para la instrucción 2. El guion comercial ensayado y la cobertura E2E completa se entregan en la segunda etapa. Declara exactamente lo implementado, lo simulado y lo pendiente.
+
+
+STACK Y ORGANIZACIÓN
+
+- Preserva framework, package manager, lockfile y versiones compatibles de Verve. Base prevista: Next.js App Router, React y TypeScript. No fuerces una actualización mayor si rompe el template.
+- PostgreSQL local para desarrollo o una conexión ya configurada; mismo esquema y migraciones para futuro despliegue Vercel/Neon. Usa un único acceso tipado a datos, preferentemente Drizzle, y validación Zod según el contrato 03.
+- Separa componentes/páginas, servicios de dominio, repositorios, consultas, comandos, políticas, adaptadores simulados y driver scripted. Un solo backend y una sola fuente de verdad; no hace falta microservicios ni un motor SQL propio.
+- Autenticación demo en servidor con usuarios sintéticos permitidos, sesión protegida y roles de la especificación. El navegador nunca asigna permisos por enviar role o tenant_id. El selector de personas es una herramienta protegida del presentador.
+- Datos, revisiones, aprobaciones, eventos, mensajes y estados viven en PostgreSQL. Las cargas privadas usan un adaptador de almacenamiento con autorización; disco privado solo para desarrollo local. No usar public/ ni memoria temporal como biblioteca persistente.
+- Implementa los contratos del futuro runtime Eve mediante una interfaz propia de AgeOS; esta etapa usa ScriptedAssistantDriver y no necesita Eve, AI SDK, Gateway ni Sandbox activos.
+- Si están disponibles, aplica vercel-react-best-practices al implementar React/Next.js y web-design-guidelines al revisar la UI. El MCP de ReUI y la API instalada gobiernan componentes y composición.
+- Prepara .env.example sin secretos con AGEOS_DEMO_MODE=true, AGEOS_ASSISTANT_MODE=scripted, AGEOS_CONNECTOR_MODE=simulated, perfil local/preview, DATABASE_URL y configuración de sesión. No solicites claves de modelos o plataformas ERP.
+
+DIRECCIÓN DE PRODUCTO
+
+El trabajo y su expediente son el centro del producto. Usa una sola navegación principal de cuatro grupos en el shell Verve; retira contextos y métricas CRM de muestra que no corresponden al ERP. /control y /ops mantienen sus permisos y contextos separados. Implementa las rutas y familias de pantalla definidas en 02 y rutas-y-pantallas.json. Registra todas las acciones, conecta las del núcleo y distingue las que requieren su escenario en la etapa 2.
+
+SIDEBAR E ICONOS
+
+Workspace: Overview — [LayoutDashboard](https://lucide.dev/icons/layout-dashboard); AgeOS Assistant — [MessagesSquare](https://lucide.dev/icons/messages-square); Inbox — [Inbox](https://lucide.dev/icons/inbox); Jobs — [BriefcaseBusiness](https://lucide.dev/icons/briefcase-business).
+
+Operations: Clients & contracts — [ContactRound](https://lucide.dev/icons/contact-round); Work & production — [Clapperboard](https://lucide.dev/icons/clapperboard); Media planning — [CalendarRange](https://lucide.dev/icons/calendar-range); Media buying — [Megaphone](https://lucide.dev/icons/megaphone).
+
+Finance: Suppliers & payments — [WalletCards](https://lucide.dev/icons/wallet-cards); Billing & collections — [ReceiptText](https://lucide.dev/icons/receipt-text); Accounting & close — [BookOpenCheck](https://lucide.dev/icons/book-open-check); Profitability — [ChartNoAxesCombined](https://lucide.dev/icons/chart-no-axes-combined).
+
+Manage: Agency setup — [SlidersHorizontal](https://lucide.dev/icons/sliders-horizontal); Connections — [Plug](https://lucide.dev/icons/plug); Library — [FolderOpen](https://lucide.dev/icons/folder-open); Settings — [Settings](https://lucide.dev/icons/settings).
+
+Catalog: All capabilities — [Workflow](https://lucide.dev/icons/workflow).
+
+Usa lucide-react estático y verifica exports contra la versión de Verve instalada. Un icono y una etiqueta por entrada; tooltip y nombre accesible al colapsar. Conserva tamaño y trazo del template. No añadas Motion Icons a navegación, filas o cifras.
+
+BLOQUES POR PANTALLA
+
+- Configurar agencia: [onboarding-1](https://reui.io/preview/base/onboarding-1?ref=mcp); cinco pasos persistentes.
+- Overview: [card-28](https://reui.io/preview/base/card-28?ref=mcp); cuatro KPIs calculados, pendientes y trabajos recientes.
+- Inbox y aprobaciones: [solution-agents-5](https://reui.io/preview/base/solution-agents-5?ref=mcp); diferencias, evidencia y revisión exacta.
+- Jobs/clientes/contratos/contabilidad: [c-data-grid-3](https://reui.io/preview/base/components/c-data-grid-3?ref=mcp); grilla común, columnas y comandos propios por entidad; detalle Verve con Tabs/Sheet.
+- Presupuestos y horas: [data-grid-editing-5](https://reui.io/preview/base/data-grid-editing-5?ref=mcp); edición validada y totales del servidor.
+- Producción: [gantt-1](https://reui.io/preview/base/gantt-1?ref=mcp); cronograma; Kanban comparte los mismos registros.
+- Planificación de medios: [data-grid-advanced-3](https://reui.io/preview/base/data-grid-advanced-3?ref=mcp); objetivos, audiencias, inversión y checks.
+- Compra de medios: [data-grid-advanced-1](https://reui.io/preview/base/data-grid-advanced-1?ref=mcp); campañas, órdenes y resultados demo.
+- Proveedores/pagos y facturación/cobranza: [data-grid-filtering-1](https://reui.io/preview/base/data-grid-filtering-1?ref=mcp); transacciones; vistas, permisos y comandos separados por dominio.
+- Rentabilidad: [data-grid-advanced-2](https://reui.io/preview/base/data-grid-advanced-2?ref=mcp); agencia, cliente y trabajo; fee, pass-through y margen separados.
+- Catálogo de 42 skills: [data-grid-filtering-2](https://reui.io/preview/base/data-grid-filtering-2?ref=mcp); configuración, dependencias y estados; quitar estrellas y automatizaciones ficticias.
+- Conexiones: [solution-dev-ops-6](https://reui.io/preview/base/solution-dev-ops-6?ref=mcp); cuenta, scopes, capacidades y estado Demo.
+- Políticas: [solution-agents-4](https://reui.io/preview/base/solution-agents-4?ref=mcp); Auto/Approval/Blocked efectivos en backend.
+- Biblioteca: [solution-files-1](https://reui.io/preview/base/solution-files-1?ref=mcp); archivos privados, versiones y vínculo al trabajo.
+- Actividad: [agent-activity-1](https://reui.io/preview/base/agent-activity-1?ref=mcp); pasos, fallas y resultados persistidos.
+- Pasos de ejecución: [c-trace-4](https://reui.io/preview/base/components/c-trace-4?ref=mcp); evidencia real de procedimientos.
+- Transición de aprobación: [c-trace-5](https://reui.io/preview/base/components/c-trace-5?ref=mcp); pausa y continuación según autorización.
+
+Marca y ajustes usan formularios Verve y Color Picker. Cierre combina grilla, Stepper y Alert. Operación de plataforma prepara las vistas de actividad y aprobación para el incidente CSV, cuyo recorrido completo se programa en la instrucción 2. Una familia de contenedores por región; no anidar Card y Frame.
+
+COMPONENTES
+
+- [data-grid](https://reui.io/components/data-grid?ref=mcp): tablas.
+- [filters](https://reui.io/components/filters?ref=mcp): condiciones de búsqueda.
+- [frame](https://reui.io/components/frame?ref=mcp): paneles operativos.
+- [badge](https://reui.io/components/badge?ref=mcp): estados.
+- [alert](https://reui.io/components/alert?ref=mcp): bloqueos y errores.
+- [stepper](https://reui.io/components/stepper?ref=mcp): wizard y checklist.
+- [kanban](https://reui.io/components/kanban?ref=mcp): tareas.
+- [gantt](https://reui.io/components/gantt?ref=mcp): cronograma.
+- [date-selector](https://reui.io/components/date-selector?ref=mcp): periodos de reportes.
+- [number-field](https://reui.io/components/number-field?ref=mcp): cantidades y horas.
+- [file-type](https://reui.io/components/file-type?ref=mcp): formatos de archivos.
+- [color-picker](https://reui.io/components/color-picker?ref=mcp): marca.
+- [timeline](https://reui.io/components/timeline?ref=mcp): historial sencillo.
+
+Reutiliza Sidebar, Breadcrumb, Tabs, Sheet, Dialog, AlertDialog, Command/CommandDialog, DropdownMenu, Tooltip, Input, Select, Textarea, Switch, Checkbox, Skeleton y Sonner del sistema instalado. Consulta sus APIs antes de escribir props. Date Selector debe admitir 2027: el default consultado termina en 2026.
+
+No necesitas descargar otra plantilla. Las referencias posteriores de capacidad, Sankey y consumo avanzado están identificadas en 04A; no forman parte de la composición inicial. Las pantallas, contratos y servicios comunes de planificación, rentabilidad y cupos forman parte del chasis; sus recorridos completos se verifican en la instrucción 2. Ninguna skill se elimina. No inventes tokens ni gasto IA.
+
+Sustituye los estados locales, temporizadores, cifras y handlers ficticios de los bloques por servicios persistentes. compose_page recomienda recursos; no sustituye esta dirección de producto. Ante incompatibilidades concretas de versión, registra y resuelve conservando intención, estilo y alcance.
+
+
+
+
+ASISTENTE GLOBAL OBLIGATORIO — ES EL ORQUESTADOR ERP
+
+Lee 07-asistente-global-erp.md y asistente-global-v1.json junto con el chasis. La página y el panel del orquestador forman parte de la demo determinista. El driver scripted sustituye la inferencia; la integración con un modelo queda para una etapa futura. Lee también REFERENCIA-COMMERCE-ASSISTANT.md: adopta el patrón de interacción del repositorio de referencia, no sus atajos de datos, identidad ni su stack Python.
+
+AgeOS Assistant es el agente coordinador existente, identificado como coordinador y sustentado por agency-orchestrator. Expón ese mismo orquestador al humano; delega en los ocho especialistas cuando la tarea lo requiere. No crees un chatbot genérico paralelo, un agente ERP adicional o una skill 43. La autorización y la aprobación viven en servicios de negocio y se aplican a todas las delegaciones.
+
+DOS SUPERFICIES, UN HILO
+
+- Crea /a/:agencySlug/assistant como página real del App Router en page.tsx. Según la estructura de Verve será app/a/[agencySlug]/assistant/page.tsx o src/app/a/[agencySlug]/assistant/page.tsx dentro de la aplicación app/ del paquete.
+- La entrada AgeOS Assistant del sidebar navega a esa página. Mantén un botón accesible en la cabecera de todas las pantallas de agencia para abrir el panel derecho sin abandonar la página. Los registros ofrecen Ask assistant con contexto explícito.
+- Monta AssistantProvider en el layout de agencia. Página y panel comparten conversación persistida, mensajes, stream/run y estado de propuestas. Navegar no reinicia el agente. Abrir la página completa oculta el panel duplicado; volver restaura el mismo hilo y permite regresar al registro contextual.
+- Panel derecho acoplado en escritorio; Sheet accesible en móvil con foco/escape/retorno al disparador. Permite cerrar y ampliar a página completa; anchos/presets accesibles sin romper grillas ni generar scroll horizontal.
+- Mostrar agencia y contexto activo (módulo, registro, periodo, moneda, filtros y adjuntos). Permitir quitar/cambiar contexto. Toda referencia del navegador es una pista que el backend valida. Cambiar de agencia nunca reutiliza mensajes ni contexto de la anterior. /control y /ops conservan su ámbito separado y no heredan herramientas privilegiadas en el asistente de agencia.
+
+REUI DEL ASISTENTE
+
+- Usa [ai-chat-6 — Agentic Task Panel](https://reui.io/preview/base/ai-chat-6?ref=mcp) para conversación, composer, fuentes, preguntas de aclaración, plan y respuestas operativas.
+- Usa [app-shell-18](https://reui.io/preview/base/app-shell-18?ref=mcp) solo como referencia del panel acoplado y Sheet móvil; conserva el shell, tema y sidebar de Verve.
+- [agent-activity-1](https://reui.io/preview/base/agent-activity-1?ref=mcp) y c-trace-4/c-trace-5 muestran actividad y aprobación; no sustituyen la conversación.
+- Revisa Message, Bubble, Message Scroller, Input Group y Trace en ReUI; verifica APIs en los componentes instalados. No inventes props. MessageScroller necesita altura acotada y su provider encima de sus controles.
+- Sustituye SOURCES, PLAN_STEPS, FORK_CHOICES, OWNERS, MODELS y PICKABLE_FILES del bloque por datos/archivos/acciones autorizados. La altura h-svh de una demo aislada debe quedar limitada al espacio del shell, sin viewport anidado. No copies handlers desconectados ni timers que falsifiquen resultados. Sustituye los ejemplos ReUI por el registro central de escenarios de AgeOS; respuestas preprogramadas están permitidas y son parte de la demo, con valores del estado vigente.
+- Icono MessagesSquare de lucide-react, sujeto al export instalado. Etiqueta EN AgeOS Assistant y ES Asistente AgeOS; nombre accesible y tooltip en sidebar colapsado.
+
+DRIVER DETERMINISTA, DATOS Y ACCIONES
+
+- Esta entrega no llama a un LLM. AGEOS_ASSISTANT_MODE=scripted y AGEOS_CONNECTOR_MODE=simulated. Implementa un único AssistantRuntime/driver de demostración para página y panel; mantén una interfaz compatible con el futuro runtime Eve sin instalarlo ni exigir credenciales para completar la demo.
+- El orquestador resuelve un scenario_id mediante sugerencias y alias EN/ES preprogramados; valida parámetros y solicita campos faltantes mediante formularios o aclaraciones guionizadas. Un texto fuera de los escenarios recibe una respuesta honesta de demo con opciones disponibles. No fingir comprensión de cualquier pregunta.
+- Las respuestas usan plantillas programadas con datos del backend. El guion puede estar hardcodeado; las cifras deben derivarse del estado persistido y coincidir con las pantallas. Ninguna acción puede responder éxito sin ejecutar el comando o la consulta correspondiente.
+- El orquestador deriva cada caso al especialista definido por el catálogo. La delegación es determinista y auditada; no afirmar que intervino un modelo. Mantener nueve módulos, 42 skills y los mismos agentes lógicos.
+- Consultas por catálogo semántico y handlers tipados. Escrituras por comandos compartidos, autorización, dinero exacto, revisión e idempotencia. No SQL arbitrario ni writes desde componentes.
+- Propuestas y aprobaciones requieren payload exacto, actor elegible y estado vigente. Mostrar diff, impacto, evidencia y recibo. Actualizar listas, expediente y reportes tras el comando, en ambas superficies.
+- Guardar conversaciones, mensajes, contexto, tool runs y recibos por agencia/usuario. El escenario no otorga privilegios. Sin autoaprobación; no usar un booleano del navegador como permiso.
+- Streaming visual opcional puede revelar texto programado, siempre rotulado Demo. Los estados de herramienta reflejan ejecución real del handler, no timers que fabrican completitud. No mostrar tokens ni costos de inferencia reales.
+- Probar navegación, recarga, cambio de agencia, cancelación, reintento, datos privados y aprobaciones obsoletas. Detener presentación de texto no revierte ni duplica un comando confirmado.
+
+ORDEN DE ENTREGA
+
+Esta es la INSTRUCCIÓN 1: construye el chasis ejecutable con Verve, las pantallas de nueve módulos, el registro de 42 capacidades, página chat/panel compartidos, persistencia y servicios del núcleo. Prepara el driver scripted y sus contratos. La demo completa se acredita al ejecutar la INSTRUCCIÓN 2 del archivo PROMPT-2-DEMO-E2E.txt, con detalle en 08-instruccion-2-demo-e2e.md y demo-scenarios-v1.json.
+
+La segunda instrucción programa todos los casos de uso, seeds/checkpoints, respuestas y delegaciones predefinidas, recorridos E2E y fallos controlados. No reduzcas el resultado a un único happy path ni a tres módulos. Cada una de las 42 skills debe terminar con caso positivo, caso negativo, resultado/evidencia y navegación conectada. El manifiesto describe requisitos por implementar; no es evidencia de una aplicación ya terminada.
+
+Empieza inspeccionando los archivos y Verve. Construye el chasis por fases, verifica el resultado y entrega el punto de continuación exacto para la instrucción 2. Mantén IMPLEMENTATION_STATUS.md y declara con precisión lo construido, probado y pendiente. Nunca exijas acceso a modelos o proveedores reales para ejecutar esta demo.
+
+
+CONDICIONES DE ENTREGA DE LA INSTRUCCIÓN 1
+
+1. La aplicación arranca y compila; README, variables, migraciones y seed mínimo reproducible están documentados.
+2. Verve conserva su diseño; sidebar, 31 patrones de ruta, nueve módulos, expediente y catálogo de 42 IDs están conectados y navegables.
+3. Los contratos de las 42 capacidades conservan IDs, módulos, entradas, salidas, permisos y dependencias del repositorio. El estado de cada handler y escenario es explícito.
+4. El núcleo común ejecuta sesiones, aislamiento, consultas, comandos, dinero exacto, revisiones, aprobación, idempotencia y auditoría, con pruebas representativas.
+5. Configuración y registros representativos guardan y recargan; grillas, formularios, filtros y estados comunes funcionan con datos persistidos.
+6. La página page.tsx de Assistant y el panel derecho comparten orquestador, hilo y contexto. Navegar, cerrar, ampliar y recargar preserva estado; cambiar de agencia mantiene aislamiento.
+7. El driver scripted tiene registro de escenarios, parámetros y estados; una consulta y una propuesta/confirmación mínimas prueban su conexión con los servicios. No exige todavía todas las conversaciones ni recorridos E2E.
+8. EN/ES, teclado, foco, móvil y temas están comprobados; se ejecutan typecheck, lint, build, tests de dominio y pruebas de navegador pertinentes al chasis. No declarar pruebas no ejecutadas.
+
+La fase 2 completará J01–J10, ERP-01–ERP-42, sus 84 comprobaciones positivas/negativas, conversaciones/checkpoints y respuestas específicas, secuencia financiera completa, incidentes, archivos de escenario y ensayos de presentación. Todo permanece dentro del alcance final; no lo elimines ni lo marques completado ahora.
+
+ENTREGA FINAL Y PUNTO DE PARADA
+
+Deja app/ funcionando y un IMPLEMENTATION_STATUS.md con columnas registered, handler implemented, scenario verified y evidence. Incluye capturas del shell, de un módulo, del chat completo y del panel derecho. Documenta scripts de desarrollo, migración, seed, pruebas y reset; registra cualquier dependencia faltante.
+
+Crea HANDOFF-INSTRUCCION-2.md con rutas relevantes, estructura del código, comandos de inicio, esquema/seed disponible, componentes reutilizables, estado de las 42 capacidades y pendientes concretos. Al finalizar informa qué construiste, qué probaste y cómo abrirlo. Detente aquí: no inicies automáticamente PROMPT-2-DEMO-E2E.txt.

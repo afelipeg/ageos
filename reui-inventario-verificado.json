@@ -1,0 +1,1162 @@
+{
+  "schema_version": "1.0",
+  "verified_at_utc": "2026-10-17T22:15:29Z",
+  "purpose": "Claude Code implementation planning only; no premium source downloaded or installed",
+  "mcp": {
+    "connected": true,
+    "reported_plan": "ultimate",
+    "skill_version": "68f0e6fa91",
+    "template_download_entitlement": "MCP plan observed; user's account download remains separate"
+  },
+  "coverage": {
+    "template_catalog_entries": 18,
+    "template_detail_pages_verified": 17,
+    "template_detail_exception": [
+      "Mesh"
+    ],
+    "advanced_blocks": 8,
+    "component_index_entries": 27,
+    "selected_registry_items": 17,
+    "selected_items_validation_passed": true,
+    "visual_browser_tested": false,
+    "runtime_tested": false
+  },
+  "sources": {
+    "templates": "https://reui.io/templates",
+    "roadmap": "https://reui.io/roadmap",
+    "advanced": "https://reui.io/blocks/data-grid/advanced",
+    "mcp_skill": "https://mcp.reui.io/skill/reui/SKILL.md"
+  },
+  "design_decision": {
+    "base": "Verve",
+    "framework": "Next.js 16 App Router",
+    "base_ui": "Base UI",
+    "style": "Nova",
+    "icons": "Lucide",
+    "surfaces": "Preserve Verve Card-led screens; Frame-led advanced desks on dedicated screens; never nested",
+    "language": "English default, Spanish option",
+    "core_backend": "Replace all UI seeds/auth stubs with canonical persisted AgeOS services"
+  },
+  "templates": [
+    {
+      "url": "https://reui.io/template/flowly-app",
+      "name": "Flowly",
+      "framework": "Next.js 16 (App Router)",
+      "pages": "7 pages, settings across 10 sections",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Card",
+      "icons": "Lucide",
+      "version": "1.0.0",
+      "updated": "Oct 17, 2026",
+      "detail_verified": true,
+      "preview_url": "https://flowly-app.reui.io",
+      "recommendation": "optional_reference_flow_editor",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/mesh-whiteboard",
+      "name": "Mesh",
+      "framework": "TanStack Start",
+      "pages": null,
+      "base": "Base UI",
+      "style": null,
+      "surface": null,
+      "icons": null,
+      "version": null,
+      "updated": null,
+      "detail_verified": false,
+      "preview_url": "https://mesh-whiteboard.reui.io",
+      "verification_note": "Listing reviewed; detail fetch unavailable after retry.",
+      "recommendation": "not_needed",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/echo-chat",
+      "name": "Echo",
+      "framework": "Next.js 16 (App Router)",
+      "pages": "9 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Card",
+      "icons": "Lucide",
+      "version": "1.0.0",
+      "updated": "Oct 17, 2026",
+      "detail_verified": true,
+      "preview_url": "https://echo-chat.reui.io",
+      "recommendation": "reference_chat_artifacts",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/limelight-landing",
+      "name": "Limelight",
+      "framework": "Next.js 16 (App Router)",
+      "pages": "1 page",
+      "base": "Base UI",
+      "style": "Luma",
+      "surface": null,
+      "icons": "Lucide",
+      "version": "1.0.0",
+      "updated": "Oct 14, 2026",
+      "detail_verified": true,
+      "preview_url": "https://limelight-landing.reui.io",
+      "recommendation": "optional_separate_marketing",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/verve-crm",
+      "name": "Verve",
+      "framework": "Next.js 16 (App Router)",
+      "pages": "30 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Card",
+      "icons": "Lucide",
+      "version": "1.1.0",
+      "updated": "Oct 17, 2026",
+      "detail_verified": true,
+      "preview_url": "https://verve-crm.reui.io",
+      "recommendation": "base_required",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/manifest-commerce",
+      "name": "Manifest",
+      "framework": "Laravel 13 + Inertia 3 (React 19)",
+      "pages": null,
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Frame",
+      "icons": "Lucide",
+      "version": "1.1.1",
+      "updated": "Oct 15, 2026",
+      "detail_verified": true,
+      "preview_url": "https://manifest-commerce.reui.io",
+      "recommendation": "not_selected_stack",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/lucent-devops",
+      "name": "Lucent",
+      "framework": "TanStack Start (React 19, Vite 8)",
+      "pages": "18 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Frame",
+      "icons": "Heroicons",
+      "version": "1.0.0",
+      "updated": "Oct 17, 2026",
+      "detail_verified": true,
+      "preview_url": "https://lucent-devops.reui.io",
+      "recommendation": "not_selected_stack",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/overture-waitlist",
+      "name": "Overture",
+      "framework": "Next.js 16 (App Router)",
+      "pages": "1 page",
+      "base": "Radix UI",
+      "style": "Nova",
+      "surface": null,
+      "icons": "Lucide",
+      "version": "1.0.0",
+      "updated": "Oct 15, 2026",
+      "detail_verified": true,
+      "preview_url": "https://overture-waitlist.reui.io",
+      "recommendation": "not_needed_waitlist",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/atlas-admin",
+      "name": "Atlas",
+      "framework": "Next.js 16 (App Router)",
+      "pages": "18 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Card",
+      "icons": "Lucide",
+      "version": "1.1.0",
+      "updated": "Oct 17, 2026",
+      "detail_verified": true,
+      "preview_url": "https://atlas-admin.reui.io",
+      "recommendation": "alternative_not_combined",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/tempo-tasks",
+      "name": "Tempo",
+      "framework": "TanStack Start (file-based routing, SPA mode)",
+      "pages": "9 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Frame",
+      "icons": "Lucide",
+      "version": "1.1.0",
+      "updated": "Oct 17, 2026",
+      "detail_verified": true,
+      "preview_url": "https://tempo-tasks.reui.io",
+      "recommendation": "reference_production_patterns",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/miro-clinic",
+      "name": "Miro",
+      "framework": "Vite 8 (React 19 SPA)",
+      "pages": "8 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Card",
+      "icons": "Lucide",
+      "version": "1.0.0",
+      "updated": "Oct 15, 2026",
+      "detail_verified": true,
+      "preview_url": "https://miro-clinic.reui.io",
+      "recommendation": "not_selected_domain",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/cohort-hr",
+      "name": "Cohort",
+      "framework": "Laravel 13 + Inertia 3 (React 19)",
+      "pages": "20 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": null,
+      "icons": "Hugeicons",
+      "version": "1.0.0",
+      "updated": "Oct 15, 2026",
+      "detail_verified": true,
+      "preview_url": "https://cohort-hr.reui.io",
+      "recommendation": "not_selected_stack",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/filespace-drive",
+      "name": "Filespace",
+      "framework": "Next.js 16 (App Router)",
+      "pages": "19 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Frame",
+      "icons": "Lucide",
+      "version": "1.0.0",
+      "updated": "Oct 12, 2026",
+      "detail_verified": true,
+      "preview_url": "https://filespace-drive.reui.io",
+      "recommendation": "reference_file_patterns",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/roster-hr",
+      "name": "Roster",
+      "framework": "React 19 (Vite 8 SPA)",
+      "pages": "14 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": null,
+      "icons": "Hugeicons",
+      "version": "1.0.0",
+      "updated": "Oct 15, 2026",
+      "detail_verified": true,
+      "preview_url": "https://roster-hr.reui.io",
+      "recommendation": "reference_timesheets",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/pulse-helpdesk",
+      "name": "Pulse",
+      "framework": "TanStack Start (React 19, Vite 8)",
+      "pages": "11 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": null,
+      "icons": "Lucide",
+      "version": "1.0.0",
+      "updated": "Oct 15, 2026",
+      "detail_verified": true,
+      "preview_url": "https://pulse-helpdesk.reui.io",
+      "recommendation": "not_selected_domain",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/surge-commerce",
+      "name": "Surge",
+      "framework": "TanStack Start (React 19)",
+      "pages": null,
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Frame",
+      "icons": "Lucide",
+      "version": "1.1.0",
+      "updated": "Oct 16, 2026",
+      "detail_verified": true,
+      "preview_url": "https://surge-commerce.reui.io",
+      "recommendation": "reference_repository_pattern",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/filebox-drive",
+      "name": "Filebox",
+      "framework": "Laravel 13 + Inertia 3 (React 19)",
+      "pages": "22 pages",
+      "base": "Base UI",
+      "style": "Nova",
+      "surface": "Frame",
+      "icons": "Lucide",
+      "version": "1.0.0",
+      "updated": "Oct 15, 2026",
+      "detail_verified": true,
+      "preview_url": "https://filebox-drive.reui.io",
+      "recommendation": "not_selected_stack",
+      "availability": "listed_as_available_ultimate"
+    },
+    {
+      "url": "https://reui.io/template/flux-agentops",
+      "name": "Flux",
+      "framework": "Next.js 16 (App Router)",
+      "pages": "22 pages",
+      "base": "Base UI",
+      "style": "Luma",
+      "surface": "Frame",
+      "icons": "Hugeicons",
+      "version": "1.0.0",
+      "updated": "Oct 17, 2026",
+      "detail_verified": true,
+      "preview_url": "https://flux-agentops.reui.io",
+      "recommendation": "optional_reference_agent_operations",
+      "availability": "listed_as_available_ultimate"
+    }
+  ],
+  "advanced_blocks": [
+    {
+      "name": "data-grid-advanced-7",
+      "label": "Fourplex Pro Forma",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-7?ref=mcp",
+      "surface": "frame"
+    },
+    {
+      "name": "data-grid-advanced-6",
+      "label": "Stock Mix",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-6?ref=mcp",
+      "surface": "frame"
+    },
+    {
+      "name": "data-grid-advanced-9",
+      "label": "Service Visit Planner",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-9?ref=mcp",
+      "surface": "frame"
+    },
+    {
+      "name": "data-grid-advanced-5",
+      "label": "Wholesale Onboarding",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-5?ref=mcp",
+      "surface": "frame"
+    },
+    {
+      "name": "data-grid-advanced-1",
+      "label": "Ad Campaign Performance",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-1?ref=mcp",
+      "surface": "frame"
+    },
+    {
+      "name": "data-grid-advanced-2",
+      "label": "Regional Store P&L",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-2?ref=mcp",
+      "surface": "frame"
+    },
+    {
+      "name": "data-grid-advanced-4",
+      "label": "SLO Reliability Index",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-4?ref=mcp",
+      "surface": "frame"
+    },
+    {
+      "name": "data-grid-advanced-3",
+      "label": "Campaign Target Review",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-3?ref=mcp",
+      "surface": "frame"
+    }
+  ],
+  "selected_registry_items": [
+    {
+      "name": "onboarding-1",
+      "label": "Live Preview Wizard",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "card",
+      "preview_url": "https://reui.io/preview/base/onboarding-1?ref=mcp",
+      "docs_url": "https://reui.io/blocks/application/onboarding/onboarding-1?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/onboarding-1-light.webp",
+      "install": "npx shadcn@latest add @reui/onboarding-1",
+      "components_used": [
+        "icon-stack",
+        "stepper"
+      ],
+      "important_adaptation": [
+        "`inboxRows` in `ProductPreviewPane` is sample mail with fixed senders and Unsplash avatars; swap it for a view of your own product"
+      ],
+      "category_notes": [
+        "`completeOnboarding` only waits on a `window.setTimeout` before the ready screen; post the collected answers to your API there"
+      ]
+    },
+    {
+      "name": "solution-agents-5",
+      "label": "Action Approval Inbox",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "card",
+      "preview_url": "https://reui.io/preview/base/solution-agents-5?ref=mcp",
+      "docs_url": "https://reui.io/blocks/solutions/agents/solution-agents-5?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/solution-agents-5-light.webp",
+      "install": "npx shadcn@latest add @reui/solution-agents-5",
+      "components_used": [
+        "alert",
+        "badge",
+        "data-grid",
+        "timeline"
+      ],
+      "important_adaptation": [
+        "Requests come from `APPROVALS` in data.tsx with typed `slaMinutesRemaining` values, and `formatSla` hardcodes the 4h review SLA text"
+      ],
+      "category_notes": [
+        "Every block sets a `min-h-svh` wrapper with its own padding and max width in page.tsx, its root component or both; drop them inside an app shell"
+      ]
+    },
+    {
+      "name": "solution-files-1",
+      "label": "Drive Explorer",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "card",
+      "preview_url": "https://reui.io/preview/base/solution-files-1?ref=mcp",
+      "docs_url": "https://reui.io/blocks/solutions/files/solution-files-1?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/solution-files-1-light.webp",
+      "install": "npx shadcn@latest add @reui/solution-files-1",
+      "components_used": [
+        "badge",
+        "data-grid",
+        "icon-stack",
+        "icon-tile",
+        "timeline",
+        "tree"
+      ],
+      "important_adaptation": [
+        "Sample files, versions and share lists come from `DRIVE_TREE`, `versionsFor`, `defaultPrincipals` and `SHARE_TEAMS`; edits live in `useState` only"
+      ],
+      "category_notes": [
+        "page.tsx wraps each block in an `h-svh` `main` with padding and the block fills it with `h-full`; inside an app shell give it a bounded height"
+      ]
+    },
+    {
+      "name": "gantt-1",
+      "label": "Project Timeline",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "card",
+      "preview_url": "https://reui.io/preview/base/gantt-1?ref=mcp",
+      "docs_url": "https://reui.io/blocks/application/gantt/gantt-1?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/gantt-1-light.webp",
+      "install": "npx shadcn@latest add @reui/gantt-1",
+      "components_used": [
+        "gantt",
+        "badge"
+      ],
+      "important_adaptation": [
+        "Replace `DEMO_TASKS`, `DEMO_PEOPLE`, `buildTaskMeta` and `buildDemoBars` in data.ts with your lists, owners, task fields and bars"
+      ],
+      "category_notes": [
+        "Each block wraps its `Card` in an `h-svh` page with `p-4` padding; remove that wrapper when the board sits inside an app shell"
+      ]
+    },
+    {
+      "name": "gantt-4",
+      "label": "Resource Capacity",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "card",
+      "preview_url": "https://reui.io/preview/base/gantt-4?ref=mcp",
+      "docs_url": "https://reui.io/blocks/application/gantt/gantt-4?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/gantt-4-light.webp",
+      "install": "npx shadcn@latest add @reui/gantt-4",
+      "components_used": [
+        "gantt",
+        "alert",
+        "badge"
+      ],
+      "important_adaptation": [
+        "Replace `PEOPLE`, `SQUADS` and `BOOKINGS` in data.ts; each booking's `startOffset` and `endOffset` count days from `ANCHOR_DATE`"
+      ],
+      "category_notes": [
+        "Each block wraps its `Card` in an `h-svh` page with `p-4` padding; remove that wrapper when the board sits inside an app shell"
+      ]
+    },
+    {
+      "name": "solution-dev-ops-6",
+      "label": "Data Connections",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "frame",
+      "preview_url": "https://reui.io/preview/base/solution-dev-ops-6?ref=mcp",
+      "docs_url": "https://reui.io/blocks/solutions/dev-ops/solution-dev-ops-6?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/solution-dev-ops-6-light.webp",
+      "install": "npx shadcn@latest add @reui/solution-dev-ops-6",
+      "components_used": [
+        "alert",
+        "badge",
+        "data-grid",
+        "filters",
+        "frame",
+        "icon-tile",
+        "stepper"
+      ],
+      "important_adaptation": [
+        "Preview rows come from the seeded `sampleRows` generator and `maskSample` masks PII in the browser; serve real rows from your API, masked on the server"
+      ],
+      "category_notes": [
+        "Every block pins now to Sep 29, 2026 14:20 UTC in `REFERENCE_MS`, set from `REFERENCE_DATE` in the audit log, and never reads the wall clock; pass your own now"
+      ]
+    },
+    {
+      "name": "solution-agents-4",
+      "label": "Tool Access Matrix",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "frame",
+      "preview_url": "https://reui.io/preview/base/solution-agents-4?ref=mcp",
+      "docs_url": "https://reui.io/blocks/solutions/agents/solution-agents-4?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/solution-agents-4-light.webp",
+      "install": "npx shadcn@latest add @reui/solution-agents-4",
+      "components_used": [
+        "badge",
+        "data-grid",
+        "filters",
+        "frame"
+      ],
+      "important_adaptation": [
+        "Sample data: `AGENT_TABS`, `RUN_POLICIES`, `APPROVAL_ROUTING` and `RATE_WINDOWS`, whose two summary cards never follow matrix edits"
+      ],
+      "category_notes": [
+        "Every block sets a `min-h-svh` wrapper with its own padding and max width in page.tsx, its root component or both; drop them inside an app shell"
+      ]
+    },
+    {
+      "name": "agent-activity-1",
+      "label": "Approval Run Console",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "frame",
+      "preview_url": "https://reui.io/preview/base/agent-activity-1?ref=mcp",
+      "docs_url": "https://reui.io/blocks/ai-agents/agent-activity/agent-activity-1?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/agent-activity-1-light.webp",
+      "install": "npx shadcn@latest add @reui/agent-activity-1",
+      "components_used": [
+        "badge",
+        "frame"
+      ],
+      "important_adaptation": [
+        "Replace `RUN` and `RUN_META`; a step's `gatedBy` names the approval whose Deny or Revise skips it, and `START_AT` of 2 opens the console mid run"
+      ],
+      "category_notes": [
+        "Each page.tsx pads a top aligned `min-h-svh` wrapper around `AgentActivity`, whose root caps at `max-w-xl` or `max-w-2xl`; drop the wrapper in your layout"
+      ]
+    },
+    {
+      "name": "data-grid-advanced-1",
+      "label": "Ad Campaign Performance",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "frame",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-1?ref=mcp",
+      "docs_url": "https://reui.io/blocks/data-grid/advanced/data-grid-advanced-1?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/data-grid-advanced-1-light.webp",
+      "install": "npx shadcn@latest add @reui/data-grid-advanced-1",
+      "components_used": [
+        "badge",
+        "cascader",
+        "data-grid",
+        "filters",
+        "frame",
+        "icon-tile"
+      ],
+      "important_adaptation": [
+        "`CAMPAIGNS` rows are generated, and `dailyConversionsOf` derives each 30 point sparkline from the row's totals, so supply real daily counts"
+      ],
+      "category_notes": [
+        "Rows live in a client store hook whose `create`, `update` and `remove` change only browser state; back them with your API"
+      ]
+    },
+    {
+      "name": "data-grid-advanced-2",
+      "label": "Regional Store P&L",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "frame",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-2?ref=mcp",
+      "docs_url": "https://reui.io/blocks/data-grid/advanced/data-grid-advanced-2?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/data-grid-advanced-2-light.webp",
+      "install": "npx shadcn@latest add @reui/data-grid-advanced-2",
+      "components_used": [
+        "alert",
+        "badge",
+        "cascader",
+        "data-grid",
+        "frame",
+        "icon-tile"
+      ],
+      "important_adaptation": [
+        "`STORE_SEEDS` holds the 28 sample stores with a fixed `FY_LABEL` and `REPORT_DATE`; replace them with your own P&L rows"
+      ],
+      "category_notes": [
+        "Rows live in a client store hook whose `create`, `update` and `remove` change only browser state; back them with your API"
+      ]
+    },
+    {
+      "name": "data-grid-advanced-3",
+      "label": "Campaign Target Review",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "frame",
+      "preview_url": "https://reui.io/preview/base/data-grid-advanced-3?ref=mcp",
+      "docs_url": "https://reui.io/blocks/data-grid/advanced/data-grid-advanced-3?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/data-grid-advanced-3-light.webp",
+      "install": "npx shadcn@latest add @reui/data-grid-advanced-3",
+      "components_used": [
+        "alert",
+        "badge",
+        "cascader",
+        "code-block",
+        "data-grid",
+        "frame",
+        "icon-tile"
+      ],
+      "important_adaptation": [
+        "`CAMPAIGNS`, `TARGET_REVISIONS` and `OWNERS` are sample data; the form and filter pickers also read `CHANNEL_ORDER` and `COUNTRY_ORDER`"
+      ],
+      "category_notes": [
+        "Rows live in a client store hook whose `create`, `update` and `remove` change only browser state; back them with your API"
+      ]
+    },
+    {
+      "name": "data-grid-editing-5",
+      "label": "Task Spreadsheet",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "frame",
+      "preview_url": "https://reui.io/preview/base/data-grid-editing-5?ref=mcp",
+      "docs_url": "https://reui.io/blocks/data-grid/editing/data-grid-editing-5?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/data-grid-editing-5-light.webp",
+      "install": "npx shadcn@latest add @reui/data-grid-editing-5",
+      "components_used": [
+        "badge",
+        "cascader",
+        "data-grid",
+        "filters",
+        "frame"
+      ],
+      "important_adaptation": [
+        "`TASKS` seeds `INITIAL_STORE` for the reducer in `LaunchRunbookGridView`; edits, creates and deletes stay in memory"
+      ],
+      "category_notes": [
+        "Every page.tsx renders an sr-only `h1` inside a centered `min-h-svh` main; remove that wrapper when the view sits in your own page"
+      ]
+    },
+    {
+      "name": "chart-48",
+      "label": "Revenue Flow",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "frame",
+      "preview_url": "https://reui.io/preview/base/chart-48?ref=mcp",
+      "docs_url": "https://reui.io/blocks/chart/sankey-chart/chart-48?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/chart-48-light.webp",
+      "install": "npx shadcn@latest add @reui/chart-48",
+      "components_used": [
+        "badge",
+        "frame"
+      ],
+      "important_adaptation": [
+        "Replace `STATEMENTS` and `COMPANY`; amounts are USD millions and `totalsOf` derives every subtotal, so enter line items only"
+      ],
+      "category_notes": [
+        "Each block exports a `Chart` with no props that reads constants from its data file, so live figures mean swapping those constants or adding props"
+      ]
+    },
+    {
+      "name": "ai-usage-2",
+      "label": "Spend Map",
+      "type": "block",
+      "free": false,
+      "required_plan": "pro",
+      "surface": "frame",
+      "preview_url": "https://reui.io/preview/base/ai-usage-2?ref=mcp",
+      "docs_url": "https://reui.io/blocks/ai-agents/ai-usage/ai-usage-2?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/blocks/ai-usage-2-light.webp",
+      "install": "npx shadcn@latest add @reui/ai-usage-2",
+      "components_used": [
+        "badge",
+        "frame",
+        "icon-tile"
+      ],
+      "important_adaptation": [
+        "`DIMENSIONS` holds each split's leaves; their seed `spend` values must sum to the `WORKSPACE` spend, because every share divides by it"
+      ],
+      "category_notes": [
+        "`AiUsage` takes no props and calls no API; its figures are typed constants, mostly in components/data.tsx, so swap them for your data"
+      ]
+    },
+    {
+      "name": "c-trace-4",
+      "label": "Subagents",
+      "type": "example",
+      "free": true,
+      "required_plan": null,
+      "surface": null,
+      "preview_url": "https://reui.io/preview/base/components/c-trace-4?ref=mcp",
+      "docs_url": "https://reui.io/components/trace/c-trace-4?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/components/c-trace-4-light.webp",
+      "install": "npx shadcn@latest add @reui/c-trace-4",
+      "components_used": [
+        "code-block"
+      ],
+      "important_adaptation": [
+        "The parent status is derived from `states` on every render; storing it separately lets it drift from the children"
+      ],
+      "category_notes": []
+    },
+    {
+      "name": "c-trace-5",
+      "label": "Change Approval",
+      "type": "example",
+      "free": true,
+      "required_plan": null,
+      "surface": null,
+      "preview_url": "https://reui.io/preview/base/components/c-trace-5?ref=mcp",
+      "docs_url": "https://reui.io/components/trace/c-trace-5?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/components/c-trace-5-light.webp",
+      "install": "npx shadcn@latest add @reui/c-trace-5",
+      "components_used": [],
+      "important_adaptation": [
+        "`answer` moves focus to the status line in `requestAnimationFrame`, because the approval Item unmounts on either answer"
+      ],
+      "category_notes": []
+    },
+    {
+      "name": "c-data-grid-3",
+      "label": "Dense Layout",
+      "type": "example",
+      "free": true,
+      "required_plan": null,
+      "surface": null,
+      "preview_url": "https://reui.io/preview/base/components/c-data-grid-3?ref=mcp",
+      "docs_url": "https://reui.io/components/data-grid/c-data-grid-3?ref=mcp",
+      "thumbnail": "https://reui.io/thumbnails/components/c-data-grid-3-light.webp",
+      "install": "npx shadcn@latest add @reui/c-data-grid-3",
+      "components_used": [
+        "data-grid"
+      ],
+      "important_adaptation": [],
+      "category_notes": []
+    }
+  ],
+  "components": [
+    {
+      "name": "alert",
+      "preview_url": "https://reui.io/components/alert?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/alert?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "autocomplete",
+      "preview_url": "https://reui.io/components/autocomplete?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/autocomplete?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "badge",
+      "preview_url": "https://reui.io/components/badge?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/badge?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "cascader",
+      "preview_url": "https://reui.io/components/cascader?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/cascader?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "code-block",
+      "preview_url": "https://reui.io/components/code-block?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/code-block?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "color-picker",
+      "preview_url": "https://reui.io/components/color-picker?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/color-picker?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "data-grid",
+      "preview_url": "https://reui.io/components/data-grid?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/data-grid?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "date-selector",
+      "preview_url": "https://reui.io/components/date-selector?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/date-selector?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "emoji-picker",
+      "preview_url": "https://reui.io/components/emoji-picker?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/emoji-picker?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "event-calendar",
+      "preview_url": "https://reui.io/components/event-calendar?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/event-calendar?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "file-type",
+      "preview_url": "https://reui.io/components/file-type?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/file-type?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "filters",
+      "preview_url": "https://reui.io/components/filters?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/filters?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "frame",
+      "preview_url": "https://reui.io/components/frame?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/frame?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "gantt",
+      "preview_url": "https://reui.io/components/gantt?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/gantt?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "icon-stack",
+      "preview_url": "https://reui.io/components/icon-stack?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/icon-stack?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "icon-tile",
+      "preview_url": "https://reui.io/components/icon-tile?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/icon-tile?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "kanban",
+      "preview_url": "https://reui.io/components/kanban?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/kanban?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "number-field",
+      "preview_url": "https://reui.io/components/number-field?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/number-field?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "phone-input",
+      "preview_url": "https://reui.io/components/phone-input?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/phone-input?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "rating",
+      "preview_url": "https://reui.io/components/rating?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/rating?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "scrollspy",
+      "preview_url": "https://reui.io/components/scrollspy?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/scrollspy?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "signature-pad",
+      "preview_url": "https://reui.io/components/signature-pad?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/signature-pad?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "sortable",
+      "preview_url": "https://reui.io/components/sortable?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/sortable?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "stepper",
+      "preview_url": "https://reui.io/components/stepper?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/stepper?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "time-picker",
+      "preview_url": "https://reui.io/components/time-picker?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/time-picker?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "timeline",
+      "preview_url": "https://reui.io/components/timeline?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/timeline?ref=mcp",
+      "free": true
+    },
+    {
+      "name": "tree",
+      "preview_url": "https://reui.io/components/tree?ref=mcp",
+      "docs_url": "https://reui.io/docs/components/base/tree?ref=mcp",
+      "free": true
+    }
+  ],
+  "release_2026_10_15": {
+    "confirmed": true,
+    "relevant": [
+      "Trace free examples",
+      "File Type formats",
+      "Sankey revenue flow",
+      "AI Usage planner and spend map",
+      "Advanced grid SLO and wholesale review"
+    ],
+    "not_selected_for_demo": [
+      "Digital Twin stadium/racing",
+      "SLO reliability main dashboard"
+    ],
+    "notice": "Current catalog lists 8 advanced blocks; old navigation release label says 5. Use returned actual inventory, not old badge."
+  },
+  "upcoming": {
+    "specific_named_templates": [],
+    "note": "Roadmap describes future templates/blocks/components/icons/MCP improvements generically; do not depend on unreleased items."
+  },
+  "validation": {
+    "ok": true,
+    "components": [
+      {
+        "name": "data-grid",
+        "exists": true,
+        "props": [
+          {
+            "prop": "table",
+            "documented": true
+          },
+          {
+            "prop": "recordCount",
+            "documented": true
+          },
+          {
+            "prop": "tableLayout",
+            "documented": true
+          },
+          {
+            "prop": "isLoading",
+            "documented": true
+          }
+        ]
+      },
+      {
+        "name": "filters",
+        "exists": true,
+        "props": [
+          {
+            "prop": "fields",
+            "documented": true
+          },
+          {
+            "prop": "query",
+            "documented": true
+          },
+          {
+            "prop": "onQueryChange",
+            "documented": true
+          },
+          {
+            "prop": "variant",
+            "documented": true
+          },
+          {
+            "prop": "advancedMode",
+            "documented": true
+          }
+        ]
+      },
+      {
+        "name": "stepper",
+        "exists": true,
+        "props": [
+          {
+            "prop": "value",
+            "documented": true
+          },
+          {
+            "prop": "onValueChange",
+            "documented": true
+          }
+        ]
+      },
+      {
+        "name": "color-picker",
+        "exists": true,
+        "props": [
+          {
+            "prop": "value",
+            "documented": true
+          },
+          {
+            "prop": "onValueChange",
+            "documented": true
+          },
+          {
+            "prop": "onValueCommit",
+            "documented": true
+          }
+        ]
+      }
+    ],
+    "items": [
+      {
+        "name": "onboarding-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "solution-agents-5",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "solution-files-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "gantt-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "gantt-4",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "solution-dev-ops-6",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "solution-agents-4",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "agent-activity-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-advanced-1",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-advanced-2",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-advanced-3",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "data-grid-editing-5",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "chart-48",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "ai-usage-2",
+        "exists": true,
+        "type": "block",
+        "free": false,
+        "requiredPlan": "pro"
+      },
+      {
+        "name": "c-trace-4",
+        "exists": true,
+        "type": "example",
+        "free": true
+      },
+      {
+        "name": "c-trace-5",
+        "exists": true,
+        "type": "example",
+        "free": true
+      },
+      {
+        "name": "c-data-grid-3",
+        "exists": true,
+        "type": "example",
+        "free": true
+      }
+    ],
+    "note": "Checked against the indexed API docs. notDocumented = the name appears nowhere in the component's documented API, so stop and read it. documented = the name appears in those docs, which is evidence and not proof it is a prop of this component; a `reason` is the docs saying outright that it is not one. Read the api from get_component before writing anything you have not seen in it."
+  }
+}

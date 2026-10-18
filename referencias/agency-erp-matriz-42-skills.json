@@ -1,0 +1,1521 @@
+{
+  "reviewed_on": "2026-10-17",
+  "repo_commit": "d73539e62ec27060347763f0ec40115c36be6f16",
+  "status": "design_coverage_not_live_integration",
+  "count": 42,
+  "skills": [
+    {
+      "block": "01 Arranque",
+      "skill": "agency-orchestrator",
+      "deliverable_summary": "Estado del trabajo y dependencias",
+      "inputs_from_repository": "Trusted tenant/client/job ids and JobNumber; JobNumber state and documents with revisions; period state per subledger; approval-circuit configuration; commercial scope; prior checkpoints; run ceilings; available tools.",
+      "outputs_from_repository": [
+        "job_state",
+        "dependency_graph",
+        "period_gate_status",
+        "task_assignments",
+        "blockers",
+        "approval_requests",
+        "checkpoints",
+        "next_stage"
+      ],
+      "readonly_calculators": [
+        "payload_digest",
+        "job_number",
+        "approval_route"
+      ],
+      "connector_options": [],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Reanudar un job sin repetir una escritura; bloquear etapas dependientes de una revisión obsoleta.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "coordinador",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "01 Arranque",
+      "skill": "agency-integrations",
+      "deliverable_summary": "Inventario de capacidades y conexiones por etapa",
+      "inputs_from_repository": "Host type; stages in scope; tenant, client and platform account ids from trusted records; enabled marketplace apps and MCP servers; approved tool policy; host approval, sandbox and idempotency support; country context.",
+      "outputs_from_repository": [
+        "capability_inventory",
+        "stage_wiring_plan",
+        "access_matrix",
+        "schema_review",
+        "connection_requests",
+        "file_mode_plan",
+        "gaps"
+      ],
+      "readonly_calculators": [],
+      "connector_options": [
+        "composio"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Descubrir scopes reales y mostrar faltantes; una conexión revocada bloquea únicamente las acciones que la necesitan.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "coordinador",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "01 Arranque",
+      "skill": "agency-access-governance",
+      "deliverable_summary": "Matriz de acceso y cambios de configuración",
+      "inputs_from_repository": "Tenant id; users, profiles, roles, specific activities and expense approval caps; agency SoD matrix; security policy; for parameter changes current and proposed values with reason; for offboarding the leaver, successor and owned open items.",
+      "outputs_from_repository": [
+        "access_matrix",
+        "capability_register",
+        "sod_conflicts",
+        "access_change_requests",
+        "config_change_requests",
+        "offboarding_plan",
+        "audit_evidence_pack"
+      ],
+      "readonly_calculators": [
+        "payload_digest",
+        "approval_route"
+      ],
+      "connector_options": [],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Usuario de agencia A no accede a conexiones, archivos ni acciones de B, incluyendo subagentes.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "coordinador",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "01 Arranque",
+      "skill": "agency-master-data",
+      "deliverable_summary": "Maestros y equivalencias externas",
+      "inputs_from_repository": "Tenant id; master type and payload; current records with usage status; legal identity evidence under restricted access; chart of accounts with observation codes; bridge-account and provisional-master configuration.",
+      "outputs_from_repository": [
+        "master_change_set",
+        "validation_report",
+        "duplicate_candidates",
+        "ledger_link_map",
+        "external_code_map",
+        "deactivation_plan",
+        "provisional_approval_requests"
+      ],
+      "readonly_calculators": [
+        "job_number",
+        "approval_route"
+      ],
+      "connector_options": [
+        "salesforce",
+        "attio",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Detectar un proveedor duplicado y conservar los IDs externos correctos al sincronizar.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "coordinador",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "02 Clientes y contratos",
+      "skill": "agency-onboarding",
+      "deliverable_summary": "Alta de cliente y brief",
+      "inputs_from_repository": "Tenant id; trade name; billing-client references from trusted CxC records; product names and agreed commission percentages; provisional-master and hierarchy configuration; brief recipients and body; registered contact attendees.",
+      "outputs_from_repository": [
+        "intake_pack",
+        "owner_client_draft",
+        "billing_client_links",
+        "product_drafts",
+        "attention_group_plan",
+        "provisional_approval_requests",
+        "brief_draft",
+        "intake_gaps"
+      ],
+      "readonly_calculators": [
+        "job_number"
+      ],
+      "connector_options": [
+        "salesforce",
+        "attio",
+        "google-drive",
+        "notion",
+        "microsoft365",
+        "dropbox",
+        "box"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Importar cliente/brief sin crear duplicado y registrar faltantes de facturación.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "clientes",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "02 Clientes y contratos",
+      "skill": "agency-job-lifecycle",
+      "deliverable_summary": "Apertura y cierre de trabajos",
+      "inputs_from_repository": "Tenant ID; titular client and product codes; requested action; start year, typology, billing code and billing client for opens; job content listing with document statuses and open tasks; acting user's department type and level; inactivity-days configuration.",
+      "outputs_from_repository": [
+        "job_proposal",
+        "job_code_check",
+        "move_or_substitution_plan",
+        "close_readiness",
+        "inactive_job_list",
+        "job_audit_note"
+      ],
+      "readonly_calculators": [
+        "job_number",
+        "approval_route"
+      ],
+      "connector_options": [
+        "salesforce",
+        "attio",
+        "clickup"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Asignar JobNumber único; impedir cierre con compromisos o documentos pendientes.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "clientes",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "02 Clientes y contratos",
+      "skill": "agency-contract-po",
+      "deliverable_summary": "Contrato, PO, reservas y ruta de facturación",
+      "inputs_from_repository": "Tenant ID; titular and billing client; signed PO or agreement with signer evidence; amount net of tax, currency and validity; documents to link with creation dates; transfer source document and POs; reserve control type and pool areas.",
+      "outputs_from_repository": [
+        "commercial_terms",
+        "po_limits",
+        "po_link_decisions",
+        "po_transfer_proposal",
+        "reserve_setup",
+        "billing_route",
+        "scope_exceptions"
+      ],
+      "readonly_calculators": [
+        "budget_check",
+        "installment_schedule",
+        "approval_route"
+      ],
+      "connector_options": [
+        "google-drive",
+        "notion",
+        "microsoft365",
+        "dropbox",
+        "box"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Extraer un límite de PO del documento, validarlo y bloquear un compromiso que lo exceda.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "clientes",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "02 Clientes y contratos",
+      "skill": "agency-budget-control",
+      "deliverable_summary": "Presupuesto, crédito y reservas",
+      "inputs_from_repository": "Tenant ID; billing client; JobNumber; document id, revision and amount; PO or reserve authorized, spent, committed and reserved balances; credit limit, open receivables and approved unbilled work; approval circuit configuration.",
+      "outputs_from_repository": [
+        "budget_check",
+        "credit_check",
+        "reservation_proposal",
+        "balance_revision",
+        "blocking_exceptions"
+      ],
+      "readonly_calculators": [
+        "budget_check",
+        "credit_exposure",
+        "approval_route"
+      ],
+      "connector_options": [
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo",
+        "google-sheets",
+        "excel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Dos operaciones concurrentes no pueden reservar el mismo saldo disponible.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "clientes",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "02 Clientes y contratos",
+      "skill": "agency-fee-contracts",
+      "deliverable_summary": "Honorarios, cuotas y liquidación de horas",
+      "inputs_from_repository": "Tenant ID; titular client; signed agreement; fixed or hourly kind and contract type; instalment months and amounts; single currency and rate; media/production split; jobs with percentages or pattern; approved hours and client rates for hourly contracts; open fiscal periods.",
+      "outputs_from_repository": [
+        "fee_contract_draft",
+        "instalment_schedule",
+        "job_allocation",
+        "hourly_settlement",
+        "approval_proposal",
+        "fee_exceptions"
+      ],
+      "readonly_calculators": [
+        "hourly_fee_settlement",
+        "installment_schedule",
+        "allocate",
+        "approval_route"
+      ],
+      "connector_options": [
+        "harvest",
+        "clickup",
+        "google-sheets",
+        "excel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Calcular fee fijo y por horas con moneda/redondeo explícitos, sin duplicar horas importadas.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "clientes",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "02 Clientes y contratos",
+      "skill": "agency-billing-requirements",
+      "deliverable_summary": "Matriz de requisitos y expediente de emisión",
+      "inputs_from_repository": "Requirement catalogue; source documents; client po records; attachments; issued invoices.",
+      "outputs_from_repository": [
+        "requirement_matrix",
+        "evidence_matches",
+        "missing_requirements",
+        "issuance_ready",
+        "locked_field_changes",
+        "owner_requests"
+      ],
+      "readonly_calculators": [],
+      "connector_options": [
+        "google-drive",
+        "notion",
+        "microsoft365",
+        "dropbox",
+        "box"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Bloquear factura final si falta PO, aceptación o evidencia requerida por ese cliente.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "clientes",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "03 Trabajo y producción",
+      "skill": "agency-tasks-timesheets",
+      "deliverable_summary": "Horas validadas, valoración y aprobaciones",
+      "inputs_from_repository": "Tenant ID; open non-generic JobNumber; task record, three task dates, recipient and actor role; timesheet lines in hundredths with daily total and allocation mode; approved hours with internal cost and client rates; timesheet closing date and configuration flags.",
+      "outputs_from_repository": [
+        "task_actions",
+        "task_delay_report",
+        "timesheet_validation",
+        "hour_approval_queue",
+        "hour_valuation",
+        "chargeability_report",
+        "timesheet_close_proposal"
+      ],
+      "readonly_calculators": [
+        "allocate",
+        "hourly_fee_settlement"
+      ],
+      "connector_options": [
+        "harvest",
+        "clickup",
+        "google-sheets",
+        "excel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Reimportar la misma semana no duplica horas; horas rechazadas no se facturan.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "produccion",
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "03 Trabajo y producción",
+      "skill": "agency-production-estimating",
+      "deliverable_summary": "Estimación, comparación de proveedores y órdenes",
+      "inputs_from_repository": "Job number state; production type catalogue; supplier master; estimate header terms; line quotes; client credit position; config flags.",
+      "outputs_from_repository": [
+        "estimate_draft",
+        "estimate_totals",
+        "supplier_comparison",
+        "client_approval_pack",
+        "purchase_order_drafts",
+        "post_buy_variance"
+      ],
+      "readonly_calculators": [
+        "estimate_totals",
+        "allocate",
+        "credit_exposure"
+      ],
+      "connector_options": [
+        "harvest",
+        "clickup",
+        "google-sheets",
+        "excel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Recalcular subtotal, markups y asignaciones; cambio del presupuesto invalida aprobación anterior.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "produccion",
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "03 Trabajo y producción",
+      "skill": "agency-production",
+      "deliverable_summary": "Calendario, activos, control de calidad y derechos",
+      "inputs_from_repository": "Approved estimate lines; asset versions; deliverable specs; royalty contracts; event staff master; config flags.",
+      "outputs_from_repository": [
+        "production_schedule",
+        "asset_manifest",
+        "qa_findings",
+        "rights_check",
+        "staff_assignment",
+        "release_candidates"
+      ],
+      "readonly_calculators": [
+        "payload_digest",
+        "approval_route"
+      ],
+      "connector_options": [
+        "clickup",
+        "google-drive",
+        "microsoft365",
+        "dropbox",
+        "box"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Relacionar la versión exacta del creativo con sus derechos y bloquear liberación vencida.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "produccion",
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "04 Planificación de medios",
+      "skill": "agency-media-ranking",
+      "deliverable_summary": "Ranking y manifest de datos",
+      "inputs_from_repository": "Open JobNumber and holder client (client rankings); licensed rating book export for one market and period with targets and population data; provider and market code mappings; planning and negotiation targets; time window, weekdays and outlets; rate-card settings and approved FX reference.",
+      "outputs_from_repository": [
+        "rating_book_manifest",
+        "ranking_spec",
+        "candidate_table",
+        "data_quality_exceptions",
+        "commercial_inheritance",
+        "planning_handoff"
+      ],
+      "readonly_calculators": [
+        "audience_metrics"
+      ],
+      "connector_options": [
+        "gwi",
+        "numeris",
+        "nielsen",
+        "kantar",
+        "google-ads",
+        "dv360"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "No comparar ratings de universos incompatibles ni inventar un ranking cuando faltan tarifas o audiencia.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "planificacion",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "04 Planificación de medios",
+      "skill": "agency-media-planning",
+      "deliverable_summary": "Plan, calendario, costos y aprobación",
+      "inputs_from_repository": "Open JobNumber with billing client, product, typology, division and billing code; media type and validity; outlets with default vendors and publication types; fee settings; currency and monthly reference FX; rating criterion and targets; contracts and rate cards; approval configuration; authoritative credit limit, open AR and approved-unbilled amounts.",
+      "outputs_from_repository": [
+        "media_plan",
+        "schedule_register",
+        "item_pricing",
+        "plan_totals",
+        "objective_summary",
+        "approval_payload",
+        "billing_release"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "audience_metrics",
+        "credit_exposure",
+        "plan_diff"
+      ],
+      "connector_options": [
+        "meta-ads",
+        "google-ads",
+        "tiktok-ads",
+        "amazon-ads",
+        "dv360",
+        "netflix",
+        "openai-ads",
+        "vistar",
+        "gwi",
+        "numeris",
+        "nielsen",
+        "kantar"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Todas las líneas cuadran con presupuesto, moneda, fuente de audiencia y revisión; aprobación ligada al plan exacto.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "planificacion",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "04 Planificación de medios",
+      "skill": "agency-tv-radio-planning",
+      "deliverable_summary": "Pauta, spots, materiales e instrucciones de tráfico",
+      "inputs_from_repository": "Saved ranking linked to an open JobNumber; programs with airing days and hours; daypart set and cut-off hour; contracts or rate cards; base duration, pricing mode and coefficient tables; materials with durations and royalty contracts; spot counts or objectives; evaluation provider settings.",
+      "outputs_from_repository": [
+        "broadcast_schedule",
+        "spot_register",
+        "rate_basis",
+        "material_distribution",
+        "traffic_instructions",
+        "evaluation_report"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "audience_metrics"
+      ],
+      "connector_options": [
+        "mediaocean",
+        "freewheel",
+        "numeris",
+        "nielsen",
+        "kantar"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Validar fecha/hora local, duración, tarifa y material de cada spot; importar emisiones y obtener post-evaluación.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "planificacion",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "04 Planificación de medios",
+      "skill": "agency-ooh-planning",
+      "deliverable_summary": "Sitios, costos, reservas y evidencia exigida",
+      "inputs_from_repository": "Open JobNumber and plan header; supplier quotes or rate cards per circuit, face or press unit; site, circuit, screen or publication data; tariff type Normal or Package; production, installation, permit and dismantling costs; evidence policy agreed with the client.",
+      "outputs_from_repository": [
+        "site_plan",
+        "ooh_line_pricing",
+        "cost_schedule",
+        "evidence_requirements",
+        "booking_proposals",
+        "exceptions"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "allocate"
+      ],
+      "connector_options": [
+        "vistar",
+        "broadsign",
+        "google-sheets",
+        "excel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Distinguir pantalla digital de soporte estático, ubicación, vigencia y formato compatible.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "planificacion",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "04 Planificación de medios",
+      "skill": "agency-digital-planning",
+      "deliverable_summary": "Plan digital, taxonomía, costos y conciliación",
+      "inputs_from_repository": "Open JobNumber and linked ranking; digital masters (platforms, formats, buy types, calc types, tracking and placement types, AdServers); per-item quantities, rates, vendor, contract and currency; taxonomy templates and external codes; read-only actuals exports; platform invoices registered with taxonomy order codes.",
+      "outputs_from_repository": [
+        "digital_plan",
+        "taxonomy_strings",
+        "adserver_costs",
+        "actuals_snapshot",
+        "invoice_match_register",
+        "order_adjustment_proposal"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "reconcile",
+        "invoice_check"
+      ],
+      "connector_options": [
+        "meta-ads",
+        "google-ads",
+        "tiktok-ads",
+        "amazon-ads",
+        "dv360",
+        "netflix",
+        "openai-ads",
+        "ga4"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Validar objetivo/targeting permitido y conversiones disponibles antes de entregar el plan a compra.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "planificacion",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "04 Planificación de medios",
+      "skill": "agency-plan-changes",
+      "deliverable_summary": "Diferencias entre revisiones y acciones sobre órdenes",
+      "inputs_from_repository": "Plan number with approved and latest revisions; authenticated change request with reason category and deadline; spot states and order numbers/versions (sent or unsent); authoritative PO and reserve balances; contracts, rate cards, materials and royalty validity for new dates; approval configuration.",
+      "outputs_from_repository": [
+        "baseline_revision",
+        "proposed_revision",
+        "line_diff",
+        "lock_report",
+        "currency_deltas",
+        "order_version_actions",
+        "approval_pack",
+        "verified_receipts",
+        "blocked_actions"
+      ],
+      "readonly_calculators": [
+        "plan_diff",
+        "budget_check",
+        "approval_route"
+      ],
+      "connector_options": [
+        "meta-ads",
+        "google-ads",
+        "tiktok-ads",
+        "amazon-ads",
+        "dv360",
+        "netflix",
+        "openai-ads",
+        "vistar",
+        "mediaocean",
+        "freewheel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Cambio de presupuesto produce diff y nueva aprobación; una aprobación vieja no ejecuta la nueva revisión.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "planificacion",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "05 Compra de medios",
+      "skill": "agency-rate-cards-contracts",
+      "deliverable_summary": "Tarifarios, contratos y saldos",
+      "inputs_from_repository": "Medium or provider with media type; holder client or printed scope; currency and exponent; validity; calculation type; base or copy source with coefficient; contract consumption/control type, payment condition, cap, VAT flag, discounts, commission, assignment, rate cards by date range; installment advance % and count; authoritative contract current account for adjustments and transfers; vendor negotiation evidence.",
+      "outputs_from_repository": [
+        "rate_card_drafts",
+        "contract_drafts",
+        "installment_schedules",
+        "contract_balance_report",
+        "adjustment_transfer_proposals",
+        "pricing_exceptions"
+      ],
+      "readonly_calculators": [
+        "discount_cascade",
+        "media_line_cost",
+        "installment_schedule",
+        "budget_check",
+        "approval_route"
+      ],
+      "connector_options": [
+        "google-drive",
+        "microsoft365",
+        "dropbox",
+        "box",
+        "mediaocean",
+        "freewheel",
+        "google-sheets",
+        "excel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Aplicar tarifa vigente y cascada de descuentos; no usar una tarifa vencida sin excepción aprobada.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "compra",
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "05 Compra de medios",
+      "skill": "agency-media-buying",
+      "deliverable_summary": "Órdenes versionadas, envío y compromisos",
+      "inputs_from_repository": "Client-approved plan and schedule revision; credit limit, open AR and approved unbilled or override approval; outlet and linked vendor per line; rate card or manual buy price; currency and exponent; VAT attributes; split criterion and cut-off; PO numbers; for changes the order number, version, sent status, reason and supplier-invoice status.",
+      "outputs_from_repository": [
+        "order_drafts",
+        "order_versions",
+        "send_packs",
+        "close_reopen_proposals",
+        "commitment_updates",
+        "supplier_exceptions"
+      ],
+      "readonly_calculators": [
+        "discount_cascade",
+        "media_line_cost",
+        "credit_exposure",
+        "plan_diff",
+        "approval_route"
+      ],
+      "connector_options": [
+        "meta-ads",
+        "google-ads",
+        "tiktok-ads",
+        "amazon-ads",
+        "dv360",
+        "netflix",
+        "openai-ads",
+        "vistar",
+        "mediaocean",
+        "freewheel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Cada orden conserva vínculo a la línea aprobada; resultado incierto se concilia antes de reintentar.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "compra",
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "05 Compra de medios",
+      "skill": "agency-campaign-activation",
+      "deliverable_summary": "Preflight, IDs externos y comprobantes de ejecución",
+      "inputs_from_repository": "Approved digital plan and issued order items; platform account with verified write tool; account currency and timezone; item platform, format, buy type, rates, flights and ordered net; budget snapshot and host reservation; taxonomy templates; creatives with rights; URLs and conversion events; authenticated approval reference.",
+      "outputs_from_repository": [
+        "activation_proposal",
+        "taxonomy_names",
+        "preflight_results",
+        "external_ids",
+        "readback_report",
+        "execution_receipts",
+        "uncertain_actions"
+      ],
+      "readonly_calculators": [
+        "payload_digest",
+        "budget_check",
+        "approval_route"
+      ],
+      "connector_options": [
+        "meta-ads",
+        "google-ads",
+        "tiktok-ads",
+        "amazon-ads",
+        "dv360",
+        "netflix",
+        "openai-ads",
+        "vistar"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Crear borrador/pausado cuando se soporte; activar solo tras aprobación, comprobar estado externo y no duplicar por timeout.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "compra",
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "05 Compra de medios",
+      "skill": "agency-campaign-optimization",
+      "deliverable_summary": "Diagnóstico, propuesta, experimento y recibos",
+      "inputs_from_repository": "Approved plan revision with investment, TRP and reach objectives and planning target; dated actuals with source, window, attribution and lag; licensed ratings and universe; committed order and contract amounts; budget snapshot; change history.",
+      "outputs_from_repository": [
+        "diagnostic",
+        "objective_deviation",
+        "optimization_proposal",
+        "experiment_plan",
+        "constraint_check",
+        "verified_change_receipts"
+      ],
+      "readonly_calculators": [
+        "audience_metrics",
+        "budget_check",
+        "plan_diff",
+        "approval_route"
+      ],
+      "connector_options": [
+        "meta-ads",
+        "google-ads",
+        "tiktok-ads",
+        "amazon-ads",
+        "dv360",
+        "netflix",
+        "openai-ads",
+        "vistar",
+        "ga4"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Con datos atrasados no aumentar presupuesto; propuesta respeta techo y conserva resultado de verificación.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "compra",
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "05 Compra de medios",
+      "skill": "agency-transmission-control",
+      "deliverable_summary": "Conciliación de emisiones y compensaciones",
+      "inputs_from_repository": "Ordered spots with station, date, window, material and order version; monitoring file or certificate with provider, timezone, cut-off and hash; default OK and deficient audit codes; code links; tolerance and match options; makegood policy; licensed ratings for post-buy.",
+      "outputs_from_repository": [
+        "emission_match",
+        "missing_or_extra_insertions",
+        "material_exceptions",
+        "makegood_register",
+        "close_readiness",
+        "postbuy_report",
+        "finance_handoff"
+      ],
+      "readonly_calculators": [
+        "spot_match",
+        "reconcile"
+      ],
+      "connector_options": [
+        "mediaocean",
+        "freewheel",
+        "broadsign",
+        "vistar"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Conciliar orden contra transmisión/proof-of-play; identificar faltantes, duplicados y makegoods.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "compra",
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "05 Compra de medios",
+      "skill": "agency-ooh-inventory",
+      "deliverable_summary": "Disponibilidad, reservas, caras y órdenes del operador",
+      "inputs_from_repository": "JobNumber; billboard type and zone; salesperson; OOH rate card and item; tariff type, faces, outings, start date, rate, currency and FX; payment terms and client PO; face states and permits; motifs with shares; posting date; agreement level, validity, type, payment, billable and bonus amounts.",
+      "outputs_from_repository": [
+        "availability_report",
+        "reservations",
+        "ooh_orders",
+        "monthly_suborders",
+        "face_motif_assignments",
+        "posting_batches",
+        "agreement_balances",
+        "inventory_exceptions"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "allocate",
+        "installment_schedule"
+      ],
+      "connector_options": [
+        "broadsign",
+        "google-sheets",
+        "excel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Dos clientes no reservan la misma cara y periodo; mantener separado inventario propio de compra externa.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "compra",
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "06 Proveedores y pagos",
+      "skill": "agency-delivery-reconciliation",
+      "deliverable_summary": "Cruce de orden, entrega y factura",
+      "inputs_from_repository": "Supplier document header and declared total; pendings per spot/item/request line with expected net; order close and certification status; estimate approval and PO status; tolerance policy.",
+      "outputs_from_repository": [
+        "match_result",
+        "discrepancies",
+        "evidence_links",
+        "payable_candidate",
+        "writeoff_proposals"
+      ],
+      "readonly_calculators": [
+        "reconcile",
+        "invoice_check",
+        "spot_match",
+        "approval_route"
+      ],
+      "connector_options": [
+        "mediaocean",
+        "freewheel",
+        "broadsign",
+        "vistar",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Bloquear factura cuyo importe o entrega no coincide y adjuntar la evidencia correspondiente.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "proveedores",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "06 Proveedores y pagos",
+      "skill": "agency-payables",
+      "deliverable_summary": "Recepción, normalización y propuesta de registro",
+      "inputs_from_repository": "Supplier document with type, letter, number, dates, currency, declared total and source hash; saved control; VAT accounts and perceptions; payment term; accounts on media/production/expense types; period status.",
+      "outputs_from_repository": [
+        "reception_log",
+        "duplicate_check",
+        "normalized_invoice",
+        "registration_proposal",
+        "holds",
+        "posting_receipt"
+      ],
+      "readonly_calculators": [
+        "invoice_check",
+        "reconcile",
+        "payment_terms",
+        "tiered_commission",
+        "approval_route"
+      ],
+      "connector_options": [
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo",
+        "bill"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Detectar factura duplicada por entidad/proveedor/número/importe; registrar una sola vez tras aprobar.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "proveedores",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "06 Proveedores y pagos",
+      "skill": "agency-payment-run",
+      "deliverable_summary": "Lista de pagos, retenciones y órdenes bancarias",
+      "inputs_from_repository": "Payment date, due window, currency, method and bank account; open items with balances and locks; client-collection evidence; supplier tax profiles, overrides and host rates; availability and checkbook state; FX rates.",
+      "outputs_from_repository": [
+        "payment_list_proposal",
+        "payment_orders_draft",
+        "withholding_schedule",
+        "release_proposal",
+        "bank_file_request",
+        "approval_requests"
+      ],
+      "readonly_calculators": [
+        "withholding",
+        "payment_terms",
+        "aging",
+        "fx_revaluation",
+        "approval_route"
+      ],
+      "connector_options": [
+        "wise",
+        "bill",
+        "paypal",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "No fondear con credencial solo lectura; aprobar beneficiario/importe exactos y conciliar timeout antes de repetir.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "proveedores",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "06 Proveedores y pagos",
+      "skill": "agency-cash-settlement",
+      "deliverable_summary": "Conciliación bancaria y caja sin aplicar",
+      "inputs_from_repository": "Bank account and statement balances and lines; last definitive reconciliation; treasury movements; portfolio cheques; bank charge details; checkbook and cheque status; card statements; rejection details.",
+      "outputs_from_repository": [
+        "deposit_proposals",
+        "bank_charge_entries",
+        "reconciliation_report",
+        "cheque_actions",
+        "card_statement_match",
+        "availability_snapshot",
+        "unapplied_cash"
+      ],
+      "readonly_calculators": [
+        "reconcile",
+        "allocate",
+        "journal_check",
+        "approval_route"
+      ],
+      "connector_options": [
+        "wise",
+        "stripe",
+        "paypal",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo",
+        "bill"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Webhook repetido no duplica recibo; cuadrar comisiones, moneda y liquidación bancaria.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "proveedores",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "06 Proveedores y pagos",
+      "skill": "agency-expenses",
+      "deliverable_summary": "Gastos, rendiciones y diferimientos",
+      "inputs_from_repository": "Requester or claimant pseudonym; concept, net amount, currency and allocation; configuration flags and approver matrix; contract schedule; sheet lines and receipts; estimate item; fund balance; budget balances.",
+      "outputs_from_repository": [
+        "expense_request_drafts",
+        "contract_schedule",
+        "sheet_review",
+        "settlement_proposal",
+        "deferral_schedule",
+        "budget_check_result",
+        "approval_requests"
+      ],
+      "readonly_calculators": [
+        "allocate",
+        "installment_schedule",
+        "invoice_check",
+        "budget_check",
+        "approval_route"
+      ],
+      "connector_options": [
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo",
+        "bill",
+        "google-drive",
+        "microsoft365"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "OCR con baja confianza requiere revisión; no registrar dos veces el mismo comprobante.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "proveedores",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "07 Facturación y cobranza",
+      "skill": "agency-client-billing",
+      "deliverable_summary": "Facturas y notas de crédito o débito",
+      "inputs_from_repository": "Billing client master; pending to bill extract; billing readiness; tax tables; split codes; advance sale balances.",
+      "outputs_from_repository": [
+        "billing_selection",
+        "invoice_drafts",
+        "credit_debit_note_drafts",
+        "fee_calculation",
+        "split_allocation",
+        "billing_exceptions"
+      ],
+      "readonly_calculators": [
+        "discount_cascade",
+        "estimate_totals",
+        "payment_terms",
+        "allocate",
+        "invoice_check",
+        "approval_route"
+      ],
+      "connector_options": [
+        "stripe",
+        "paypal",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "siigo",
+        "netsuite",
+        "facturapi",
+        "arca",
+        "nuvem-fiscal"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Emitir una vez y guardar folio/estado; separar factura comercial de documento fiscal autorizado.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "facturacion",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "07 Facturación y cobranza",
+      "skill": "agency-collections",
+      "deliverable_summary": "Aplicación de cobros y antigüedad de saldos",
+      "inputs_from_repository": "Open items; remittance evidence; withholding certificates; credit limits; tax tables; fx rates; client contacts.",
+      "outputs_from_repository": [
+        "receipt_proposal",
+        "application_plan",
+        "withholding_certificates",
+        "advance_applications",
+        "aging_report",
+        "credit_exposure",
+        "followup_worklist"
+      ],
+      "readonly_calculators": [
+        "aging",
+        "credit_exposure",
+        "allocate",
+        "withholding",
+        "payment_terms",
+        "approval_route"
+      ],
+      "connector_options": [
+        "stripe",
+        "paypal",
+        "wise",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Pago parcial reduce saldo correcto; borrador de recordatorio no se envía sin la autorización prevista.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "facturacion",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "07 Facturación y cobranza",
+      "skill": "agency-rebates",
+      "deliverable_summary": "Base elegible, provisión y rebate al cliente",
+      "inputs_from_repository": "Rebate contracts; qualifying orders; registered supplier invoices; prior pendings; fx rates; supplier settlements.",
+      "outputs_from_repository": [
+        "eligible_base",
+        "rebate_calculation",
+        "pending_register",
+        "provision_proposal",
+        "client_rebates",
+        "rebate_exceptions"
+      ],
+      "readonly_calculators": [
+        "tiered_commission",
+        "flat_rebate",
+        "allocate",
+        "approval_route"
+      ],
+      "connector_options": [
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo",
+        "google-sheets",
+        "excel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Aplicar tramos del contrato y excluir facturas no elegibles; no reconocer ingreso duplicado.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "facturacion",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "07 Facturación y cobranza",
+      "skill": "agency-tax-compliance",
+      "deliverable_summary": "Autorizaciones, impuestos y exportaciones fiscales",
+      "inputs_from_repository": "Approved document drafts; country tax tables; numbering series; ledger tax balances; sub journals; withholding records.",
+      "outputs_from_repository": [
+        "authorization_requests",
+        "numbering_report",
+        "vat_books_reconciliation",
+        "withholding_perception_schedule",
+        "certificate_register",
+        "tax_positions",
+        "statutory_exports"
+      ],
+      "readonly_calculators": [
+        "invoice_check",
+        "withholding",
+        "approval_route"
+      ],
+      "connector_options": [
+        "facturapi",
+        "arca",
+        "nuvem-fiscal",
+        "alegra",
+        "siigo",
+        "quickbooks",
+        "xero",
+        "netsuite"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "País sin adaptador validado permite preparación, pero bloquea emisión/declaración automática y muestra el faltante.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "facturacion",
+      "primary_sandbox_profile": "documentos",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "08 Contabilidad y cierre",
+      "skill": "agency-general-ledger",
+      "deliverable_summary": "Asientos y conciliación contable",
+      "inputs_from_repository": "Fiscal year; period subledger states; locked periods; chart of accounts; voucher types; entry lines; supporting attachment; opening subledger detail.",
+      "outputs_from_repository": [
+        "journal_entry_proposal",
+        "journal_check_report",
+        "coa_change_proposal",
+        "opening_balance_reconciliation",
+        "integration_difference_report"
+      ],
+      "readonly_calculators": [
+        "journal_check",
+        "allocate",
+        "approval_route"
+      ],
+      "connector_options": [
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Debe y haber cuadran; mapa de cuentas incompleto bloquea publicación en el libro maestro.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "contabilidad",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "08 Contabilidad y cierre",
+      "skill": "agency-accruals-revaluation",
+      "deliverable_summary": "Provisiones y revaluación cambiaria",
+      "inputs_from_repository": "Period subledger states; month end buy sell rates; open foreign currency items; pending billing and supplier items; expense requests without invoice; overcommission pendings; bridge balances by ot; intercompany flags.",
+      "outputs_from_repository": [
+        "fx_revaluation_proposal",
+        "gross_income_provision_proposal",
+        "wip_reclass_proposal",
+        "expense_provision_proposal",
+        "overcommission_provision_proposal",
+        "ot_close_proposal",
+        "ic_reclass_proposal",
+        "close_job_checklist"
+      ],
+      "readonly_calculators": [
+        "fx_revaluation",
+        "journal_check",
+        "tiered_commission",
+        "allocate",
+        "approval_route"
+      ],
+      "connector_options": [
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Recalcular con tipo de cambio/fecha aprobados; no mutar periodo cerrado ni duplicar reversión.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "contabilidad",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "08 Contabilidad y cierre",
+      "skill": "agency-fixed-assets",
+      "deliverable_summary": "Registro de activos y depreciación",
+      "inputs_from_repository": "Asset concepts; expense request and invoice; purchase value and dates; depreciation method and criterion; cost center mode; period state; disposal details.",
+      "outputs_from_repository": [
+        "asset_register_changes",
+        "depreciation_run_proposal",
+        "disposal_proposal",
+        "fixed_asset_annex"
+      ],
+      "readonly_calculators": [
+        "depreciation_schedule",
+        "journal_check",
+        "approval_route"
+      ],
+      "connector_options": [
+        "xero",
+        "quickbooks",
+        "alegra",
+        "netsuite",
+        "siigo",
+        "google-sheets",
+        "excel"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Calendario aprobado respeta vida útil, residual y periodo; si API de activos no existe usar registro nativo y asiento revisado.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "contabilidad",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "08 Contabilidad y cierre",
+      "skill": "agency-period-close",
+      "deliverable_summary": "Checklist, conciliaciones y bloqueo de periodo",
+      "inputs_from_repository": "Period subledger states; month end rate; close job receipts; trial balance with integrators; unpaid invoices at cutoff; bank reconciliations; reopen or year close request.",
+      "outputs_from_repository": [
+        "close_checklist",
+        "close_job_status",
+        "post_close_reconciliations",
+        "unresolved_balances",
+        "lock_proposal",
+        "reopen_plan",
+        "adjustment_plan"
+      ],
+      "readonly_calculators": [
+        "journal_check",
+        "fx_revaluation",
+        "aging",
+        "approval_route"
+      ],
+      "connector_options": [
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Impedir cierre con diferencias; bloqueo local no se anuncia como cierre externo sin recibo del sistema contable.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "contabilidad",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "09 Rentabilidad",
+      "skill": "agency-profitability",
+      "deliverable_summary": "Rentabilidad por job y cliente",
+      "inputs_from_repository": "Ledger results by job; approved hours and rates; direct expenses; structural expense pool; managed spend; pending items.",
+      "outputs_from_repository": [
+        "job_pnl",
+        "client_profitability",
+        "overhead_allocation",
+        "margin_bridge",
+        "managed_spend",
+        "completeness_gaps"
+      ],
+      "readonly_calculators": [
+        "margin",
+        "allocate"
+      ],
+      "connector_options": [
+        "harvest",
+        "clickup",
+        "meta-ads",
+        "google-ads",
+        "tiktok-ads",
+        "amazon-ads",
+        "dv360",
+        "openai-ads",
+        "vistar",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Separar gasto de medios administrado de ingreso propio; no duplicar costos entre factura y feed de plataforma.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "rentabilidad",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "09 Rentabilidad",
+      "skill": "agency-revenue-budget",
+      "deliverable_summary": "Versiones del presupuesto e ingresos proyectados",
+      "inputs_from_repository": "Tenant ID; budget year, version name and loading method; client x product x division lines with media/supplier or production-type rows; monthly investment, commission and cost-difference bps; projected fees, rebates and refunds; actuals and last closed month; supervisor identity.",
+      "outputs_from_repository": [
+        "budget_version",
+        "budget_lines",
+        "income_projection",
+        "plan_vs_actual",
+        "version_lock_proposal",
+        "budget_exceptions"
+      ],
+      "readonly_calculators": [
+        "allocate",
+        "margin"
+      ],
+      "connector_options": [
+        "google-sheets",
+        "excel",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Comparar plan y real en moneda/período homogéneos y conservar revisión aprobada.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "rentabilidad",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "09 Rentabilidad",
+      "skill": "agency-cash-forecast",
+      "deliverable_summary": "Pronóstico de caja y escenarios",
+      "inputs_from_repository": "Opening liquidity; ar open items; ap open items; chronic delays; approved unbilled pipeline; payroll capex recurring; holiday calendar.",
+      "outputs_from_repository": [
+        "cash_forecast",
+        "currency_buckets",
+        "undated_pipeline",
+        "collection_scenarios",
+        "supplier_exposure",
+        "liquidity_gaps"
+      ],
+      "readonly_calculators": [
+        "cash_projection",
+        "payment_terms",
+        "aging"
+      ],
+      "connector_options": [
+        "stripe",
+        "paypal",
+        "wise",
+        "bill",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Separar confirmado de probable y partidas sin fecha; evitar sumar distintas monedas sin conversión explícita.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "rentabilidad",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    },
+    {
+      "block": "09 Rentabilidad",
+      "skill": "agency-management-reporting",
+      "deliverable_summary": "Paquete gerencial y exportaciones",
+      "inputs_from_repository": "Closed period state; trial balance; interface code table; account mapping; ar open items; approved hours; wip items.",
+      "outputs_from_repository": [
+        "management_pack",
+        "mapping_coverage",
+        "export_files",
+        "kpi_summary",
+        "variance_commentary"
+      ],
+      "readonly_calculators": [
+        "margin",
+        "aging",
+        "allocate"
+      ],
+      "connector_options": [
+        "google-sheets",
+        "excel",
+        "quickbooks",
+        "xero",
+        "alegra",
+        "netsuite",
+        "siigo"
+      ],
+      "native_capability_required": true,
+      "file_mode": "Importación validada de CSV/XLSX/PDF/DOCX o registro nativo según la etapa; nunca simular una operación externa como ejecutada.",
+      "acceptance_test": "Cada KPI trazable a datos/versiones y totales conciliados; exportación respeta permisos de agencia/cliente.",
+      "implementation_status": "specified_not_implemented",
+      "runtime_tested": false,
+      "responsible_agent": "rentabilidad",
+      "primary_sandbox_profile": "datos-reportes",
+      "sandbox_required_for_every_call": false
+    }
+  ]
+}

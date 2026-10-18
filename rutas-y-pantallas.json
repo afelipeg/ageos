@@ -1,0 +1,3546 @@
+{
+  "$comment": "UX route and screen contract, not a generated application or an implementation claim. Paths use :parameter notation; translate to Next.js App Router segments.",
+  "schema_version": "1.1.0-design",
+  "product": "AgeOS",
+  "created_on": "2026-10-17",
+  "status": "specified_not_implemented",
+  "locales": {
+    "default": "en-US",
+    "available": [
+      "en-US",
+      "es"
+    ],
+    "business_record_names_are_not_auto_translated": true
+  },
+  "demo_contract": {
+    "persistent_business_state": true,
+    "deterministic_rules": true,
+    "external_integrations": "simulated",
+    "ai_inference": "not_used_scripted_deterministic_assistant",
+    "public_role_picker": false,
+    "public_reset": false,
+    "scope": "presenter-led restricted preview",
+    "business_integrations": "simulated",
+    "llm_credentials_required": false,
+    "assistant_driver": "scripted",
+    "demo_cases_instruction": "08-instruccion-2-demo-e2e.md"
+  },
+  "screen_families": [
+    "landing",
+    "control-list",
+    "setup-wizard",
+    "workspace-home",
+    "module-desk",
+    "record-detail",
+    "workflow-workbench",
+    "approval-detail",
+    "run-detail",
+    "settings-form",
+    "file-library",
+    "report",
+    "platform-ops",
+    "assistant-conversation"
+  ],
+  "global_states": [
+    "loading",
+    "empty",
+    "no_results",
+    "recoverable_error",
+    "blocked_by_rule",
+    "awaiting_approval",
+    "outcome_unknown",
+    "forbidden_or_not_found",
+    "partial_result",
+    "stale_source",
+    "revision_conflict",
+    "unsaved_changes"
+  ],
+  "shared_navigation": {
+    "workspace": [
+      "workspace-home",
+      "assistant",
+      "inbox",
+      "jobs"
+    ],
+    "manage": [
+      "module-desk:setup",
+      "connections",
+      "library",
+      "settings"
+    ],
+    "capabilities_route": "capabilities",
+    "platform_isolated_from_agency_nav": true,
+    "assistant_panel_action": "open_assistant_panel",
+    "sidebar_entry_count_including_catalog": 17
+  },
+  "routes": [
+    {
+      "id": "landing",
+      "path": "/",
+      "screen_family": "landing",
+      "shell": "public",
+      "label": {
+        "en": "Build your agency",
+        "es": "Construya su agencia"
+      },
+      "authorization": "public",
+      "primary_actions": [
+        "start_demo_setup",
+        "explore_authorized_fixture"
+      ],
+      "data_bindings": [],
+      "demo_disclosure_required": true
+    },
+    {
+      "id": "sign-in",
+      "path": "/sign-in",
+      "screen_family": "settings-form",
+      "shell": "public",
+      "label": {
+        "en": "Sign in",
+        "es": "Ingresar"
+      },
+      "authorization": "public",
+      "primary_actions": [
+        "authenticate_demo_session"
+      ],
+      "data_bindings": [],
+      "must_not_allow_public_impersonation": true
+    },
+    {
+      "id": "control-agencies",
+      "path": "/control/agencies",
+      "screen_family": "control-list",
+      "shell": "control",
+      "label": {
+        "en": "Your agencies",
+        "es": "Sus agencias"
+      },
+      "authorization": "control_member",
+      "primary_actions": [
+        "create_agency_draft",
+        "resume_setup",
+        "open_workspace"
+      ],
+      "data_bindings": [
+        "tenant_memberships",
+        "activation_runs"
+      ]
+    },
+    {
+      "id": "control-agency",
+      "path": "/control/agencies/:agencyId",
+      "screen_family": "record-detail",
+      "shell": "control",
+      "label": {
+        "en": "Agency activation",
+        "es": "Activación de agencia"
+      },
+      "authorization": "control_member",
+      "primary_actions": [
+        "open_workspace",
+        "review_configuration"
+      ],
+      "data_bindings": [
+        "tenant_memberships",
+        "tenant_configuration",
+        "activation_runs"
+      ]
+    },
+    {
+      "id": "setup-wizard",
+      "path": "/control/setup/:draftId/:step",
+      "screen_family": "setup-wizard",
+      "shell": "control",
+      "label": {
+        "en": "Build your agency",
+        "es": "Configure su agencia"
+      },
+      "authorization": "control_member",
+      "primary_actions": [
+        "save_draft",
+        "continue_valid_step",
+        "back",
+        "review_configuration",
+        "deploy_demo_agency"
+      ],
+      "data_bindings": [
+        "agency_draft",
+        "tenant_configuration",
+        "connection_bindings"
+      ],
+      "parameters": {
+        "step": [
+          "agency",
+          "operations",
+          "connections",
+          "brand-access",
+          "review"
+        ]
+      },
+      "reui_reference": "onboarding-1"
+    },
+    {
+      "id": "activation",
+      "path": "/control/activations/:runId",
+      "screen_family": "run-detail",
+      "shell": "control",
+      "label": {
+        "en": "Activating your workspace",
+        "es": "Activando su espacio"
+      },
+      "authorization": "control_member",
+      "primary_actions": [
+        "retry_safe_step",
+        "resolve_blocker",
+        "open_workspace"
+      ],
+      "data_bindings": [
+        "activation_runs",
+        "run_steps",
+        "tenant_configuration"
+      ],
+      "must_survive_refresh": true
+    },
+    {
+      "id": "workspace-home",
+      "path": "/a/:agencySlug",
+      "screen_family": "workspace-home",
+      "shell": "agency",
+      "label": {
+        "en": "Overview",
+        "es": "Resumen"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "open_attention_item",
+        "open_job",
+        "create_job"
+      ],
+      "data_bindings": [
+        "jobs",
+        "approvals",
+        "named_metric_queries",
+        "run_events"
+      ],
+      "reui_references": [
+        "card-28"
+      ],
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "assistant",
+      "path": "/a/:agencySlug/assistant",
+      "screen_family": "assistant-conversation",
+      "shell": "agency",
+      "label": {
+        "en": "Assistant",
+        "es": "Asistente"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "submit_supported_preset_or_alias",
+        "new_conversation",
+        "open_authorized_thread",
+        "attach_authorized_file",
+        "review_proposed_command",
+        "request_required_approval",
+        "return_to_work_with_panel"
+      ],
+      "data_bindings": [
+        "assistant_conversation",
+        "assistant_message",
+        "action_proposal",
+        "assistant_run",
+        "approval_request"
+      ],
+      "query_parameters": {
+        "thread": "authorized thread identifier; server resolves tenant and user access"
+      },
+      "reui_references": [
+        "ai-chat-6"
+      ],
+      "sidebar_icon": "MessagesSquare",
+      "entrypoint_skill_id": "agency-orchestrator",
+      "shares_backend_and_thread_with_panel": true,
+      "hide_duplicate_panel": true,
+      "live_model_required": false,
+      "assistant_panel_available": true,
+      "assistant_surface": "full_page_hides_duplicate_panel",
+      "scripted_driver_required": true,
+      "scenario_manifest": "demo-scenarios-v1.json"
+    },
+    {
+      "id": "inbox",
+      "path": "/a/:agencySlug/inbox",
+      "screen_family": "module-desk",
+      "shell": "agency",
+      "label": {
+        "en": "Inbox",
+        "es": "Pendientes"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "open_item",
+        "assign_item",
+        "snooze_item",
+        "resolve_verified_item"
+      ],
+      "data_bindings": [
+        "attention_items",
+        "approvals",
+        "blockers"
+      ],
+      "query_parameters": {
+        "view": [
+          "for-me",
+          "approvals",
+          "blocked",
+          "all"
+        ],
+        "job": "authorized job identifier",
+        "owner": "authorized member identifier"
+      },
+      "reui_references": [
+        "solution-agents-5"
+      ],
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "jobs",
+      "path": "/a/:agencySlug/jobs",
+      "screen_family": "module-desk",
+      "shell": "agency",
+      "label": {
+        "en": "Jobs",
+        "es": "Trabajos"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "create_job",
+        "open_job",
+        "preview_import",
+        "apply_valid_import"
+      ],
+      "data_bindings": [
+        "jobs",
+        "clients",
+        "job_metric_views"
+      ],
+      "query_parameters": {
+        "q": "search",
+        "status": "status filter",
+        "owner": "owner filter",
+        "sort": "allowlisted order",
+        "page": "positive integer"
+      },
+      "reui_references": [
+        "c-data-grid-3"
+      ],
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "job-dossier",
+      "path": "/a/:agencySlug/jobs/:jobId",
+      "screen_family": "record-detail",
+      "shell": "agency",
+      "label": {
+        "en": "Job dossier",
+        "es": "Expediente del trabajo"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "propose_change",
+        "request_approval",
+        "log_time",
+        "open_plan",
+        "open_invoice",
+        "upload_file",
+        "open_run"
+      ],
+      "data_bindings": [
+        "jobs",
+        "contracts",
+        "budgets",
+        "tasks",
+        "timesheets",
+        "media_plans",
+        "orders",
+        "deliveries",
+        "bills",
+        "invoices",
+        "receipts",
+        "journals",
+        "files",
+        "audit_events"
+      ],
+      "query_parameters": {
+        "tab": [
+          "overview",
+          "scope",
+          "production",
+          "media",
+          "finance",
+          "files",
+          "activity"
+        ]
+      },
+      "shared_record_authority": true,
+      "reui_references": [
+        "data-grid-editing-5",
+        "c-trace-5"
+      ],
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "client-detail",
+      "path": "/a/:agencySlug/clients/:clientId",
+      "screen_family": "record-detail",
+      "shell": "agency",
+      "label": {
+        "en": "Client",
+        "es": "Cliente"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "edit_client",
+        "create_job",
+        "open_contract",
+        "open_invoice"
+      ],
+      "data_bindings": [
+        "clients",
+        "client_contacts",
+        "jobs",
+        "contracts",
+        "invoices",
+        "files"
+      ],
+      "query_parameters": {
+        "tab": [
+          "overview",
+          "jobs",
+          "contracts",
+          "invoices",
+          "files"
+        ]
+      },
+      "reui_references": [
+        "c-data-grid-3"
+      ],
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "module-desk",
+      "path": "/a/:agencySlug/modules/:moduleKey",
+      "screen_family": "module-desk",
+      "shell": "agency",
+      "label": {
+        "en": "Module desk",
+        "es": "Mesa de módulo"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "open_record",
+        "create_record_if_allowed",
+        "open_workflow",
+        "filter_saved_view"
+      ],
+      "data_bindings": [
+        "authorized_module_view"
+      ],
+      "parameters": {
+        "moduleKey": [
+          "setup",
+          "clients-contracts",
+          "work-production",
+          "media-planning",
+          "media-buying",
+          "suppliers-payments",
+          "billing-collections",
+          "accounting-close",
+          "profitability"
+        ]
+      },
+      "query_parameters": {
+        "view": "allowlisted module view",
+        "q": "search",
+        "sort": "allowlisted order",
+        "page": "positive integer"
+      },
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "workflow-workbench",
+      "path": "/a/:agencySlug/modules/:moduleKey/workflows/:skillId",
+      "screen_family": "workflow-workbench",
+      "shell": "agency",
+      "label": {
+        "en": "Workflow",
+        "es": "Proceso"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "save_draft",
+        "validate_inputs",
+        "calculate_or_prepare",
+        "request_approval_if_required",
+        "execute_approved_action_if_allowed",
+        "download_output"
+      ],
+      "data_bindings": [
+        "workflow_contract",
+        "authorized_context",
+        "workflow_runs",
+        "output_artifacts",
+        "approvals"
+      ],
+      "parameters": {
+        "skillId": [
+          "agency-orchestrator",
+          "agency-integrations",
+          "agency-access-governance",
+          "agency-master-data",
+          "agency-onboarding",
+          "agency-job-lifecycle",
+          "agency-contract-po",
+          "agency-budget-control",
+          "agency-fee-contracts",
+          "agency-billing-requirements",
+          "agency-tasks-timesheets",
+          "agency-production-estimating",
+          "agency-production",
+          "agency-media-ranking",
+          "agency-media-planning",
+          "agency-tv-radio-planning",
+          "agency-ooh-planning",
+          "agency-digital-planning",
+          "agency-plan-changes",
+          "agency-rate-cards-contracts",
+          "agency-media-buying",
+          "agency-campaign-activation",
+          "agency-campaign-optimization",
+          "agency-transmission-control",
+          "agency-ooh-inventory",
+          "agency-delivery-reconciliation",
+          "agency-payables",
+          "agency-payment-run",
+          "agency-cash-settlement",
+          "agency-expenses",
+          "agency-client-billing",
+          "agency-collections",
+          "agency-rebates",
+          "agency-tax-compliance",
+          "agency-general-ledger",
+          "agency-accruals-revaluation",
+          "agency-fixed-assets",
+          "agency-period-close",
+          "agency-profitability",
+          "agency-revenue-budget",
+          "agency-cash-forecast",
+          "agency-management-reporting"
+        ]
+      },
+      "stages": [
+        "context",
+        "inputs",
+        "validation",
+        "output",
+        "next_action"
+      ],
+      "must_not_be_generic_noop": true,
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "business-record",
+      "path": "/a/:agencySlug/records/:recordType/:recordId",
+      "screen_family": "record-detail",
+      "shell": "agency",
+      "label": {
+        "en": "Business record",
+        "es": "Registro de negocio"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "edit_draft",
+        "open_source",
+        "compare_revision",
+        "request_approval",
+        "open_job",
+        "download_allowed_artifact"
+      ],
+      "data_bindings": [
+        "authorized_record",
+        "record_revisions",
+        "record_links",
+        "files",
+        "audit_events"
+      ],
+      "parameters": {
+        "recordType": [
+          "contract",
+          "purchase-order",
+          "estimate",
+          "timesheet",
+          "deliverable",
+          "media-plan",
+          "media-order",
+          "campaign",
+          "supplier-bill",
+          "payment-run",
+          "client-invoice",
+          "receipt",
+          "journal",
+          "fixed-asset",
+          "period-close"
+        ]
+      },
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "capabilities",
+      "path": "/a/:agencySlug/capabilities",
+      "screen_family": "module-desk",
+      "shell": "agency",
+      "label": {
+        "en": "All capabilities",
+        "es": "Todas las capacidades"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "filter_by_module",
+        "open_workflow",
+        "review_activation_change"
+      ],
+      "data_bindings": [
+        "catalog_42",
+        "tenant_configuration",
+        "capability_dependencies"
+      ],
+      "query_parameters": {
+        "module": "moduleKey",
+        "status": [
+          "all",
+          "active",
+          "inactive",
+          "blocked"
+        ]
+      },
+      "required_catalog_count": 42,
+      "reui_references": [
+        "data-grid-filtering-2"
+      ],
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "approvals",
+      "path": "/a/:agencySlug/approvals",
+      "screen_family": "module-desk",
+      "shell": "agency",
+      "label": {
+        "en": "Approvals",
+        "es": "Aprobaciones"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "open_approval",
+        "filter_status"
+      ],
+      "data_bindings": [
+        "approvals"
+      ],
+      "reui_reference": "solution-agents-5",
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "approval-detail",
+      "path": "/a/:agencySlug/approvals/:approvalId",
+      "screen_family": "approval-detail",
+      "shell": "agency",
+      "label": {
+        "en": "Review change",
+        "es": "Revisar cambio"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "approve_exact_payload",
+        "request_changes",
+        "reject_with_reason",
+        "open_evidence"
+      ],
+      "data_bindings": [
+        "approval_payload",
+        "record_revisions",
+        "approval_policy",
+        "files",
+        "audit_events"
+      ],
+      "must_block_stale_or_self_approval": true,
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "runs",
+      "path": "/a/:agencySlug/runs",
+      "screen_family": "module-desk",
+      "shell": "agency",
+      "label": {
+        "en": "Runs",
+        "es": "Ejecuciones"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "open_run",
+        "filter_status"
+      ],
+      "data_bindings": [
+        "workflow_runs",
+        "run_steps"
+      ],
+      "reui_references": [
+        "agent-activity-1"
+      ],
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "run-detail",
+      "path": "/a/:agencySlug/runs/:runId",
+      "screen_family": "run-detail",
+      "shell": "agency",
+      "label": {
+        "en": "Run details",
+        "es": "Detalle de ejecución"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "open_step_output",
+        "open_approval",
+        "retry_safe_step",
+        "reconcile_unknown_result",
+        "open_record"
+      ],
+      "data_bindings": [
+        "workflow_runs",
+        "run_steps",
+        "output_artifacts",
+        "approvals",
+        "audit_events"
+      ],
+      "reui_reference": "agent-activity-1",
+      "must_not_fake_agent_inference": true,
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "connections",
+      "path": "/a/:agencySlug/connections",
+      "screen_family": "module-desk",
+      "shell": "agency",
+      "label": {
+        "en": "Connections",
+        "es": "Conexiones"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "search_catalog",
+        "configure_demo_connection",
+        "start_file_workflow"
+      ],
+      "data_bindings": [
+        "connection_catalog",
+        "connection_bindings"
+      ],
+      "reui_reference": "solution-dev-ops-6",
+      "external_mode": "simulated",
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "connection-detail",
+      "path": "/a/:agencySlug/connections/:connectionId",
+      "screen_family": "settings-form",
+      "shell": "agency",
+      "label": {
+        "en": "Connection settings",
+        "es": "Configuración de conexión"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "test_simulated_connection",
+        "review_scope_change",
+        "disconnect_after_impact_review"
+      ],
+      "data_bindings": [
+        "connection_binding",
+        "account_binding",
+        "scopes",
+        "dependent_workflows",
+        "sync_events"
+      ],
+      "external_mode": "simulated",
+      "must_not_request_real_credentials": true,
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "library",
+      "path": "/a/:agencySlug/library",
+      "screen_family": "file-library",
+      "shell": "agency",
+      "label": {
+        "en": "Library",
+        "es": "Biblioteca"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "upload_private_file",
+        "preview_file",
+        "preview_import",
+        "filter_job",
+        "download_authorized_file"
+      ],
+      "data_bindings": [
+        "file_metadata",
+        "file_versions",
+        "extraction_status",
+        "job_links"
+      ],
+      "reui_reference": "solution-files-1",
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "file-detail",
+      "path": "/a/:agencySlug/library/:fileId",
+      "screen_family": "record-detail",
+      "shell": "agency",
+      "label": {
+        "en": "Document",
+        "es": "Documento"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "preview_authorized_file",
+        "download_authorized_file",
+        "link_to_job",
+        "review_extraction",
+        "open_source_job"
+      ],
+      "data_bindings": [
+        "file_metadata",
+        "file_versions",
+        "extraction_artifacts",
+        "job_links",
+        "audit_events"
+      ],
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "settings",
+      "path": "/a/:agencySlug/settings/:section",
+      "screen_family": "settings-form",
+      "shell": "agency",
+      "label": {
+        "en": "Settings",
+        "es": "Configuración"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "save_configuration_draft",
+        "preview_change",
+        "publish_approved_configuration",
+        "copy_demo_invitation",
+        "review_demo_plan_change"
+      ],
+      "data_bindings": [
+        "tenant_configuration",
+        "branding",
+        "memberships",
+        "policy",
+        "domain_simulations",
+        "demo_entitlements",
+        "usage_counters"
+      ],
+      "parameters": {
+        "section": [
+          "identity",
+          "team",
+          "policy",
+          "domains",
+          "plan",
+          "audit"
+        ]
+      },
+      "restricted_by_section_and_action": true,
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "explore",
+      "path": "/a/:agencySlug/explore",
+      "screen_family": "report",
+      "shell": "agency",
+      "label": {
+        "en": "Explore your operation",
+        "es": "Explore su operación"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "choose_named_question",
+        "set_parameters",
+        "run_readonly_query",
+        "open_source_record",
+        "export_authorized_report"
+      ],
+      "data_bindings": [
+        "named_readonly_queries",
+        "metric_definitions",
+        "source_freshness"
+      ],
+      "must_not_offer_unrestricted_sql": true,
+      "must_label_deterministic_query": true,
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "report",
+      "path": "/a/:agencySlug/reports/:reportId",
+      "screen_family": "report",
+      "shell": "agency",
+      "label": {
+        "en": "Report",
+        "es": "Reporte"
+      },
+      "authorization": "tenant_member",
+      "primary_actions": [
+        "change_authorized_filters",
+        "open_source_record",
+        "download_report"
+      ],
+      "data_bindings": [
+        "report_version",
+        "metric_definitions",
+        "source_manifest",
+        "data_cutoff"
+      ],
+      "assistant_panel_available": true,
+      "assistant_surface": "right_panel"
+    },
+    {
+      "id": "platform-home",
+      "path": "/ops",
+      "screen_family": "platform-ops",
+      "shell": "platform",
+      "label": {
+        "en": "Platform operations",
+        "es": "Operación de plataforma"
+      },
+      "authorization": "platform_operator_or_admin",
+      "primary_actions": [
+        "open_incident",
+        "filter_health"
+      ],
+      "data_bindings": [
+        "redacted_tenant_health",
+        "platform_incidents"
+      ],
+      "reui_references": [
+        "agent-activity-1"
+      ]
+    },
+    {
+      "id": "platform-incident",
+      "path": "/ops/incidents/:incidentId",
+      "screen_family": "run-detail",
+      "shell": "platform",
+      "label": {
+        "en": "Incident investigation",
+        "es": "Investigación de incidente"
+      },
+      "authorization": "platform_operator_or_admin",
+      "primary_actions": [
+        "inspect_evidence",
+        "prepare_reviewable_change"
+      ],
+      "data_bindings": [
+        "platform_incident",
+        "redacted_traces",
+        "investigation_steps"
+      ],
+      "fixture_label_required": true,
+      "fixture_id": "ops_csv_delimiter_mismatch",
+      "reui_references": [
+        "agent-activity-1",
+        "c-trace-4"
+      ]
+    },
+    {
+      "id": "platform-change",
+      "path": "/ops/changes/:changeId",
+      "screen_family": "approval-detail",
+      "shell": "platform",
+      "label": {
+        "en": "Review platform change",
+        "es": "Revisar cambio de plataforma"
+      },
+      "authorization": "platform_operator_or_admin",
+      "primary_actions": [
+        "approve_exact_configuration_change",
+        "reject_change",
+        "apply_approved_local_change",
+        "verify_local_result"
+      ],
+      "data_bindings": [
+        "platform_change_payload",
+        "platform_approval",
+        "verification_results"
+      ],
+      "remote_pr_creation": false,
+      "implementation_required": true,
+      "minimum_flow": [
+        "synthetic_incident",
+        "evidence",
+        "safe_local_configuration_proposal",
+        "platform_admin_approval",
+        "local_application",
+        "verification",
+        "audit"
+      ],
+      "optional_action": "download_code_proposal",
+      "action_permissions": {
+        "prepare_reviewable_change": "platform_operator",
+        "approve_exact_configuration_change": "platform_admin_distinct_from_requester",
+        "apply_approved_local_change": "server_policy_for_approved_demo_profile_only"
+      },
+      "fixture_id": "ops_csv_delimiter_mismatch",
+      "reui_references": [
+        "solution-agents-5",
+        "c-trace-5"
+      ]
+    },
+    {
+      "id": "presenter-controls",
+      "path": "/demo/presenter",
+      "screen_family": "settings-form",
+      "shell": "demo_tools",
+      "label": {
+        "en": "Presenter controls",
+        "es": "Controles de presentación"
+      },
+      "authorization": "demo_presenter",
+      "primary_actions": [
+        "load_authorized_demo_scenario",
+        "reset_owned_demo_tenant",
+        "open_authorized_actor_session"
+      ],
+      "data_bindings": [
+        "owned_demo_fixture",
+        "demo_session_roles"
+      ],
+      "must_not_be_public": true,
+      "destructive_reset_requires_in_product_confirmation": true
+    }
+  ],
+  "modules": [
+    {
+      "id": "M01",
+      "key": "setup",
+      "label": {
+        "en": "Agency setup",
+        "es": "Arranque"
+      },
+      "navigation_group": {
+        "en": "Manage",
+        "es": "Administrar"
+      },
+      "path": "/a/:agencySlug/modules/setup",
+      "screen_family": "module-desk",
+      "skill_count": 4,
+      "skill_ids": [
+        "agency-orchestrator",
+        "agency-integrations",
+        "agency-access-governance",
+        "agency-master-data"
+      ],
+      "available_in_v1": true,
+      "agency_activation": "configurable_with_dependency_validation",
+      "mandatory_controls_cannot_be_disabled": true,
+      "reui_references": [
+        "data-grid-filtering-2",
+        "solution-agents-4"
+      ],
+      "sidebar_icon": {
+        "library": "lucide-react",
+        "name": "SlidersHorizontal"
+      }
+    },
+    {
+      "id": "M02",
+      "key": "clients-contracts",
+      "label": {
+        "en": "Clients & contracts",
+        "es": "Clientes y contratos"
+      },
+      "navigation_group": {
+        "en": "Operations",
+        "es": "Operación"
+      },
+      "path": "/a/:agencySlug/modules/clients-contracts",
+      "screen_family": "module-desk",
+      "skill_count": 6,
+      "skill_ids": [
+        "agency-onboarding",
+        "agency-job-lifecycle",
+        "agency-contract-po",
+        "agency-budget-control",
+        "agency-fee-contracts",
+        "agency-billing-requirements"
+      ],
+      "available_in_v1": true,
+      "agency_activation": "configurable_with_dependency_validation",
+      "mandatory_controls_cannot_be_disabled": true,
+      "reui_references": [
+        "c-data-grid-3"
+      ],
+      "sidebar_icon": {
+        "library": "lucide-react",
+        "name": "ContactRound"
+      }
+    },
+    {
+      "id": "M03",
+      "key": "work-production",
+      "label": {
+        "en": "Work & production",
+        "es": "Trabajo y producción"
+      },
+      "navigation_group": {
+        "en": "Operations",
+        "es": "Operación"
+      },
+      "path": "/a/:agencySlug/modules/work-production",
+      "screen_family": "module-desk",
+      "skill_count": 3,
+      "skill_ids": [
+        "agency-tasks-timesheets",
+        "agency-production-estimating",
+        "agency-production"
+      ],
+      "available_in_v1": true,
+      "agency_activation": "configurable_with_dependency_validation",
+      "mandatory_controls_cannot_be_disabled": true,
+      "reui_references": [
+        "gantt-1",
+        "data-grid-editing-5"
+      ],
+      "sidebar_icon": {
+        "library": "lucide-react",
+        "name": "Clapperboard"
+      }
+    },
+    {
+      "id": "M04",
+      "key": "media-planning",
+      "label": {
+        "en": "Media planning",
+        "es": "Planificación de medios"
+      },
+      "navigation_group": {
+        "en": "Operations",
+        "es": "Operación"
+      },
+      "path": "/a/:agencySlug/modules/media-planning",
+      "screen_family": "module-desk",
+      "skill_count": 6,
+      "skill_ids": [
+        "agency-media-ranking",
+        "agency-media-planning",
+        "agency-tv-radio-planning",
+        "agency-ooh-planning",
+        "agency-digital-planning",
+        "agency-plan-changes"
+      ],
+      "available_in_v1": true,
+      "agency_activation": "configurable_with_dependency_validation",
+      "mandatory_controls_cannot_be_disabled": true,
+      "reui_references": [
+        "data-grid-advanced-3"
+      ],
+      "sidebar_icon": {
+        "library": "lucide-react",
+        "name": "CalendarRange"
+      }
+    },
+    {
+      "id": "M05",
+      "key": "media-buying",
+      "label": {
+        "en": "Media buying",
+        "es": "Compra de medios"
+      },
+      "navigation_group": {
+        "en": "Operations",
+        "es": "Operación"
+      },
+      "path": "/a/:agencySlug/modules/media-buying",
+      "screen_family": "module-desk",
+      "skill_count": 6,
+      "skill_ids": [
+        "agency-rate-cards-contracts",
+        "agency-media-buying",
+        "agency-campaign-activation",
+        "agency-campaign-optimization",
+        "agency-transmission-control",
+        "agency-ooh-inventory"
+      ],
+      "available_in_v1": true,
+      "agency_activation": "configurable_with_dependency_validation",
+      "mandatory_controls_cannot_be_disabled": true,
+      "reui_references": [
+        "data-grid-advanced-1"
+      ],
+      "sidebar_icon": {
+        "library": "lucide-react",
+        "name": "Megaphone"
+      }
+    },
+    {
+      "id": "M06",
+      "key": "suppliers-payments",
+      "label": {
+        "en": "Suppliers & payments",
+        "es": "Proveedores y pagos"
+      },
+      "navigation_group": {
+        "en": "Finance",
+        "es": "Finanzas"
+      },
+      "path": "/a/:agencySlug/modules/suppliers-payments",
+      "screen_family": "module-desk",
+      "skill_count": 5,
+      "skill_ids": [
+        "agency-delivery-reconciliation",
+        "agency-payables",
+        "agency-payment-run",
+        "agency-cash-settlement",
+        "agency-expenses"
+      ],
+      "available_in_v1": true,
+      "agency_activation": "configurable_with_dependency_validation",
+      "mandatory_controls_cannot_be_disabled": true,
+      "reui_references": [
+        "data-grid-filtering-1"
+      ],
+      "sidebar_icon": {
+        "library": "lucide-react",
+        "name": "WalletCards"
+      }
+    },
+    {
+      "id": "M07",
+      "key": "billing-collections",
+      "label": {
+        "en": "Billing & collections",
+        "es": "Facturación y cobranza"
+      },
+      "navigation_group": {
+        "en": "Finance",
+        "es": "Finanzas"
+      },
+      "path": "/a/:agencySlug/modules/billing-collections",
+      "screen_family": "module-desk",
+      "skill_count": 4,
+      "skill_ids": [
+        "agency-client-billing",
+        "agency-collections",
+        "agency-rebates",
+        "agency-tax-compliance"
+      ],
+      "available_in_v1": true,
+      "agency_activation": "configurable_with_dependency_validation",
+      "mandatory_controls_cannot_be_disabled": true,
+      "reui_references": [
+        "data-grid-filtering-1"
+      ],
+      "sidebar_icon": {
+        "library": "lucide-react",
+        "name": "ReceiptText"
+      }
+    },
+    {
+      "id": "M08",
+      "key": "accounting-close",
+      "label": {
+        "en": "Accounting & close",
+        "es": "Contabilidad y cierre"
+      },
+      "navigation_group": {
+        "en": "Finance",
+        "es": "Finanzas"
+      },
+      "path": "/a/:agencySlug/modules/accounting-close",
+      "screen_family": "module-desk",
+      "skill_count": 4,
+      "skill_ids": [
+        "agency-general-ledger",
+        "agency-accruals-revaluation",
+        "agency-fixed-assets",
+        "agency-period-close"
+      ],
+      "available_in_v1": true,
+      "agency_activation": "configurable_with_dependency_validation",
+      "mandatory_controls_cannot_be_disabled": true,
+      "reui_references": [
+        "c-data-grid-3"
+      ],
+      "sidebar_icon": {
+        "library": "lucide-react",
+        "name": "BookOpenCheck"
+      }
+    },
+    {
+      "id": "M09",
+      "key": "profitability",
+      "label": {
+        "en": "Profitability",
+        "es": "Rentabilidad"
+      },
+      "navigation_group": {
+        "en": "Finance",
+        "es": "Finanzas"
+      },
+      "path": "/a/:agencySlug/modules/profitability",
+      "screen_family": "module-desk",
+      "skill_count": 4,
+      "skill_ids": [
+        "agency-profitability",
+        "agency-revenue-budget",
+        "agency-cash-forecast",
+        "agency-management-reporting"
+      ],
+      "available_in_v1": true,
+      "agency_activation": "configurable_with_dependency_validation",
+      "mandatory_controls_cannot_be_disabled": true,
+      "reui_references": [
+        "data-grid-advanced-2"
+      ],
+      "sidebar_icon": {
+        "library": "lucide-react",
+        "name": "ChartNoAxesCombined"
+      }
+    }
+  ],
+  "workflow_bindings": [
+    {
+      "skill_id": "agency-orchestrator",
+      "module_id": "M01",
+      "module_key": "setup",
+      "path": "/a/:agencySlug/modules/setup/workflows/agency-orchestrator",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Work coordination",
+        "es": "Estado del trabajo y dependencias"
+      },
+      "primary_action": {
+        "en": "Check next steps",
+        "es": "Revisar próximos pasos"
+      },
+      "required_output_keys": [
+        "job_state",
+        "dependency_graph",
+        "period_gate_status",
+        "task_assignments",
+        "blockers",
+        "approval_requests",
+        "checkpoints",
+        "next_stage"
+      ],
+      "readonly_calculators": [
+        "payload_digest",
+        "job_number",
+        "approval_route"
+      ],
+      "owner_specialist": "coordinador",
+      "source_acceptance": "Reanudar un job sin repetir una escritura; bloquear etapas dependientes de una revisión obsoleta.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-orchestrator",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-integrations",
+      "module_id": "M01",
+      "module_key": "setup",
+      "path": "/a/:agencySlug/modules/setup/workflows/agency-integrations",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Connection coverage",
+        "es": "Inventario de capacidades y conexiones por etapa"
+      },
+      "primary_action": {
+        "en": "Check coverage",
+        "es": "Revisar cobertura"
+      },
+      "required_output_keys": [
+        "capability_inventory",
+        "stage_wiring_plan",
+        "access_matrix",
+        "schema_review",
+        "connection_requests",
+        "file_mode_plan",
+        "gaps"
+      ],
+      "readonly_calculators": [],
+      "owner_specialist": "coordinador",
+      "source_acceptance": "Descubrir scopes reales y mostrar faltantes; una conexión revocada bloquea únicamente las acciones que la necesitan.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-integrations",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-access-governance",
+      "module_id": "M01",
+      "module_key": "setup",
+      "path": "/a/:agencySlug/modules/setup/workflows/agency-access-governance",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Access & approval policy",
+        "es": "Matriz de acceso y cambios de configuración"
+      },
+      "primary_action": {
+        "en": "Review access change",
+        "es": "Revisar cambio de acceso"
+      },
+      "required_output_keys": [
+        "access_matrix",
+        "capability_register",
+        "sod_conflicts",
+        "access_change_requests",
+        "config_change_requests",
+        "offboarding_plan",
+        "audit_evidence_pack"
+      ],
+      "readonly_calculators": [
+        "payload_digest",
+        "approval_route"
+      ],
+      "owner_specialist": "coordinador",
+      "source_acceptance": "Usuario de agencia A no accede a conexiones, archivos ni acciones de B, incluyendo subagentes.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-access-governance",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-master-data",
+      "module_id": "M01",
+      "module_key": "setup",
+      "path": "/a/:agencySlug/modules/setup/workflows/agency-master-data",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Master data",
+        "es": "Maestros y equivalencias externas"
+      },
+      "primary_action": {
+        "en": "Validate master record",
+        "es": "Validar maestro"
+      },
+      "required_output_keys": [
+        "master_change_set",
+        "validation_report",
+        "duplicate_candidates",
+        "ledger_link_map",
+        "external_code_map",
+        "deactivation_plan",
+        "provisional_approval_requests"
+      ],
+      "readonly_calculators": [
+        "job_number",
+        "approval_route"
+      ],
+      "owner_specialist": "coordinador",
+      "source_acceptance": "Detectar un proveedor duplicado y conservar los IDs externos correctos al sincronizar.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-master-data",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-onboarding",
+      "module_id": "M02",
+      "module_key": "clients-contracts",
+      "path": "/a/:agencySlug/modules/clients-contracts/workflows/agency-onboarding",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Client intake",
+        "es": "Alta de cliente y brief"
+      },
+      "primary_action": {
+        "en": "Create client intake",
+        "es": "Crear expediente de cliente"
+      },
+      "required_output_keys": [
+        "intake_pack",
+        "owner_client_draft",
+        "billing_client_links",
+        "product_drafts",
+        "attention_group_plan",
+        "provisional_approval_requests",
+        "brief_draft",
+        "intake_gaps"
+      ],
+      "readonly_calculators": [
+        "job_number"
+      ],
+      "owner_specialist": "clientes",
+      "source_acceptance": "Importar cliente/brief sin crear duplicado y registrar faltantes de facturación.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-onboarding",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-job-lifecycle",
+      "module_id": "M02",
+      "module_key": "clients-contracts",
+      "path": "/a/:agencySlug/modules/clients-contracts/workflows/agency-job-lifecycle",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Job lifecycle",
+        "es": "Apertura y cierre de trabajos"
+      },
+      "primary_action": {
+        "en": "Open job",
+        "es": "Abrir trabajo"
+      },
+      "required_output_keys": [
+        "job_proposal",
+        "job_code_check",
+        "move_or_substitution_plan",
+        "close_readiness",
+        "inactive_job_list",
+        "job_audit_note"
+      ],
+      "readonly_calculators": [
+        "job_number",
+        "approval_route"
+      ],
+      "owner_specialist": "clientes",
+      "source_acceptance": "Asignar JobNumber único; impedir cierre con compromisos o documentos pendientes.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-job-lifecycle",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-contract-po",
+      "module_id": "M02",
+      "module_key": "clients-contracts",
+      "path": "/a/:agencySlug/modules/clients-contracts/workflows/agency-contract-po",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Contracts & purchase orders",
+        "es": "Contrato, PO, reservas y ruta de facturación"
+      },
+      "primary_action": {
+        "en": "Validate contract and PO",
+        "es": "Validar contrato y PO"
+      },
+      "required_output_keys": [
+        "commercial_terms",
+        "po_limits",
+        "po_link_decisions",
+        "po_transfer_proposal",
+        "reserve_setup",
+        "billing_route",
+        "scope_exceptions"
+      ],
+      "readonly_calculators": [
+        "budget_check",
+        "installment_schedule",
+        "approval_route"
+      ],
+      "owner_specialist": "clientes",
+      "source_acceptance": "Extraer un límite de PO del documento, validarlo y bloquear un compromiso que lo exceda.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-contract-po",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-budget-control",
+      "module_id": "M02",
+      "module_key": "clients-contracts",
+      "path": "/a/:agencySlug/modules/clients-contracts/workflows/agency-budget-control",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Budget control",
+        "es": "Presupuesto, crédito y reservas"
+      },
+      "primary_action": {
+        "en": "Validate reservation",
+        "es": "Validar reserva"
+      },
+      "required_output_keys": [
+        "budget_check",
+        "credit_check",
+        "reservation_proposal",
+        "balance_revision",
+        "blocking_exceptions"
+      ],
+      "readonly_calculators": [
+        "budget_check",
+        "credit_exposure",
+        "approval_route"
+      ],
+      "owner_specialist": "clientes",
+      "source_acceptance": "Dos operaciones concurrentes no pueden reservar el mismo saldo disponible.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-budget-control",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-fee-contracts",
+      "module_id": "M02",
+      "module_key": "clients-contracts",
+      "path": "/a/:agencySlug/modules/clients-contracts/workflows/agency-fee-contracts",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Fee agreements",
+        "es": "Honorarios, cuotas y liquidación de horas"
+      },
+      "primary_action": {
+        "en": "Calculate fee",
+        "es": "Calcular honorarios"
+      },
+      "required_output_keys": [
+        "fee_contract_draft",
+        "instalment_schedule",
+        "job_allocation",
+        "hourly_settlement",
+        "approval_proposal",
+        "fee_exceptions"
+      ],
+      "readonly_calculators": [
+        "hourly_fee_settlement",
+        "installment_schedule",
+        "allocate",
+        "approval_route"
+      ],
+      "owner_specialist": "clientes",
+      "source_acceptance": "Calcular fee fijo y por horas con moneda/redondeo explícitos, sin duplicar horas importadas.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-fee-contracts",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-billing-requirements",
+      "module_id": "M02",
+      "module_key": "clients-contracts",
+      "path": "/a/:agencySlug/modules/clients-contracts/workflows/agency-billing-requirements",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Billing readiness",
+        "es": "Matriz de requisitos y expediente de emisión"
+      },
+      "primary_action": {
+        "en": "Check billing requirements",
+        "es": "Revisar requisitos de facturación"
+      },
+      "required_output_keys": [
+        "requirement_matrix",
+        "evidence_matches",
+        "missing_requirements",
+        "issuance_ready",
+        "locked_field_changes",
+        "owner_requests"
+      ],
+      "readonly_calculators": [],
+      "owner_specialist": "clientes",
+      "source_acceptance": "Bloquear factura final si falta PO, aceptación o evidencia requerida por ese cliente.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-billing-requirements",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-tasks-timesheets",
+      "module_id": "M03",
+      "module_key": "work-production",
+      "path": "/a/:agencySlug/modules/work-production/workflows/agency-tasks-timesheets",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Tasks & timesheets",
+        "es": "Horas validadas, valoración y aprobaciones"
+      },
+      "primary_action": {
+        "en": "Submit timesheet",
+        "es": "Enviar hoja de horas"
+      },
+      "required_output_keys": [
+        "task_actions",
+        "task_delay_report",
+        "timesheet_validation",
+        "hour_approval_queue",
+        "hour_valuation",
+        "chargeability_report",
+        "timesheet_close_proposal"
+      ],
+      "readonly_calculators": [
+        "allocate",
+        "hourly_fee_settlement"
+      ],
+      "owner_specialist": "produccion",
+      "source_acceptance": "Reimportar la misma semana no duplica horas; horas rechazadas no se facturan.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-tasks-timesheets",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-production-estimating",
+      "module_id": "M03",
+      "module_key": "work-production",
+      "path": "/a/:agencySlug/modules/work-production/workflows/agency-production-estimating",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Production estimate",
+        "es": "Estimación, comparación de proveedores y órdenes"
+      },
+      "primary_action": {
+        "en": "Calculate estimate",
+        "es": "Calcular estimación"
+      },
+      "required_output_keys": [
+        "estimate_draft",
+        "estimate_totals",
+        "supplier_comparison",
+        "client_approval_pack",
+        "purchase_order_drafts",
+        "post_buy_variance"
+      ],
+      "readonly_calculators": [
+        "estimate_totals",
+        "allocate",
+        "credit_exposure"
+      ],
+      "owner_specialist": "produccion",
+      "source_acceptance": "Recalcular subtotal, markups y asignaciones; cambio del presupuesto invalida aprobación anterior.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-production-estimating",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-production",
+      "module_id": "M03",
+      "module_key": "work-production",
+      "path": "/a/:agencySlug/modules/work-production/workflows/agency-production",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Production & delivery",
+        "es": "Calendario, activos, control de calidad y derechos"
+      },
+      "primary_action": {
+        "en": "Review deliverable",
+        "es": "Revisar entregable"
+      },
+      "required_output_keys": [
+        "production_schedule",
+        "asset_manifest",
+        "qa_findings",
+        "rights_check",
+        "staff_assignment",
+        "release_candidates"
+      ],
+      "readonly_calculators": [
+        "payload_digest",
+        "approval_route"
+      ],
+      "owner_specialist": "produccion",
+      "source_acceptance": "Relacionar la versión exacta del creativo con sus derechos y bloquear liberación vencida.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-production",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-media-ranking",
+      "module_id": "M04",
+      "module_key": "media-planning",
+      "path": "/a/:agencySlug/modules/media-planning/workflows/agency-media-ranking",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Audience & media ranking",
+        "es": "Ranking y manifest de datos"
+      },
+      "primary_action": {
+        "en": "Calculate ranking",
+        "es": "Calcular ranking"
+      },
+      "required_output_keys": [
+        "rating_book_manifest",
+        "ranking_spec",
+        "candidate_table",
+        "data_quality_exceptions",
+        "commercial_inheritance",
+        "planning_handoff"
+      ],
+      "readonly_calculators": [
+        "audience_metrics"
+      ],
+      "owner_specialist": "planificacion",
+      "source_acceptance": "No comparar ratings de universos incompatibles ni inventar un ranking cuando faltan tarifas o audiencia.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-media-ranking",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-media-planning",
+      "module_id": "M04",
+      "module_key": "media-planning",
+      "path": "/a/:agencySlug/modules/media-planning/workflows/agency-media-planning",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Media plan",
+        "es": "Plan, calendario, costos y aprobación"
+      },
+      "primary_action": {
+        "en": "Validate plan",
+        "es": "Validar plan"
+      },
+      "required_output_keys": [
+        "media_plan",
+        "schedule_register",
+        "item_pricing",
+        "plan_totals",
+        "objective_summary",
+        "approval_payload",
+        "billing_release"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "audience_metrics",
+        "credit_exposure",
+        "plan_diff"
+      ],
+      "owner_specialist": "planificacion",
+      "source_acceptance": "Todas las líneas cuadran con presupuesto, moneda, fuente de audiencia y revisión; aprobación ligada al plan exacto.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-media-planning",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-tv-radio-planning",
+      "module_id": "M04",
+      "module_key": "media-planning",
+      "path": "/a/:agencySlug/modules/media-planning/workflows/agency-tv-radio-planning",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "TV & radio plan",
+        "es": "Pauta, spots, materiales e instrucciones de tráfico"
+      },
+      "primary_action": {
+        "en": "Validate schedule",
+        "es": "Validar pauta"
+      },
+      "required_output_keys": [
+        "broadcast_schedule",
+        "spot_register",
+        "rate_basis",
+        "material_distribution",
+        "traffic_instructions",
+        "evaluation_report"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "audience_metrics"
+      ],
+      "owner_specialist": "planificacion",
+      "source_acceptance": "Validar fecha/hora local, duración, tarifa y material de cada spot; importar emisiones y obtener post-evaluación.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-tv-radio-planning",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-ooh-planning",
+      "module_id": "M04",
+      "module_key": "media-planning",
+      "path": "/a/:agencySlug/modules/media-planning/workflows/agency-ooh-planning",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "OOH plan",
+        "es": "Sitios, costos, reservas y evidencia exigida"
+      },
+      "primary_action": {
+        "en": "Validate placement plan",
+        "es": "Validar plan de ubicaciones"
+      },
+      "required_output_keys": [
+        "site_plan",
+        "ooh_line_pricing",
+        "cost_schedule",
+        "evidence_requirements",
+        "booking_proposals",
+        "exceptions"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "allocate"
+      ],
+      "owner_specialist": "planificacion",
+      "source_acceptance": "Distinguir pantalla digital de soporte estático, ubicación, vigencia y formato compatible.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-ooh-planning",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-digital-planning",
+      "module_id": "M04",
+      "module_key": "media-planning",
+      "path": "/a/:agencySlug/modules/media-planning/workflows/agency-digital-planning",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Digital media plan",
+        "es": "Plan digital, taxonomía, costos y conciliación"
+      },
+      "primary_action": {
+        "en": "Run planning checks",
+        "es": "Validar plan digital"
+      },
+      "required_output_keys": [
+        "digital_plan",
+        "taxonomy_strings",
+        "adserver_costs",
+        "actuals_snapshot",
+        "invoice_match_register",
+        "order_adjustment_proposal"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "reconcile",
+        "invoice_check"
+      ],
+      "owner_specialist": "planificacion",
+      "source_acceptance": "Validar objetivo/targeting permitido y conversiones disponibles antes de entregar el plan a compra.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-digital-planning",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-plan-changes",
+      "module_id": "M04",
+      "module_key": "media-planning",
+      "path": "/a/:agencySlug/modules/media-planning/workflows/agency-plan-changes",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Plan revisions",
+        "es": "Diferencias entre revisiones y acciones sobre órdenes"
+      },
+      "primary_action": {
+        "en": "Compare revisions",
+        "es": "Comparar revisiones"
+      },
+      "required_output_keys": [
+        "baseline_revision",
+        "proposed_revision",
+        "line_diff",
+        "lock_report",
+        "currency_deltas",
+        "order_version_actions",
+        "approval_pack",
+        "verified_receipts",
+        "blocked_actions"
+      ],
+      "readonly_calculators": [
+        "plan_diff",
+        "budget_check",
+        "approval_route"
+      ],
+      "owner_specialist": "planificacion",
+      "source_acceptance": "Cambio de presupuesto produce diff y nueva aprobación; una aprobación vieja no ejecuta la nueva revisión.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-plan-changes",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-rate-cards-contracts",
+      "module_id": "M05",
+      "module_key": "media-buying",
+      "path": "/a/:agencySlug/modules/media-buying/workflows/agency-rate-cards-contracts",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Media rates & agreements",
+        "es": "Tarifarios, contratos y saldos"
+      },
+      "primary_action": {
+        "en": "Calculate applicable rate",
+        "es": "Calcular tarifa aplicable"
+      },
+      "required_output_keys": [
+        "rate_card_drafts",
+        "contract_drafts",
+        "installment_schedules",
+        "contract_balance_report",
+        "adjustment_transfer_proposals",
+        "pricing_exceptions"
+      ],
+      "readonly_calculators": [
+        "discount_cascade",
+        "media_line_cost",
+        "installment_schedule",
+        "budget_check",
+        "approval_route"
+      ],
+      "owner_specialist": "compra",
+      "source_acceptance": "Aplicar tarifa vigente y cascada de descuentos; no usar una tarifa vencida sin excepción aprobada.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-rate-cards-contracts",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-media-buying",
+      "module_id": "M05",
+      "module_key": "media-buying",
+      "path": "/a/:agencySlug/modules/media-buying/workflows/agency-media-buying",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Media orders",
+        "es": "Órdenes versionadas, envío y compromisos"
+      },
+      "primary_action": {
+        "en": "Prepare order",
+        "es": "Preparar orden"
+      },
+      "required_output_keys": [
+        "order_drafts",
+        "order_versions",
+        "send_packs",
+        "close_reopen_proposals",
+        "commitment_updates",
+        "supplier_exceptions"
+      ],
+      "readonly_calculators": [
+        "discount_cascade",
+        "media_line_cost",
+        "credit_exposure",
+        "plan_diff",
+        "approval_route"
+      ],
+      "owner_specialist": "compra",
+      "source_acceptance": "Cada orden conserva vínculo a la línea aprobada; resultado incierto se concilia antes de reintentar.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-media-buying",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-campaign-activation",
+      "module_id": "M05",
+      "module_key": "media-buying",
+      "path": "/a/:agencySlug/modules/media-buying/workflows/agency-campaign-activation",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Campaign activation",
+        "es": "Preflight, IDs externos y comprobantes de ejecución"
+      },
+      "primary_action": {
+        "en": "Run preflight",
+        "es": "Revisar antes de activar"
+      },
+      "required_output_keys": [
+        "activation_proposal",
+        "taxonomy_names",
+        "preflight_results",
+        "external_ids",
+        "readback_report",
+        "execution_receipts",
+        "uncertain_actions"
+      ],
+      "readonly_calculators": [
+        "payload_digest",
+        "budget_check",
+        "approval_route"
+      ],
+      "owner_specialist": "compra",
+      "source_acceptance": "Crear borrador/pausado cuando se soporte; activar solo tras aprobación, comprobar estado externo y no duplicar por timeout.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-campaign-activation",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-campaign-optimization",
+      "module_id": "M05",
+      "module_key": "media-buying",
+      "path": "/a/:agencySlug/modules/media-buying/workflows/agency-campaign-optimization",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Campaign optimization",
+        "es": "Diagnóstico, propuesta, experimento y recibos"
+      },
+      "primary_action": {
+        "en": "Prepare optimization proposal",
+        "es": "Preparar propuesta de optimización"
+      },
+      "required_output_keys": [
+        "diagnostic",
+        "objective_deviation",
+        "optimization_proposal",
+        "experiment_plan",
+        "constraint_check",
+        "verified_change_receipts"
+      ],
+      "readonly_calculators": [
+        "audience_metrics",
+        "budget_check",
+        "plan_diff",
+        "approval_route"
+      ],
+      "owner_specialist": "compra",
+      "source_acceptance": "Con datos atrasados no aumentar presupuesto; propuesta respeta techo y conserva resultado de verificación.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-campaign-optimization",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-transmission-control",
+      "module_id": "M05",
+      "module_key": "media-buying",
+      "path": "/a/:agencySlug/modules/media-buying/workflows/agency-transmission-control",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Delivery verification",
+        "es": "Conciliación de emisiones y compensaciones"
+      },
+      "primary_action": {
+        "en": "Reconcile transmissions",
+        "es": "Conciliar transmisiones"
+      },
+      "required_output_keys": [
+        "emission_match",
+        "missing_or_extra_insertions",
+        "material_exceptions",
+        "makegood_register",
+        "close_readiness",
+        "postbuy_report",
+        "finance_handoff"
+      ],
+      "readonly_calculators": [
+        "spot_match",
+        "reconcile"
+      ],
+      "owner_specialist": "compra",
+      "source_acceptance": "Conciliar orden contra transmisión/proof-of-play; identificar faltantes, duplicados y makegoods.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-transmission-control",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-ooh-inventory",
+      "module_id": "M05",
+      "module_key": "media-buying",
+      "path": "/a/:agencySlug/modules/media-buying/workflows/agency-ooh-inventory",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "OOH inventory",
+        "es": "Disponibilidad, reservas, caras y órdenes del operador"
+      },
+      "primary_action": {
+        "en": "Check availability",
+        "es": "Consultar disponibilidad"
+      },
+      "required_output_keys": [
+        "availability_report",
+        "reservations",
+        "ooh_orders",
+        "monthly_suborders",
+        "face_motif_assignments",
+        "posting_batches",
+        "agreement_balances",
+        "inventory_exceptions"
+      ],
+      "readonly_calculators": [
+        "media_line_cost",
+        "discount_cascade",
+        "allocate",
+        "installment_schedule"
+      ],
+      "owner_specialist": "compra",
+      "source_acceptance": "Dos clientes no reservan la misma cara y periodo; mantener separado inventario propio de compra externa.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-ooh-inventory",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-delivery-reconciliation",
+      "module_id": "M06",
+      "module_key": "suppliers-payments",
+      "path": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-delivery-reconciliation",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Three-way reconciliation",
+        "es": "Cruce de orden, entrega y factura"
+      },
+      "primary_action": {
+        "en": "Match order, delivery and bill",
+        "es": "Cruzar orden, entrega y factura"
+      },
+      "required_output_keys": [
+        "match_result",
+        "discrepancies",
+        "evidence_links",
+        "payable_candidate",
+        "writeoff_proposals"
+      ],
+      "readonly_calculators": [
+        "reconcile",
+        "invoice_check",
+        "spot_match",
+        "approval_route"
+      ],
+      "owner_specialist": "proveedores",
+      "source_acceptance": "Bloquear factura cuyo importe o entrega no coincide y adjuntar la evidencia correspondiente.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-delivery-reconciliation",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-payables",
+      "module_id": "M06",
+      "module_key": "suppliers-payments",
+      "path": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-payables",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Supplier bills",
+        "es": "Recepción, normalización y propuesta de registro"
+      },
+      "primary_action": {
+        "en": "Validate supplier bill",
+        "es": "Validar factura de proveedor"
+      },
+      "required_output_keys": [
+        "reception_log",
+        "duplicate_check",
+        "normalized_invoice",
+        "registration_proposal",
+        "holds",
+        "posting_receipt"
+      ],
+      "readonly_calculators": [
+        "invoice_check",
+        "reconcile",
+        "payment_terms",
+        "tiered_commission",
+        "approval_route"
+      ],
+      "owner_specialist": "proveedores",
+      "source_acceptance": "Detectar factura duplicada por entidad/proveedor/número/importe; registrar una sola vez tras aprobar.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-payables",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-payment-run",
+      "module_id": "M06",
+      "module_key": "suppliers-payments",
+      "path": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-payment-run",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Payment runs",
+        "es": "Lista de pagos, retenciones y órdenes bancarias"
+      },
+      "primary_action": {
+        "en": "Prepare demo payment run",
+        "es": "Preparar lote de pagos demo"
+      },
+      "required_output_keys": [
+        "payment_list_proposal",
+        "payment_orders_draft",
+        "withholding_schedule",
+        "release_proposal",
+        "bank_file_request",
+        "approval_requests"
+      ],
+      "readonly_calculators": [
+        "withholding",
+        "payment_terms",
+        "aging",
+        "fx_revaluation",
+        "approval_route"
+      ],
+      "owner_specialist": "proveedores",
+      "source_acceptance": "No fondear con credencial solo lectura; aprobar beneficiario/importe exactos y conciliar timeout antes de repetir.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-payment-run",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-cash-settlement",
+      "module_id": "M06",
+      "module_key": "suppliers-payments",
+      "path": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-cash-settlement",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Cash reconciliation",
+        "es": "Conciliación bancaria y caja sin aplicar"
+      },
+      "primary_action": {
+        "en": "Reconcile statement",
+        "es": "Conciliar estado de cuenta"
+      },
+      "required_output_keys": [
+        "deposit_proposals",
+        "bank_charge_entries",
+        "reconciliation_report",
+        "cheque_actions",
+        "card_statement_match",
+        "availability_snapshot",
+        "unapplied_cash"
+      ],
+      "readonly_calculators": [
+        "reconcile",
+        "allocate",
+        "journal_check",
+        "approval_route"
+      ],
+      "owner_specialist": "proveedores",
+      "source_acceptance": "Webhook repetido no duplica recibo; cuadrar comisiones, moneda y liquidación bancaria.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-cash-settlement",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-expenses",
+      "module_id": "M06",
+      "module_key": "suppliers-payments",
+      "path": "/a/:agencySlug/modules/suppliers-payments/workflows/agency-expenses",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Expense claims",
+        "es": "Gastos, rendiciones y diferimientos"
+      },
+      "primary_action": {
+        "en": "Validate expense claim",
+        "es": "Validar rendición"
+      },
+      "required_output_keys": [
+        "expense_request_drafts",
+        "contract_schedule",
+        "sheet_review",
+        "settlement_proposal",
+        "deferral_schedule",
+        "budget_check_result",
+        "approval_requests"
+      ],
+      "readonly_calculators": [
+        "allocate",
+        "installment_schedule",
+        "invoice_check",
+        "budget_check",
+        "approval_route"
+      ],
+      "owner_specialist": "proveedores",
+      "source_acceptance": "OCR con baja confianza requiere revisión; no registrar dos veces el mismo comprobante.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-expenses",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-client-billing",
+      "module_id": "M07",
+      "module_key": "billing-collections",
+      "path": "/a/:agencySlug/modules/billing-collections/workflows/agency-client-billing",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Client invoices",
+        "es": "Facturas y notas de crédito o débito"
+      },
+      "primary_action": {
+        "en": "Prepare demo invoice",
+        "es": "Preparar factura demo"
+      },
+      "required_output_keys": [
+        "billing_selection",
+        "invoice_drafts",
+        "credit_debit_note_drafts",
+        "fee_calculation",
+        "split_allocation",
+        "billing_exceptions"
+      ],
+      "readonly_calculators": [
+        "discount_cascade",
+        "estimate_totals",
+        "payment_terms",
+        "allocate",
+        "invoice_check",
+        "approval_route"
+      ],
+      "owner_specialist": "facturacion",
+      "source_acceptance": "Emitir una vez y guardar folio/estado; separar factura comercial de documento fiscal autorizado.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-client-billing",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-collections",
+      "module_id": "M07",
+      "module_key": "billing-collections",
+      "path": "/a/:agencySlug/modules/billing-collections/workflows/agency-collections",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Collections",
+        "es": "Aplicación de cobros y antigüedad de saldos"
+      },
+      "primary_action": {
+        "en": "Apply demo receipt",
+        "es": "Aplicar cobro demo"
+      },
+      "required_output_keys": [
+        "receipt_proposal",
+        "application_plan",
+        "withholding_certificates",
+        "advance_applications",
+        "aging_report",
+        "credit_exposure",
+        "followup_worklist"
+      ],
+      "readonly_calculators": [
+        "aging",
+        "credit_exposure",
+        "allocate",
+        "withholding",
+        "payment_terms",
+        "approval_route"
+      ],
+      "owner_specialist": "facturacion",
+      "source_acceptance": "Pago parcial reduce saldo correcto; borrador de recordatorio no se envía sin la autorización prevista.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-collections",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-rebates",
+      "module_id": "M07",
+      "module_key": "billing-collections",
+      "path": "/a/:agencySlug/modules/billing-collections/workflows/agency-rebates",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Rebates",
+        "es": "Base elegible, provisión y rebate al cliente"
+      },
+      "primary_action": {
+        "en": "Calculate rebate",
+        "es": "Calcular rebate"
+      },
+      "required_output_keys": [
+        "eligible_base",
+        "rebate_calculation",
+        "pending_register",
+        "provision_proposal",
+        "client_rebates",
+        "rebate_exceptions"
+      ],
+      "readonly_calculators": [
+        "tiered_commission",
+        "flat_rebate",
+        "allocate",
+        "approval_route"
+      ],
+      "owner_specialist": "facturacion",
+      "source_acceptance": "Aplicar tramos del contrato y excluir facturas no elegibles; no reconocer ingreso duplicado.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-rebates",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-tax-compliance",
+      "module_id": "M07",
+      "module_key": "billing-collections",
+      "path": "/a/:agencySlug/modules/billing-collections/workflows/agency-tax-compliance",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Tax readiness",
+        "es": "Autorizaciones, impuestos y exportaciones fiscales"
+      },
+      "primary_action": {
+        "en": "Check tax readiness",
+        "es": "Revisar preparación fiscal"
+      },
+      "required_output_keys": [
+        "authorization_requests",
+        "numbering_report",
+        "vat_books_reconciliation",
+        "withholding_perception_schedule",
+        "certificate_register",
+        "tax_positions",
+        "statutory_exports"
+      ],
+      "readonly_calculators": [
+        "invoice_check",
+        "withholding",
+        "approval_route"
+      ],
+      "owner_specialist": "facturacion",
+      "source_acceptance": "País sin adaptador validado permite preparación, pero bloquea emisión/declaración automática y muestra el faltante.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-tax-compliance",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-general-ledger",
+      "module_id": "M08",
+      "module_key": "accounting-close",
+      "path": "/a/:agencySlug/modules/accounting-close/workflows/agency-general-ledger",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "General ledger",
+        "es": "Asientos y conciliación contable"
+      },
+      "primary_action": {
+        "en": "Validate journal",
+        "es": "Validar asiento"
+      },
+      "required_output_keys": [
+        "journal_entry_proposal",
+        "journal_check_report",
+        "coa_change_proposal",
+        "opening_balance_reconciliation",
+        "integration_difference_report"
+      ],
+      "readonly_calculators": [
+        "journal_check",
+        "allocate",
+        "approval_route"
+      ],
+      "owner_specialist": "contabilidad",
+      "source_acceptance": "Debe y haber cuadran; mapa de cuentas incompleto bloquea publicación en el libro maestro.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-general-ledger",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-accruals-revaluation",
+      "module_id": "M08",
+      "module_key": "accounting-close",
+      "path": "/a/:agencySlug/modules/accounting-close/workflows/agency-accruals-revaluation",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Accruals & FX revaluation",
+        "es": "Provisiones y revaluación cambiaria"
+      },
+      "primary_action": {
+        "en": "Calculate adjustment",
+        "es": "Calcular ajuste"
+      },
+      "required_output_keys": [
+        "fx_revaluation_proposal",
+        "gross_income_provision_proposal",
+        "wip_reclass_proposal",
+        "expense_provision_proposal",
+        "overcommission_provision_proposal",
+        "ot_close_proposal",
+        "ic_reclass_proposal",
+        "close_job_checklist"
+      ],
+      "readonly_calculators": [
+        "fx_revaluation",
+        "journal_check",
+        "tiered_commission",
+        "allocate",
+        "approval_route"
+      ],
+      "owner_specialist": "contabilidad",
+      "source_acceptance": "Recalcular con tipo de cambio/fecha aprobados; no mutar periodo cerrado ni duplicar reversión.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-accruals-revaluation",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-fixed-assets",
+      "module_id": "M08",
+      "module_key": "accounting-close",
+      "path": "/a/:agencySlug/modules/accounting-close/workflows/agency-fixed-assets",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Fixed assets",
+        "es": "Registro de activos y depreciación"
+      },
+      "primary_action": {
+        "en": "Calculate depreciation",
+        "es": "Calcular depreciación"
+      },
+      "required_output_keys": [
+        "asset_register_changes",
+        "depreciation_run_proposal",
+        "disposal_proposal",
+        "fixed_asset_annex"
+      ],
+      "readonly_calculators": [
+        "depreciation_schedule",
+        "journal_check",
+        "approval_route"
+      ],
+      "owner_specialist": "contabilidad",
+      "source_acceptance": "Calendario aprobado respeta vida útil, residual y periodo; si API de activos no existe usar registro nativo y asiento revisado.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-fixed-assets",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-period-close",
+      "module_id": "M08",
+      "module_key": "accounting-close",
+      "path": "/a/:agencySlug/modules/accounting-close/workflows/agency-period-close",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Period close",
+        "es": "Checklist, conciliaciones y bloqueo de periodo"
+      },
+      "primary_action": {
+        "en": "Check close readiness",
+        "es": "Revisar preparación de cierre"
+      },
+      "required_output_keys": [
+        "close_checklist",
+        "close_job_status",
+        "post_close_reconciliations",
+        "unresolved_balances",
+        "lock_proposal",
+        "reopen_plan",
+        "adjustment_plan"
+      ],
+      "readonly_calculators": [
+        "journal_check",
+        "fx_revaluation",
+        "aging",
+        "approval_route"
+      ],
+      "owner_specialist": "contabilidad",
+      "source_acceptance": "Impedir cierre con diferencias; bloqueo local no se anuncia como cierre externo sin recibo del sistema contable.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-period-close",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-profitability",
+      "module_id": "M09",
+      "module_key": "profitability",
+      "path": "/a/:agencySlug/modules/profitability/workflows/agency-profitability",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Job & client profitability",
+        "es": "Rentabilidad por job y cliente"
+      },
+      "primary_action": {
+        "en": "Calculate profitability",
+        "es": "Calcular rentabilidad"
+      },
+      "required_output_keys": [
+        "job_pnl",
+        "client_profitability",
+        "overhead_allocation",
+        "margin_bridge",
+        "managed_spend",
+        "completeness_gaps"
+      ],
+      "readonly_calculators": [
+        "margin",
+        "allocate"
+      ],
+      "owner_specialist": "rentabilidad",
+      "source_acceptance": "Separar gasto de medios administrado de ingreso propio; no duplicar costos entre factura y feed de plataforma.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-profitability",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-revenue-budget",
+      "module_id": "M09",
+      "module_key": "profitability",
+      "path": "/a/:agencySlug/modules/profitability/workflows/agency-revenue-budget",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Revenue budget",
+        "es": "Versiones del presupuesto e ingresos proyectados"
+      },
+      "primary_action": {
+        "en": "Compare budget and actual",
+        "es": "Comparar presupuesto y real"
+      },
+      "required_output_keys": [
+        "budget_version",
+        "budget_lines",
+        "income_projection",
+        "plan_vs_actual",
+        "version_lock_proposal",
+        "budget_exceptions"
+      ],
+      "readonly_calculators": [
+        "allocate",
+        "margin"
+      ],
+      "owner_specialist": "rentabilidad",
+      "source_acceptance": "Comparar plan y real en moneda/período homogéneos y conservar revisión aprobada.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-revenue-budget",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-cash-forecast",
+      "module_id": "M09",
+      "module_key": "profitability",
+      "path": "/a/:agencySlug/modules/profitability/workflows/agency-cash-forecast",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Cash forecast",
+        "es": "Pronóstico de caja y escenarios"
+      },
+      "primary_action": {
+        "en": "Calculate cash forecast",
+        "es": "Calcular proyección de caja"
+      },
+      "required_output_keys": [
+        "cash_forecast",
+        "currency_buckets",
+        "undated_pipeline",
+        "collection_scenarios",
+        "supplier_exposure",
+        "liquidity_gaps"
+      ],
+      "readonly_calculators": [
+        "cash_projection",
+        "payment_terms",
+        "aging"
+      ],
+      "owner_specialist": "rentabilidad",
+      "source_acceptance": "Separar confirmado de probable y partidas sin fecha; evitar sumar distintas monedas sin conversión explícita.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-cash-forecast",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    },
+    {
+      "skill_id": "agency-management-reporting",
+      "module_id": "M09",
+      "module_key": "profitability",
+      "path": "/a/:agencySlug/modules/profitability/workflows/agency-management-reporting",
+      "screen_family": "workflow-workbench",
+      "label": {
+        "en": "Management reporting",
+        "es": "Paquete gerencial y exportaciones"
+      },
+      "primary_action": {
+        "en": "Build management report",
+        "es": "Preparar reporte gerencial"
+      },
+      "required_output_keys": [
+        "management_pack",
+        "mapping_coverage",
+        "export_files",
+        "kpi_summary",
+        "variance_commentary"
+      ],
+      "readonly_calculators": [
+        "margin",
+        "aging",
+        "allocate"
+      ],
+      "owner_specialist": "rentabilidad",
+      "source_acceptance": "Cada KPI trazable a datos/versiones y totales conciliados; exportación respeta permisos de agencia/cliente.",
+      "inputs_reference": {
+        "document": "referencias/agency-erp-matriz-42-skills.json",
+        "skill_id": "agency-management-reporting",
+        "field": "inputs_from_repository"
+      },
+      "external_calls": "simulated_or_file_workflow",
+      "implementation_required": true,
+      "completion_requires": [
+        "typed_inputs",
+        "server_validation",
+        "persistent_versioned_outputs",
+        "valid_fixture",
+        "blocked_fixture",
+        "refresh_persistence",
+        "tenant_and_role_checks"
+      ],
+      "approval_policy": "determined_by_action_and_exact_revision_not_by_skill_label"
+    }
+  ],
+  "fixture_links": {
+    "scenario": "aurora_scope_change",
+    "agency_id": "tenant_demo_rayo",
+    "agency_slug": "rayo-de-sol",
+    "agency_name": "Rayo de Sol",
+    "application_name": "Estudio Solar",
+    "client_id": "client_demo_aurora",
+    "job_id": "job_demo_aurora",
+    "job_number": "AURSL7AF0001",
+    "display_reference": "RDS-2027-001",
+    "job_name": "Aurora Spring Launch",
+    "incident_data_date": "2027-03-15",
+    "period_close_date": "2027-03-31",
+    "initial_approval_actor": "user_demo_owner",
+    "amendment_approval_actor": "user_demo_finance",
+    "amendment_client_authority_evidence": "evidence_demo_po_r2"
+  },
+  "ux_invariants": [
+    "one canonical business model across all module views",
+    "UI and assistant orchestrator call the same authorized business action services",
+    "server resolves tenant and checks membership for every record action and download",
+    "all nine modules and exactly 42 skills are available in V1",
+    "activated capabilities can vary by agency but mandatory controls remain active",
+    "no hardcoded metric totals in components",
+    "forecast and recognized metrics use different labels and definitions",
+    "managed media spend is separate from agency own revenue",
+    "all external execution receipts in demo are marked simulated",
+    "no success state is produced from a frontend timeout",
+    "all primary visible actions have implemented results or explicit unavailable reasons",
+    "route refresh restores authorized state",
+    "all component labels, errors, states and messages are localized",
+    "assistant page and panel are views of the same orchestrator and server-persisted conversation",
+    "assistant uses centralized deterministic scripted cases with server-derived results; no LLM or model credentials required",
+    "assistant adds no ERP module or skill; exactly 42 skills remain",
+    "conversation context cannot widen user tenant or record permissions"
+  ],
+  "expected_counts": {
+    "route_patterns": 31,
+    "module_desks": 9,
+    "workflow_bindings": 42,
+    "bespoke_workflow_pages_required": 0,
+    "sidebar_entries_including_catalog": 17
+  },
+  "platform_operations_fixture": {
+    "id": "ops_csv_delimiter_mismatch",
+    "synthetic": true,
+    "implementation_required": true,
+    "scope": "demo_import_profile_only",
+    "profile_id": "import_profile_demo_media_orders",
+    "file_id": "file_demo_ops_media_orders",
+    "filename": "demo-media-orders.csv",
+    "expected_headers": [
+      "order_id",
+      "channel",
+      "amount_minor",
+      "currency",
+      "job_reference",
+      "service_date"
+    ],
+    "sample_csv": "order_id;channel;amount_minor;currency;job_reference;service_date\nDEMO-ORD-01;meta;1000000;USD;AURSL7AF0001;2027-03-20\n",
+    "initial_profile": {
+      "revision": 1,
+      "delimiter": ","
+    },
+    "expected_initial_columns": 1,
+    "proposed_change": {
+      "field": "delimiter",
+      "from": ",",
+      "to": ";"
+    },
+    "expected_updated_profile": {
+      "revision": 2,
+      "delimiter": ";"
+    },
+    "expected_verified_columns": 6,
+    "approval": {
+      "requester_role": "platform_operator",
+      "approver_role": "platform_admin",
+      "distinct_actors_required": true,
+      "exact_payload_revision_required": true,
+      "requester_id": "user_demo_platform_operator",
+      "approver_id": "user_demo_platform_admin"
+    },
+    "verification": [
+      "same file hash before and after",
+      "six named columns match schema",
+      "profile revision persisted",
+      "audit links proposal approval application and verification",
+      "no business records imported"
+    ],
+    "forbidden_effects": [
+      "global arbitrary configuration edits",
+      "remote infrastructure mutation",
+      "remote pull request creation",
+      "payment retry",
+      "business order import"
+    ],
+    "source_reference": "demo-fixtures.json#/platform_operations_case"
+  },
+  "ui_direction_reference": "04A-direccion-producto-y-mapa-ui.md",
+  "ui_resource_manifest": "reui-direccion-producto-v1.json",
+  "global_assistant": {
+    "name": "AgeOS Assistant",
+    "entrypoint_skill_id": "agency-orchestrator",
+    "new_skill_added": false,
+    "dispatch": "scripted_cases_to_existing_specialist_handlers_and_enabled_skills_through_shared_domain_services",
+    "page_route": "assistant",
+    "page_path": "/a/:agencySlug/assistant",
+    "nextjs_page_relative_to_application": "app/a/[agencySlug]/assistant/page.tsx",
+    "panel_trigger": {
+      "sidebar": "navigate_to_assistant_page",
+      "header": "open_assistant_panel",
+      "contextual_action": "open_assistant_panel_with_authorized_record"
+    },
+    "icon": "MessagesSquare",
+    "icon_preview_url": "https://lucide.dev/icons/messages-square",
+    "view_contract": {
+      "desktop": "docked_right_panel",
+      "mobile": "accessible_sheet",
+      "full_page": "same_conversation_component",
+      "hide_duplicate_panel_on_full_page": true,
+      "shared_state_owner": "agency_layout",
+      "persist_conversations_on_server": true,
+      "route_navigation_preserves_thread_and_draft": true,
+      "agency_switch_does_not_transfer_context": true,
+      "closing_panel_does_not_cancel_confirmed_commands": true
+    },
+    "context_fields": [
+      "agency",
+      "module",
+      "record_reference",
+      "authorized_selected_records",
+      "currency",
+      "as_of_date"
+    ],
+    "context_authorization": "server_revalidates_all_references_and_source_access",
+    "query_access": "typed_authorized_queries_and_semantic_definitions_not_arbitrary_sql_or_schema_dump",
+    "command_access": "same_domain_commands_with_validation_idempotency_exact_revision_approval_and_audit",
+    "proposed_command_ui": [
+      "diff",
+      "impact",
+      "currency",
+      "approval_requirement",
+      "evidence",
+      "record_link"
+    ],
+    "required_states": [
+      "ready",
+      "unsupported_input",
+      "validating",
+      "executing",
+      "awaiting_parameters",
+      "awaiting_approval",
+      "blocked",
+      "error",
+      "outcome_unknown",
+      "stale_context"
+    ],
+    "inference": {
+      "mode": "scripted",
+      "llm_required": false,
+      "llm_credentials_required": false,
+      "presets_and_aliases": "centralized_declarative_scenarios_with_typed_parameters",
+      "response_templates": "allowed_with_server_derived_values_and_real_handler_results",
+      "fake_business_results_allowed": false,
+      "general_intelligence_claims_allowed": false,
+      "unsupported_input": "show_supported_cases",
+      "business_integrations": "simulated"
+    },
+    "reui": {
+      "conversation": "ai-chat-6",
+      "conversation_preview": "https://reui.io/preview/base/ai-chat-6?ref=mcp",
+      "docking_reference_only": "app-shell-18",
+      "docking_preview": "https://reui.io/preview/base/app-shell-18?ref=mcp",
+      "replace_verve_shell": false,
+      "activity_console": "agent-activity-1"
+    },
+    "acceptance": [
+      "scripted_query_reconciles_to_canonical_data",
+      "draft_job_with_parameter_clarification",
+      "plan_change_uses_independent_approval",
+      "page_panel_navigation_preserves_single_thread",
+      "refresh_recovers_history",
+      "cross_tenant_threads_files_and_queries_denied",
+      "unauthorized_chat_command_rejected",
+      "unsupported_input_shows_available_cases",
+      "scripted_presets_and_aliases_work_in_english_and_spanish_without_llm",
+      "centralized_scenarios_invoke_real_handlers_not_reui_local_success_callbacks"
+    ],
+    "query_parameter_contract": {
+      "thread": "Alias de conversation_id, comprobado por el servidor contra agencia y propietario. No es un thread global ni una autoridad de acceso."
+    },
+    "delivery_sequence": {
+      "instruction_1": "build_chassis_page_panel_persistence_and_driver_contracts",
+      "instruction_2": "08-instruccion-2-demo-e2e.md",
+      "instruction_2_prompt": "PROMPT-2-DEMO-E2E.txt",
+      "scenario_manifest": "demo-scenarios-v1.json"
+    }
+  }
+}

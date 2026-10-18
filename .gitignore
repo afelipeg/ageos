@@ -1,0 +1,40 @@
+# AgeOS — proprietary. Keep consistent with app/.gitignore.
+
+# dependencies and build output
+**/node_modules
+app/.next
+**/.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# secrets: never commit env files, keep the example
+**/.env*
+!**/.env.example
+
+# local runtime data (private uploads, e2e output, WIP migrations)
+app/.data
+
+# test artifacts
+app/test-results
+app/playwright-report
+app/blob-report
+app/tests/e2e/.output
+# Playwright storage state: contains a live signed session cookie
+app/tests/e2e/.auth
+
+# OS and local agent config
+.DS_Store
+.claude/settings.local.json
+
+# licensed third-party template archive and its extracted copy — never commit
+inputs/reui/verve/
+
+# archives anywhere (includes referencias/agency-erp-all-skills.zip)
+*.zip
+
+# internal dev tooling (already excluded by app/.gitignore)
+app/.agents/
+app/.claude/skills/
+app/.mcp.json
+app/skills-lock.json
+app/AGENTS.md

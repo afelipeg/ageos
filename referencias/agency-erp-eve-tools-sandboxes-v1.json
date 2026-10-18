@@ -1,0 +1,366 @@
+{
+  "version": "0.2.0-design",
+  "date": "2026-10-17",
+  "package_docs_reviewed": {
+    "eve": "0.80.1",
+    "ai": "7.0.143"
+  },
+  "implemented": false,
+  "connection_preference": [
+    "eve_catalog_or_official_connection_with_vercel_connect",
+    "composio_scoped_capability",
+    "custom_typescript_api_openapi_or_remote_mcp",
+    "validated_file_import_or_explicit_external_step"
+  ],
+  "selection_policy": "Elegir por operación al configurar; no hacer failover de escrituras entre proveedores en ejecución. API directa permitida cuando cubre mejor requisitos críticos.",
+  "oauth_is_auth_not_transport": true,
+  "tenant_scoped": true,
+  "root_clone_delegation": false,
+  "default_tools_policy": "Deshabilitar defaults opcionales y reintroducir solo capacidades requeridas por agente; catálogo/mcp filtrados aparte",
+  "agents": [
+    {
+      "id": "coordinador",
+      "name": "Coordinador y arranque",
+      "skills": [
+        "agency-orchestrator",
+        "agency-integrations",
+        "agency-access-governance",
+        "agency-master-data"
+      ],
+      "primary_sandbox_profile": "datos-reportes",
+      "tool_capabilities": "Consultar estado, resolver dependencias, validar configuración y accesos, mantener maestros, delegar y solicitar aprobación",
+      "restriction": "No concede su propia aprobación; no tiene herramientas genéricas para pagar o lanzar campañas",
+      "user_facing_role": "AgeOS Assistant: el orquestador expuesto en página de chat y panel derecho; resuelve contexto autorizado y delega en especialistas, sin ejecutar sus acciones privilegiadas por fuera de sus servicios."
+    },
+    {
+      "id": "clientes",
+      "name": "Clientes y contratos",
+      "skills": [
+        "agency-onboarding",
+        "agency-job-lifecycle",
+        "agency-contract-po",
+        "agency-budget-control",
+        "agency-fee-contracts",
+        "agency-billing-requirements"
+      ],
+      "primary_sandbox_profile": "documentos",
+      "tool_capabilities": "Leer CRM/documentos, extraer brief y PO, validar presupuesto/crédito, calcular fees y comprobar requisitos de facturación",
+      "restriction": "Escrituras de CRM acotadas; sin pagos ni compra publicitaria"
+    },
+    {
+      "id": "produccion",
+      "name": "Trabajo y producción",
+      "skills": [
+        "agency-tasks-timesheets",
+        "agency-production-estimating",
+        "agency-production"
+      ],
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "tool_capabilities": "Leer y validar horas, sincronizar tareas, estimar producción, comparar proveedores, registrar activos, revisar formato y derechos",
+      "restriction": "Liberación de entregables y órdenes bajo circuito de aprobación"
+    },
+    {
+      "id": "planificacion",
+      "name": "Planificación de medios",
+      "skills": [
+        "agency-media-ranking",
+        "agency-media-planning",
+        "agency-tv-radio-planning",
+        "agency-ooh-planning",
+        "agency-digital-planning",
+        "agency-plan-changes"
+      ],
+      "primary_sandbox_profile": "datos-reportes",
+      "tool_capabilities": "Buscar fuentes, consultar audiencias/licencias e inventario, recuperar specs, calcular ranking/costos, producir plan y comparar revisiones",
+      "restriction": "Lectura publicitaria y propuestas; no activar campañas ni gastar"
+    },
+    {
+      "id": "compra",
+      "name": "Compra de medios",
+      "skills": [
+        "agency-rate-cards-contracts",
+        "agency-media-buying",
+        "agency-campaign-activation",
+        "agency-campaign-optimization",
+        "agency-transmission-control",
+        "agency-ooh-inventory"
+      ],
+      "primary_sandbox_profile": "piezas-publicitarias",
+      "tool_capabilities": "Preparar órdenes/campañas, verificar creativos, activar cambios aprobados, consultar resultados, proponer optimización y conciliar emisiones",
+      "restriction": "Ejecución por acción aprobada; permisos del anunciante exacto; sin transferencias de tesorería"
+    },
+    {
+      "id": "proveedores",
+      "name": "Proveedores y pagos",
+      "skills": [
+        "agency-delivery-reconciliation",
+        "agency-payables",
+        "agency-payment-run",
+        "agency-cash-settlement",
+        "agency-expenses"
+      ],
+      "primary_sandbox_profile": "documentos",
+      "tool_capabilities": "Leer facturas/OCR, comparar orden-entrega-factura, detectar duplicados, preparar pago, ejecutar liberación autorizada y conciliar",
+      "restriction": "Beneficiario/importe/moneda/cuenta aprobados y verificados en backend"
+    },
+    {
+      "id": "facturacion",
+      "name": "Facturación y cobranza",
+      "skills": [
+        "agency-client-billing",
+        "agency-collections",
+        "agency-rebates",
+        "agency-tax-compliance"
+      ],
+      "primary_sandbox_profile": "documentos",
+      "tool_capabilities": "Verificar expediente, preparar factura, ejecutar emisión fiscal habilitada, aplicar cobros, calcular aging/rebates y preparar seguimiento",
+      "restriction": "Emisión, cancelación y envíos según aprobación y jurisdicción; claves fiscales fuera del sandbox"
+    },
+    {
+      "id": "contabilidad",
+      "name": "Contabilidad y cierre",
+      "skills": [
+        "agency-general-ledger",
+        "agency-accruals-revaluation",
+        "agency-fixed-assets",
+        "agency-period-close"
+      ],
+      "primary_sandbox_profile": "datos-reportes",
+      "tool_capabilities": "Validar asientos, mapear cuentas, calcular provisiones/FX/depreciación, conciliar sublibros y preparar cierre",
+      "restriction": "Posteo y cierre externo solo con autorización y comprobante del libro maestro"
+    },
+    {
+      "id": "rentabilidad",
+      "name": "Rentabilidad",
+      "skills": [
+        "agency-profitability",
+        "agency-revenue-budget",
+        "agency-cash-forecast",
+        "agency-management-reporting"
+      ],
+      "primary_sandbox_profile": "datos-reportes",
+      "tool_capabilities": "Calcular P&L, asignar costos, comparar presupuesto/real, proyectar caja y generar reportes",
+      "restriction": "Acceso principalmente de lectura; exportaciones con los permisos de los datos originales"
+    }
+  ],
+  "sandbox_profiles": [
+    {
+      "id": "documentos",
+      "name": "Documentos",
+      "uses": [
+        "Lectura PDF y DOCX",
+        "Extracción tabular XLSX/CSV",
+        "OCR bajo demanda",
+        "Comparación de contratos y comprobantes",
+        "Generación de documentos de trabajo"
+      ],
+      "prepared_software_candidates": [
+        "Lectores PDF/DOCX/XLSX/CSV con versiones fijadas",
+        "Motor OCR y utilidades PDF",
+        "Exportadores de documentos"
+      ],
+      "network": "deny-all en procesamiento; entrada/salida de archivos mediada por herramientas autorizadas",
+      "secrets": "none",
+      "persistence": "originales/resultados en Blob privado; workspace/Drive por sesión o job según necesidad"
+    },
+    {
+      "id": "datos-reportes",
+      "name": "Datos, cálculos y reportes",
+      "uses": [
+        "Procesar tablas y reportes publicitarios",
+        "Ejecutar calculadoras deterministas",
+        "Conciliar y agregar",
+        "Analizar audiencias y pacing",
+        "Generar reportes Excel, gráficos y PDF"
+      ],
+      "prepared_software_candidates": [
+        "Python/Node",
+        "pandas o Polars y DuckDB según pruebas",
+        "26 calculadoras verificadas del repo",
+        "Librerías de gráficos y exportación"
+      ],
+      "network": "deny-all; datasets entregados por herramientas con permisos",
+      "secrets": "none",
+      "persistence": "datos normalizados y auditoría en Postgres; datasets/resultados en Blob privado"
+    },
+    {
+      "id": "piezas-publicitarias",
+      "name": "Piezas publicitarias",
+      "uses": [
+        "Medir dimensiones y peso",
+        "Inspeccionar codec/duración/audio",
+        "Crear previsualizaciones",
+        "Validar archivos frente a specs versionadas",
+        "Transformaciones simples aprobadas"
+      ],
+      "prepared_software_candidates": [
+        "FFmpeg y ffprobe",
+        "Biblioteca de imagen",
+        "Utilidades PDF",
+        "Reglas de formatos por plataforma/placement"
+      ],
+      "network": "deny-all; subida a plataforma mediante conector controlado fuera del sandbox",
+      "secrets": "none",
+      "persistence": "original/derivado separados en Blob; vínculo a creativo y revisión"
+    }
+  ],
+  "sandbox_policy": {
+    "provider": "Vercel Sandbox",
+    "common_base": "Runtime y utilidades comunes versionadas; cada perfil agrega su especialidad. No contiene datos ni secretos de agencias.",
+    "initialization": "Artefactos preparados al build; instancias separadas por sesión/tenant. Una sesión Eve tiene su entorno principal; evitar mutar de perfil durante una sesión.",
+    "lifecycle": "Abrir a demanda; parar cómputo al quedar inactivo conservando estado compatible; liberar al finalizar con retención explícita.",
+    "quotas": "Concurrencia por agencia y global, cola equitativa, presupuesto de ejecución, tamaño/páginas/filas/duración. Valores por definir con pruebas.",
+    "network": "Sin egress por defecto; excepciones por herramienta/host y propósito",
+    "excluded_defaults": [
+      "Browser automation general",
+      "Composio remote bash/workbench",
+      "Instalación arbitraria de paquetes en producción",
+      "Claves de ads/banca/contabilidad dentro del sandbox",
+      "Sandbox compartido entre agencias"
+    ]
+  },
+  "source_urls": [
+    "https://eve.dev/integrations",
+    "https://eve.dev/docs/connections",
+    "https://eve.dev/docs/connections/mcp",
+    "https://eve.dev/docs/connections/openapi",
+    "https://eve.dev/docs/subagents",
+    "https://eve.dev/docs/sandbox",
+    "https://eve.dev/docs/sandbox/vercel",
+    "https://vercel.com/docs/connect"
+  ],
+  "product_name": "AgeOS",
+  "architecture_contract": "ageos-arquitectura-v1.json",
+  "shared_business_tools": [
+    {
+      "id": "consultar_operacion",
+      "purpose": "Consultar registros y métricas definidas del trabajo, con fuentes y fecha de actualización.",
+      "mode": "read",
+      "implementation": "Consultas parametrizadas y vistas autorizadas; SQL generado solo mediante gateway restringido.",
+      "controls": [
+        "tenant y actor desde contexto autenticado",
+        "roles de lectura sin bypass RLS",
+        "tablas, columnas y funciones autorizadas",
+        "límites de filas, tiempo, costo y concurrencia",
+        "sin credenciales generales para el modelo"
+      ]
+    },
+    {
+      "id": "buscar_evidencia",
+      "purpose": "Recuperar contratos, documentos, versiones y decisiones vinculados al trabajo.",
+      "mode": "read",
+      "controls": [
+        "permisos por agencia y expediente",
+        "referencias de documento/página/celda",
+        "respetar retención y revocación"
+      ]
+    },
+    {
+      "id": "preparar_accion",
+      "purpose": "Preparar un cambio de configuración o acción de negocio con motivo, impacto y versión esperada.",
+      "mode": "draft",
+      "controls": [
+        "validación de reglas de negocio",
+        "diferencia entre estado actual y propuesto",
+        "payload exacto y cuenta destino"
+      ]
+    },
+    {
+      "id": "solicitar_aprobacion",
+      "purpose": "Presentar la propuesta al responsable habilitado y registrar la decisión.",
+      "mode": "approval_request",
+      "controls": [
+        "sin autoaprobación del agente",
+        "aprobación ligada a payload, revisión y cuenta",
+        "revocación y vencimiento"
+      ]
+    },
+    {
+      "id": "ejecutar_accion_aprobada",
+      "purpose": "Invocar la herramienta específica habilitada y conciliar el resultado externo.",
+      "mode": "controlled_write",
+      "controls": [
+        "autorización comprobada en backend",
+        "idempotencia por operación",
+        "conciliar resultados inciertos antes de repetir",
+        "comprobante y evento persistente"
+      ]
+    }
+  ],
+  "platform_operations": {
+    "plane": "Capacidad administrativa de la plataforma separada de los nueve módulos del ERP; no añade una skill de negocio al catálogo de 42.",
+    "business_loop": [
+      "evento o desviación de negocio",
+      "investigación de lectura",
+      "propuesta con evidencia y diferencia",
+      "aprobación según política",
+      "herramienta de negocio específica",
+      "verificación y registro"
+    ],
+    "technical_loop": [
+      "traza o error",
+      "diagnóstico acotado",
+      "propuesta de configuración o PR si afecta código",
+      "pruebas y preview aislados",
+      "aprobación",
+      "despliegue por identidad administrativa",
+      "verificación y rollback de configuración/código cuando proceda"
+    ],
+    "telemetry": [
+      "tenant_id",
+      "job_id cuando corresponda",
+      "actor y permisos",
+      "run_id y correlation_id",
+      "config_version",
+      "acción y resultado",
+      "latencia",
+      "tokens y costo atribuido",
+      "estado y frescura de conexión",
+      "referencia de evidencia"
+    ],
+    "autonomous_actions": [
+      "lecturas autorizadas",
+      "clasificar anomalías",
+      "preparar borradores",
+      "reintentos seguros y acotados por política previa",
+      "pausar una tarea según política acordada"
+    ],
+    "approval_required": [
+      "cambiar permisos o alcance de una conexión",
+      "variar presupuesto o gasto",
+      "pagar, comprar, emitir o cancelar según circuito",
+      "activar una revisión de configuración con impacto",
+      "fusionar o desplegar cambios de código"
+    ],
+    "controls": [
+      "sin secretos ni documentos completos en trazas",
+      "roles de mantenimiento separados de agentes ERP",
+      "sin CLI general de Vercel en subagentes de negocio",
+      "límites de investigación y retención",
+      "aprobación nunca concedida por el propio agente"
+    ],
+    "persistence": "La bitácora de negocio, aprobaciones y evidencia se conserva según política en almacenamiento del producto; la retención de trazas del proveedor no reemplaza el registro del ERP.",
+    "vercel_agent": "Complemento opcional para diagnóstico técnico según disponibilidad y plan. No entiende automáticamente contratos, márgenes o decisiones del ERP."
+  },
+  "non_optional_controls": [
+    "aislamiento por agencia",
+    "autorización de acceso",
+    "auditoría de negocio",
+    "límites de consumo",
+    "validación de aprobaciones"
+  ],
+  "cost_recognition": "Orden/compromiso, entrega, factura y pago se vinculan al mismo costo según la política contable. Al conciliar se consume el compromiso pendiente; no se suman todas las etapas como gastos nuevos. El pago afecta caja y liquidación, no crea un costo duplicado.",
+  "assistant_entrypoint": {
+    "agent_id": "coordinador",
+    "skill_id": "agency-orchestrator",
+    "surfaces": [
+      "chat_page",
+      "global_right_panel"
+    ],
+    "same_runtime_and_conversation": true,
+    "extra_erp_agent": false,
+    "extra_business_skill": false,
+    "semantic_model_access": "authorized_catalog_only",
+    "contract": "claude-code-chasis-v1/07-asistente-global-erp.md"
+  }
+}

@@ -1,0 +1,627 @@
+AgeOS — GUÍA DE ARQUITECTURA E IMPLEMENTACIÓN
+Construya su agencia con el poder de la infraestructura agéntica ERP de AgeOS.
+Versión de diseño: 0.3 — 17 de octubre de 2026
+V1 completa para diez agencias: nueve módulos y 42 skills
+Estado: diseño propuesto; la aplicación y sus servicios no se han implementado ni desplegado.
+
+1. QUÉ PRODUCTO SE ESTÁ CONSTRUYENDO
+
+Un SaaS vertical para agencias de publicidad: cada agencia contrata una suscripción, configura sus procesos y obtiene una aplicación propia en apariencia, datos, permisos y reglas. La plataforma ejecuta esos procesos con agentes preconfigurados y operados por el proveedor del SaaS.
+
+La promesa al cliente es: “Construya su agencia con el poder de la infraestructura agéntica ERP de AgeOS”. El cliente no necesita una cuenta de Vercel, AWS, GitHub, Neon ni un proyecto de desarrollo. Sí debe autorizar sus herramientas externas cuando quiera conectarlas. AgeOS es el nombre de producto utilizado en esta revisión; se conservan los nombres históricos de archivos y carpeta para no romper referencias.
+
+Tres pilares de producto, adaptados del enfoque de plataforma aportado por el usuario y publicado por Vercel en Ship 2026:
+1) Construya su agencia. AgeOS reúne la aplicación, el ERP completo y los agentes para configurar procesos, conectar plataformas y operar con marca propia.
+2) Actívela con agentes. El asistente traduce una descripción del negocio a una configuración versionada y validada; prepara conexiones y dependencias, solicita las autorizaciones humanas necesarias y activa el espacio de la agencia sobre la aplicación compartida.
+3) Opérela con agentes. La plataforma reúne ejecuciones, trazas, costos, estado de conexiones y eventos del ERP para investigar anomalías y presentar soluciones concretas: una corrección de configuración revisable o, cuando haga falta cambiar código, una propuesta de cambio (PR) para el equipo técnico. Aplicar cambios exige las políticas de autorización, pruebas y recuperación correspondientes.
+
+Estos pilares son requisitos de la V1 y una promesa de producto a implementar. No describen una aplicación ya construida ni implican que AgeOS herede automáticamente agentes, comandos o capacidades operativas internas de Vercel. La supervisión de infraestructura de Vercel complementa la de AgeOS; por sí sola no diagnostica reglas, cuentas o resultados del ERP.
+Referencia de la adaptación: https://vercel.com/blog/vercel-ship-2026-recap
+
+La ventaja que se busca es sencilla de explicar: una agencia puede configurar y operar todo su negocio en un mismo lugar, con sus herramientas y su marca. La profundidad de los procesos, las conexiones y la evidencia histórica debe sostener esa promesa. El piloto medirá tiempo de activación, trabajo administrativo y resolución de excepciones para comprobar su valor.
+
+El repositorio de base es:
+https://github.com/afelipeg/agentic-advertising-agency-erp
+
+La documentación revisada describe 42 skills, 26 calculadoras deterministas de solo lectura, contratos de flujos y una política de agencia configurable. Aporta procedimientos de back office y operación: clientes, trabajos, producción, medios, facturación, cobranza, tesorería, contabilidad y rentabilidad. No demuestra que estén implementados todos los procesos de estrategia creativa o generación de campañas de una agencia completa.
+
+La propia documentación distingue esa biblioteca del runtime, la base de datos transaccional, el sistema de cobro y la aplicación alojada que hay que construir. La integración con Eve es trabajo de implementación, no una capacidad ya entregada por el repositorio.
+Fuente: https://github.com/afelipeg/agentic-advertising-agency-erp/blob/main/docs/architecture.md
+
+2. DECISIÓN RECOMENDADA PARA LAS DIEZ AGENCIAS
+
+Una aplicación común en Vercel, con diez organizaciones aisladas lógicamente y una plantilla de producto versionada. El alcance obligatorio del MVP es TODO el catálogo del repositorio: las 42 skills, sus calculadoras, reglas, contratos de flujos e integraciones aplicables. Cada agencia recibe su propio espacio y configura cuáles usa. Los miembros, clientes, documentos, trabajos, conexiones y aprobaciones pertenecen siempre a una organización.
+
+Los controles de acceso, aislamiento, auditoría, límites y validación de aprobaciones siempre permanecen activos, aunque se oculte un módulo.
+
+La configuración es dato validado. Cambiar el nombre, los responsables o las capacidades de una agencia no requiere recompilar la aplicación. El botón del cliente se llama “Desplegar mi agencia”; crea y habilita su entorno lógico y publica su configuración. Si posteriormente una agencia necesita código independiente, se ofrece un proyecto dedicado como modalidad adicional.
+
+Esta decisión reduce instalaciones duplicadas, mantenimiento y actualizaciones. La capacidad para diez agencias debe verificarse con una carga representativa: diez agencias registradas no especifican cuántos usuarios, documentos o tareas ejecutan simultáneamente.
+
+2.1. ENFOQUE DE ATTIO APLICADO A AgeOS
+
+Attio presenta contexto compartido, orquestación y ecosistema; su lanzamiento incorpora SQL para consultar relaciones y agregaciones sobre sus registros. La adaptación de AgeOS toma ese principio: una estructura común de negocio que personas, agentes e integraciones puedan utilizar. No supone usar Attio como base del ERP ni construir un motor SQL propietario.
+Fuentes:
+https://attio.com/architecture
+https://attio.com/blog/introducing-the-architecture-for-agentic-revenue
+
+El trabajo (job) será el expediente operativo central. Vincula cliente/marca → contrato y PO → presupuesto aprobado → producción o plan de medios → órdenes/compromisos → entrega y evidencia → facturas → cobros/pagos → resultado y margen. Los nueve módulos son distintas funciones y vistas de ese mismo expediente; no mantienen versiones aisladas del cliente, presupuesto o estado.
+
+La arquitectura propuesta conecta cinco responsabilidades:
+A. Experiencia: configuración guiada, aplicación con marca propia, trabajos, bandeja de pendientes, aprobaciones y consultas en lenguaje natural.
+B. Configuración y control: identidad, permisos, plan/cupos, catálogo y política de agencia versionados, activación y dominios.
+C. Operación común: contratos de negocio, validadores, calculadoras, métricas y servicios de acciones utilizados tanto por la interfaz como por Eve.
+D. Contexto persistente: registros relacionados en Postgres, originales/evidencias en Blob, historial de eventos y enlaces a las cuentas y documentos de origen.
+E. Ejecución e integraciones: Eve/Workflow, herramientas TypeScript, conectores y los tres perfiles de Sandbox a demanda. La telemetría de cada ejecución alimenta el circuito de operación de plataforma.
+
+Los especialistas consultan el mismo contexto con los permisos de su tarea. Una corrección hecha por una persona queda disponible para los siguientes pasos y conserva autoría/versiones. El contenido externo es evidencia a interpretar, no instrucciones que concedan permisos. Esta revisión se concreta también en ageos-arquitectura-v1.json y en el diagrama de arquitectura; dichos archivos son especificaciones, no infraestructura desplegada.
+
+3. SERVICIOS ELEGIDOS
+
+Panel y API: Next.js en Vercel, con páginas de configuración, trabajos, entregables, aprobaciones y consumo.
+Identidad: Clerk Organizations, mediante integración nativa de Vercel Marketplace; una organización por agencia. El backend aplica autorización propia.
+Suscripción: Stripe Checkout y Stripe Billing integrados en la aplicación. El cobro de la suscripción es independiente de las facturas de negocio que el ERP prepare para los clientes de la agencia.
+Datos de negocio: Neon Postgres mediante Vercel Marketplace, con entidades relacionadas, historial de revisiones, configuración y control de acceso por agencia.
+Consulta y métricas: servicio de lectura sobre vistas y consultas aprobadas de Postgres; definiciones de negocio versionadas, permisos por agencia/campo y límites de tiempo, filas y concurrencia. El modelo no recibe acceso directo de administración de la base.
+Documentos: Vercel Blob privado, con acceso autenticado a través de la aplicación.
+Agentes: Eve, con una versión fijada y sus capacidades adaptadas desde el repositorio.
+Continuidad de ejecución: Vercel Workflow para sesiones, pasos, reintentos y pausas.
+Herramientas aisladas: Vercel Sandbox para los tres perfiles de Documentos, Datos y reportes, y Piezas publicitarias cuando requieran procesamiento aislado. Las calculadoras deterministas pueden ejecutarse como herramientas del runtime; solo usan Sandbox cuando el trabajo lo necesita.
+Archivos de trabajo persistentes: Vercel Drives por trabajo o espacio de ejecución; no una carpeta editable simultáneamente por todos los agentes.
+Modelos: Vercel AI Gateway hacia proveedores de modelos compatibles.
+Herramientas: funciones propias TypeScript, adaptadores a APIs/SDKs externos y conexiones MCP/OpenAPI, habilitadas por agencia y autorizadas en el backend.
+Conexiones: Vercel Connect para proveedores y mecanismos compatibles; Composio como alternativa externa y adaptadores específicos cuando se necesiten. Cada conexión conserva su agencia, cuenta, permisos y responsable.
+Operación: registros, trazas y métricas de Vercel/Eve, complementados por eventos de negocio y consumo por agencia en Postgres. Un servicio de supervisión correlaciona anomalías con trabajos y versiones, y prepara cambios revisables; autorización, ejecución y verificación pertenecen a servicios controlados.
+Marca blanca: identidad visual versionada por agencia, dominios personalizados en el proyecto compartido y Vercel Domains Registrar API para el recorrido de compra y renovación.
+
+Vercel administra el núcleo del despliegue y ejecución; Neon y Clerk son proveedores integrados en su Marketplace. Stripe y los modelos siguen siendo servicios externos. “Dentro del ecosistema Vercel” significa una operación integrada y una sola experiencia para el cliente, no que Vercel sea propietario de todos los servicios.
+
+Fuentes:
+https://vercel.com/for/platforms
+https://vercel.com/docs/postgres
+https://vercel.com/marketplace/neon
+https://vercel.com/marketplace/clerk
+https://docs.stripe.com/billing/subscriptions/overview
+
+4. EXPERIENCIA DE CONFIGURACIÓN
+
+Paso 1 — Cuenta y plan: registrar a la persona, crear la agencia y contratar el plan. El estado de pago se verifica en el servidor mediante eventos firmados del proveedor.
+Paso 2 — Tu agencia: nombre de agencia, nombre de su aplicación, logo, colores, país, moneda, equipo y tipos de servicios. Elegir dirección de plataforma, conectar dominio existente o comprar uno. Las tasas y reglas locales se introducen o validan; no se inventan.
+Paso 3 — Tu operación: describir qué vende la agencia, cómo cobra, quién aprueba, qué clientes atiende y con qué plataformas trabaja. El asistente/formulario propone los procesos aplicables del catálogo completo, sus responsables, aprobaciones y límites. El detalle técnico de skills, herramientas y sandboxes queda en controles avanzados; la experiencia inicial no consiste en elegir entre 42 interruptores. Se permite comenzar con archivos si aún no hay integraciones.
+Paso 4 — Revisar y desplegar: mostrar la configuración completa y ejecutar la activación automática. Al terminar se entrega la dirección lista y se abre la aplicación operativa con la marca y las capacidades configuradas. Un primer trabajo de ejemplo, si se ofrece, se identifica claramente como demostración.
+
+El asistente conversacional es una ayuda opcional sobre el mismo formulario y esquema de configuración. Sus respuestas generan un borrador estructurado con módulos, reglas, conexiones, vistas y campos; el backend valida cobertura, dependencias, permisos y plan, muestra qué cambiará y el usuario confirma la configuración. OAuth o las autorizaciones del proveedor siguen siendo realizadas por la persona autorizada. El asistente no recibe claves de infraestructura ni puede ampliar permisos por su cuenta.
+
+La configuración inicial se guarda como una versión. Cada cambio posterior crea otra versión, conserva historial y deja claro qué política se aplica a un trabajo ya iniciado.
+
+4.1. MARCA BLANCA Y DOMINIO PROPIO DESDE LA VERSIÓN UNO
+
+La agencia configura nombre comercial, logo, favicon y colores permitidos con contraste legible. La interfaz de acceso y la operación muestran su identidad visual. La aplicación sigue compartida; personalizar su apariencia o dirección no exige crear otro proyecto. Las pantallas de autorización de proveedores externos pueden conservar la identidad de esos proveedores.
+Fuente: https://vercel.com/for/platforms
+
+Opciones del panel:
+A. Dirección incluida de la plataforma: sirve para operar mientras se prepara un dominio propio.
+B. Traer dominio existente: el cliente conserva su registrador, demuestra control y configura los registros DNS que indique la integración. Puede usar un subdominio de su sitio actual para conservar su web y correo existentes.
+C. Comprar dominio desde el panel: buscar nombres, consultar disponibilidad y precio vigente, recopilar los datos requeridos, mostrar plazo y renovación, obtener autorización y enviar la orden. Registrar el resultado y permitir seguimiento sin duplicar compras.
+
+Para un dominio propio, añadirlo al proyecto compartido y relacionarlo de manera única con una agencia. Verificar control, DNS y estado del certificado antes de habilitarlo. Vercel administra la emisión y renovación de certificados cuando la configuración satisface los requisitos. La propagación y verificación pueden tardar; la agencia conserva su dirección de plataforma mientras tanto. Si se utiliza un comodín de la plataforma, configurar la delegación DNS y los certificados correspondientes.
+Fuente: https://vercel.com/docs/platforms/multi-tenant-platforms/configuring-domains
+
+La API de registro de Vercel ofrece búsqueda, precios, compra, renovación y consulta de órdenes. Las operaciones de compra requieren autenticación del backend. La implementación usa las API actuales de Domains Registrar, no endpoints de compra retirados. Debe contemplar falta de disponibilidad, cambios de precio y requisitos por extensión; una búsqueda no reserva un nombre.
+Fuente: https://vercel.com/docs/domains/registrar-api
+
+La compra recibe precio esperado, años, elección de renovación y datos de contacto. Guardar el consentimiento para esos datos y consultar la orden si el resultado es incierto; no reintentar una compra a ciegas. El cobro al cliente y el pago de la plataforma a su proveedor de dominios son operaciones distintas y deben conciliarse.
+Fuente: https://vercel.com/docs/rest-api/domains-registrar/buy-a-domain
+
+Titularidad y operación comercial: antes de habilitar compras para clientes, confirmar el modelo con el proveedor y documentar quién es el registrante, quién paga renovaciones y cómo se entrega o transfiere el dominio al salir. Los términos de Vercel contemplan al titular de cuenta cuando no se identifica al registrante y al Team Owner para registros de un equipo; no afirmar que los datos de contacto de la API convierten automáticamente al cliente en titular. Esta validación comercial queda como condición de habilitación de compras reales; no impide implementar la conexión de dominios existentes.
+Fuente: https://vercel.com/legal/domain-name-registration-and-services-terms
+
+Datos propuestos: tenant_branding, tenant_domains y domain_orders, vinculados a agencia, permisos y plan. El hostname identifica la configuración de presentación; la sesión autenticada sigue determinando el acceso. Usar un registro de dominios verificados, evitar asociaciones duplicadas y comprobar que sesión, dominio y agencia coincidan. Probar inicio/cierre de sesión, cookies, redirecciones, callbacks OAuth y recuperación de acceso en cada dominio con el proveedor de identidad elegido.
+
+Estados de dominio propuestos: solicitado, pendiente_de_compra, pendiente_dns, verificando, activo, error, por_renovar y desconectado. La interfaz distingue agencia activa de dominio aún pendiente. Una baja de suscripción no debe cancelar o abandonar una renovación de dominio silenciosamente; aplicar la elección y condiciones autorizadas. Cambiar marca o dominio conserva documentos y trabajos.
+
+4.2. LA APLICACIÓN QUE RECIBE LA AGENCIA
+
+Ejemplo de experiencia: Rayo de Sol es el nombre de la agencia; su administrador puede llamar a su aplicación «Estudio Solar». Configura servicios, procesos, conexiones, responsables, límites e identidad visual. Esa elección resuelve flujos y skills de la plantilla validada. Al pulsar «Desplegar mi agencia», ve el progreso y, cuando las verificaciones terminan, recibe un enlace para abrir Estudio Solar. La pantalla de destino es la aplicación operativa: una bandeja de atención, trabajos, aprobaciones, documentos, entregables y módulos habilitados, con su nombre, logo y colores.
+
+Desde cada trabajo se consulta el expediente completo y se ejecutan acciones permitidas. Una pregunta como «¿Qué trabajos están perdiendo margen y por qué?» produce resultados calculados, fuentes y fecha de actualización, y puede preparar una propuesta de acción. Los formularios y los agentes invocan los mismos servicios de negocio; una respuesta de chat no modifica por sí sola el presupuesto ni la cuenta externa.
+
+Cada petición identifica el entorno de la agencia desde su dirección verificada y sesión autorizada, carga la versión publicada de configuración y ejecuta sus flujos con las cuentas y permisos correspondientes. La configuración no queda como un formulario desconectado del producto: determina la interfaz y el comportamiento real. El panel de administración permite modificarla y publicar una versión nueva posteriormente.
+
+La dirección puede ser un subdominio de plataforma, un dominio de la agencia dedicado a la app o un subdominio de su web. Una ruta con el nombre de la aplicación también es posible cuando controlamos el enrutamiento del dominio completo. DNS selecciona hosts; no puede enviar por sí solo una ruta concreta de una web alojada en otro lugar a Vercel. Para conservar una web existente, la opción recomendada de V1 es un subdominio de la agencia. Publicar en una ruta del sitio existente exige integración de enrutamiento o proxy y pruebas de recursos, sesiones y redirecciones.
+
+El nombre visible de la aplicación y su dirección son campos distintos. Normalizar y validar cualquier alias URL, evitar colisiones y conservar redirecciones verificadas cuando se cambie. No se ha comprobado ni reservado el dominio real usado verbalmente como ejemplo; las vistas conceptuales utilizan direcciones de demostración.
+
+El botón despliega la experiencia configurada para el cliente mediante aprovisionamiento y activación de datos sobre la aplicación común. No hace falta compilar o crear un proyecto por agencia. El estado «Lista» requiere comprobaciones satisfactorias; si el dominio propio está pendiente, mostrar «Aplicación lista en dirección provisional; dominio en verificación» y conservar el progreso.
+
+5. QUÉ HACE EL BOTÓN DESPLEGAR MI AGENCIA
+
+Una ejecución durable de activación:
+1) Comprueba usuario, membresía, permisos y estado del plan.
+2) Valida configuración, dependencias del catálogo completo y cupos contratados.
+3) Crea de forma idempotente el registro de agencia, permisos y límites.
+4) Asocia una versión del catálogo de skills y la política específica.
+5) Prepara referencias de almacenamiento y conexiones. Los Drives de trabajos se crean cuando se necesitan.
+6) Aplica identidad visual y asigna la dirección de plataforma. Si el cliente solicita dominio propio, inicia el flujo de conexión o compra autorizada y verifica DNS/certificado antes de activarlo. La agencia puede operar mientras ese proceso está pendiente.
+7) Ejecuta una prueba mínima de acceso, almacenamiento y agente.
+8) Marca la agencia como activa y registra el resultado.
+
+Estados canónicos: draft (borrador), validating (validando), awaiting_authorization (espera autorización), approved (aprobada), provisioning (preparando), ready (lista) y blocked (requiere atención). El estado del dominio se conserva aparte. Un reintento continúa el trabajo pendiente; no vuelve a cobrar ni duplica la organización. Un fallo conserva el diagnóstico y permite retomar la activación.
+
+6. CUATRO TIPOS DE PERSISTENCIA
+
+Postgres es el registro canónico del negocio: agencias, configuración, trabajos, estados, versiones, aprobaciones, permisos, referencias de documentos y eventos de consumo. Aquí se guarda también la propiedad de cada sesión de agente.
+
+Blob privado conserva originales y entregables. Postgres guarda quién puede acceder a cada objeto y sus metadatos. Una ruta con el nombre de la agencia no constituye por sí sola una barrera de acceso.
+
+Drives conserva los archivos que utiliza un agente entre sandboxes y ejecuciones. Vercel anunció su disponibilidad general el 15 de octubre de 2026. Un Drive admite un montaje de escritura a la vez; se usan snapshots de lectura o forks para trabajo paralelo. Los forks requieren una consolidación explícita de resultados.
+
+Workflow conserva el progreso de ejecución. El registro de decisiones y resultados del ERP debe copiarse al almacén de negocio con su política de retención. Los registros temporales del runtime no son el historial permanente de la agencia.
+
+Las copias de seguridad, recuperación y retención son parte de la operación: seleccionar una política de respaldo/restauración de Postgres adecuada al plan, conservar versiones o copias recuperables de documentos y probar recuperación antes de incorporar agencias de pago. Un Drive persistente por sí solo no es una estrategia de respaldo.
+
+Fuentes:
+https://vercel.com/docs/vercel-blob/security
+https://vercel.com/blog/introducing-vercel-drives-persistent-storage-for-agents
+https://vercel.com/docs/sandbox/concepts/drives
+https://vercel.com/docs/workflows/pricing
+
+6.1. BIBLIOTECA PRIVADA Y CARGA DE ARCHIVOS EN V1
+
+Cada agencia dispone de una biblioteca persistente para PDF, Word, Excel y CSV. Los formatos iniciales de procesamiento son .pdf, .docx, .xlsx y .csv; cualquier formato histórico adicional debe declarar explícitamente su conversión soportada. Se organizan por cliente, proyecto o trabajo y se conservan originales y versiones. Los archivos son privados y sobreviven al cierre de sesiones y sandboxes.
+
+Recorrido: verificar membresía y cupo → reservar capacidad de carga → autorizar subida al almacenamiento privado → validar tipo/tamaño/integridad → registrar metadatos y permisos en Postgres → mostrar archivo disponible. La carga grande no tiene que atravesar el cuerpo de una Function: se debe integrar un mecanismo de carga autorizada adecuado al tamaño admitido y revalidar el objeto al finalizar. Las cargas fallidas liberan la reserva de cuota.
+
+Guardar un archivo no dispara por defecto extracción, OCR, embeddings o una llamada de IA. Cuando un flujo necesita su contenido, se crea un trabajo con presupuesto, cola y concurrencia acotada. La extracción conserva referencias al original y a su versión; se reutilizan resultados vigentes y el agente recibe solo contenido pertinente. Las búsquedas y derivados mantienen el mismo aislamiento de agencia que el archivo original.
+
+Importar filas de Excel/CSV al ERP requiere otro recorrido: identificar hojas/columnas, mostrar vista previa, validar tipos y registros duplicados, señalar errores y confirmar la operación antes de crear registros. Un PDF escaneado puede requerir OCR, con consumo y estado visibles. No se ejecutan macros ni contenido activo de los archivos. El soporte de lectura por formato es parte de la matriz de herramientas de V1.
+
+Los cupos cubren almacenamiento, tamaño por archivo y volumen de procesamiento; los valores se fijan con pruebas, no se prometen cargas ilimitadas. También hay límites globales para proteger la plataforma. Cuando falta capacidad se explica el motivo antes de iniciar trabajo costoso. Borrar o archivar respeta permisos, retención, referencias y copias recuperables.
+
+Pruebas mínimas: cargar, descargar y procesar ejemplos de los cuatro formatos; recuperar tras reinicio; impedir acceso cruzado incluso con identificadores conocidos; rechazar exceso de cuota antes del procesamiento; conservar el original ante errores de extracción; validar importaciones con columnas incorrectas y reintentos.
+
+6.2. CONTEXTO COMÚN: TRABAJO, DATOS Y DEFINICIONES
+
+Postgres es el registro canónico de la operación de AgeOS. Un trabajo tiene identidad y estado propios; enlaza versiones de contrato/PO, presupuesto, horas, entregables, planes, órdenes, compromisos, evidencia, documentos de cobro/pago y resultados. Los identificadores y relaciones incluyen la agencia y, cuando corresponda, la entidad legal. El cierre se valida con esas relaciones, no solo con el texto de una conversación.
+
+El núcleo utiliza campos tipados, relaciones y restricciones para importes, moneda, entidad, fechas, estados y revisiones. Los importes se calculan con precisión decimal y reglas de redondeo declaradas. El gasto administrado del cliente se distingue del ingreso propio de la agencia. Presupuestado, comprometido, realizado, reconocido, facturado y cobrado son conceptos distintos; ninguna pantalla ni agente puede intercambiarlos silenciosamente.
+
+La configuración admite campos personalizados validados por esquema, vistas, etapas compatibles, responsables y aprobaciones. Extensiones JSONB pueden conservar atributos particulares, con tipo, versión y permisos. No sustituyen las tablas y restricciones financieras ni permiten al cliente redefinir identidades, saltar una aprobación o mezclar monedas. Las extensiones que alteren reglas de negocio requieren migración y validación de la plataforma.
+
+El diccionario de métricas fija para cada resultado: definición, granularidad, fuentes, estado de registros incluidos, periodo, moneda/tipo de cambio, reglas de atribución y versión. Las 26 calculadoras del repositorio se adaptan y prueban contra estas definiciones; no se modifican sus contratos sin revisión. Un margen por trabajo no suma repetidamente una factura por tener varios documentos adjuntos o varias líneas de entrega.
+
+Cada registro importado conserva proveedor, conexión/cuenta, ID externo, entidad de origen, fecha del hecho, fecha de actualización de origen si existe, fecha de sincronización y vínculo a su evidencia. La tabla de autoridad define quién puede escribir cada dato: por ejemplo, AgeOS puede ser autoridad del plan aprobado y el sistema contable conectado de un asiento ya contabilizado. Una copia operativa en AgeOS no convierte una factura borrador en factura fiscal emitida ni reemplaza silenciosamente el libro oficial.
+
+Los hechos históricos se corrigen con revisiones o movimientos de ajuste según corresponda; no se reescribe una aprobación ni un cierre para ocultar el cambio. El acceso a documentos y derivados sigue los permisos del expediente. La historia de una agencia puede ayudar a estimar sus trabajos futuros, pero las recomendaciones se contrastan con resultados y no se comparte esa información con otras agencias por defecto.
+
+Orden, entrega, factura y pago se concilian como etapas del mismo costo según la política contable. La conciliación consume el compromiso pendiente; no suma cada etapa como un gasto nuevo. El pago afecta caja y liquidación, sin duplicar el costo.
+
+6.3. CONSULTAS SQL Y MÉTRICAS CONTROLADAS EN V1
+
+La V1 utiliza el motor de PostgreSQL existente. El servicio de consulta ofrece métricas, vistas y consultas parametrizadas aprobadas; Eve selecciona una consulta y sus parámetros de negocio, y el servicio resuelve identidad y agencia desde el contexto autenticado. La interfaz usa el mismo servicio. No se necesita desarrollar un motor SQL propietario ni abrir un endpoint de base de datos a cada cliente.
+
+El servicio aplica permisos por agencia, rol, cliente/trabajo y campo. Las consultas se ejecutan con un rol de solo lectura sin facultad de evadir RLS, dentro de una transacción con el contexto de autorización correcto. Los parámetros son tipados; no se aceptan tablas, expresiones SQL ni tenant_id libremente elegidos por el modelo. Las plantillas y funciones consultables están versionadas y revisadas; no pueden producir efectos secundarios. No hay herramienta de SQL de escritura ni credenciales de administrador en el prompt.
+
+Se limitan tiempo, filas, tamaño de resultado, concurrencia y frecuencia. Las consultas costosas tienen presupuestos y, si procede, resultados calculados previamente con fecha de actualización visible. Cachés, exportaciones y agregados respetan los mismos permisos; un total no debe revelar costos, salarios o clientes que el solicitante no puede consultar. Revocar acceso invalida el uso correspondiente, incluso en una tarea reanudada.
+
+La respuesta devuelve resultado, unidad/moneda, periodo, definición y versión de métrica, referencias de evidencia y estado de actualización. Los enlaces de evidencia se autorizan al abrirlos. Si faltan datos o la fuente está atrasada, se indica qué falta y se bloquean las acciones dependientes cuando el riesgo lo requiere. El agente puede explicar el resultado y preparar una acción; la ejecución vuelve a pasar por el servicio de acciones y una aprobación vigente.
+
+Ejemplos de consultas V1: margen previsto y real por trabajo; horas aprobadas frente a estimadas; presupuesto disponible después de compromisos; órdenes sin evidencia; facturas vencidas; gasto publicitario frente a plan; y estado de cierre. Su cobertura se extiende a los nueve módulos según la matriz de 42 skills. SQL ayuda a obtener respuestas reproducibles; la validez depende además de las definiciones, relaciones, permisos y datos de origen.
+
+Las consultas libres generadas por un modelo, un endpoint SQL público y un constructor universal de esquemas quedan fuera de la interfaz ordinaria de V1. Se podrán evaluar después con controles específicos. Esta decisión limita la superficie técnica, no elimina ningún módulo ni skill del ERP.
+
+6.4. SINCRONIZACIÓN Y CALIDAD DEL CONTEXTO
+
+Los adaptadores traen cambios mediante webhooks firmados, lectura incremental o importaciones, según el proveedor. Guardan cursores, identificadores externos, estado de sincronización y errores; detectan eventos duplicados o fuera de orden. Las equivalencias de cliente, proveedor, campaña y trabajo se validan antes de unir registros. La resolución de conflictos conserva procedencia y una política por campo.
+
+Una consulta transaccional sobre AgeOS no garantiza que Meta, el banco o el ERP contable estén sincronizados en ese instante. El producto muestra frescura por fuente y usa umbrales definidos por operación. Las escrituras externas se registran con su estado confirmado, pendiente o desconocido; se reconcilian antes de volver a enviar. Un resultado parcial nunca se presenta como ejecución completa.
+
+7. SEPARACIÓN ENTRE AGENCIAS
+
+El servidor resuelve la agencia desde la identidad autenticada y comprueba membresía. Los identificadores enviados por el navegador o el modelo nunca bastan para autorizar una operación.
+
+Cada entidad incorpora tenant_id. Se aplica seguridad por filas de Postgres y se usa un rol de ejecución sin privilegios que evadan esas políticas. El contexto de agencia se establece dentro de cada transacción, evitando reutilizar accidentalmente el contexto de una conexión anterior. Las relaciones y restricciones incluyen la agencia para impedir enlaces cruzados.
+
+La misma comprobación cubre lecturas, descargas, búsquedas, cachés, tareas en segundo plano, sesiones de Eve, streams, cancelaciones y aprobaciones. Eve autentica rutas, pero la aplicación debe resolver quién puede acceder a cada sesión.
+
+Cada conexión externa, Drive, objeto y sesión tiene una vinculación persistida con su agencia. Las herramientas reciben ese contexto validado por el backend. Las credenciales generales del servicio no se entregan al modelo ni al sandbox de un cliente.
+
+Fuentes:
+https://github.com/vercel/eve/blob/main/docs/guides/auth-and-route-protection.md
+https://www.postgresql.org/docs/current/ddl-rowsecurity.html
+
+8. AGENTES, REGLAS Y ACCIONES
+
+Las 42 skills constituyen un catálogo de capacidades, no 42 agentes siempre encendidos. Un coordinador selecciona las capacidades pertinentes; se crean subagentes cuando una tarea puede dividirse y su costo lo justifica.
+
+La política de agencia es un objeto estructurado y versionado. Se puede producir una representación compatible con AGENCY.md para el runtime, pero el registro canónico se mantiene en Postgres. Las reglas de autorización se aplican en código además de describirse en instrucciones.
+
+Los cálculos de importes se ejecutan con herramientas deterministas. El modelo propone y explica. Los servicios autenticados realizan las transiciones de negocio y comprueban autorización, saldo, estado y dependencias de forma transaccional. La UI y los agentes usan esos mismos servicios. Una aprobación incluye agencia, entidad, persona, acción exacta, cuenta destino, importes, versión y referencia o hash del resultado aprobado; cualquier cambio material exige una nueva aprobación.
+
+Las acciones con efectos externos utilizan un registro de ejecución e idempotencia cuando el proveedor lo soporte. Un timeout de resultado desconocido se investiga antes de reintentar. El estado de una conversación no reemplaza una transacción de negocio.
+
+Familias de datos propuestas: agencias/membresías y permisos; versiones de configuración/catálogo; clientes/marcas/proveedores; trabajos; contratos/PO/presupuestos; tareas/horas/entregables; planes y revisiones/líneas de medios; órdenes/compromisos/evidencias; facturas/cobros/pagos/asientos según autoridad; métricas y mapeos externos; sesiones/ejecuciones; documentos/aprobaciones; conexiones; registro de acciones/consumo; suscripciones y activaciones. Los nombres físicos y migraciones se definen al implementar; esta enumeración no afirma que las tablas existan en el repositorio.
+
+8.1. PLATAFORMA OPERADA CON AGENTES
+
+AgeOS registrará run_id, job_id, tenant_id, versión de configuración/skill/herramienta, pasos, tiempos, errores, consumo y resultado confirmado. Las trazas técnicas se correlacionan con los eventos de negocio sin almacenar tokens o credenciales. La auditoría, los comprobantes, las aprobaciones y los resultados del ERP se conservan en los almacenes de AgeOS con su política de retención; las trazas temporales de un proveedor no los reemplazan.
+
+El circuito de supervisión de V1 será: detectar → investigar con evidencia y permisos limitados → proponer → aprobar → aplicar → verificar → registrar. Ejemplos de anomalía: conexión revocada, importación atrasada, factura duplicada, aprobación pendiente que bloquea un cierre, costo de ejecución excesivo o fallos repetidos de un adaptador. Una señal sin datos suficientes se presenta como hipótesis y diagnóstico pendiente.
+
+Dos tipos de propuesta comparten ese circuito:
+A. Cambio operativo o de configuración: muestra qué campo, regla, cuenta, revisión o parámetro se cambiaría, por qué, a quién afecta y cómo se verificaría. Lo aprueba el responsable autorizado de la agencia o de la plataforma según el alcance.
+B. Cambio de código: prepara una propuesta técnica o PR con reproducción del fallo, cambio sugerido y pruebas. El equipo técnico revisa, prueba en entorno de validación y autoriza el despliegue; el cliente no necesita operar GitHub. No se permite que un agente publique código de producción a partir de una alerta sin esos controles.
+
+Los reintentos automáticos de operaciones transitorias están definidos por código: límite de intentos, espera, presupuesto, idempotencia y comprobación del resultado. Las correcciones automáticas adicionales requieren una política previa específica y un procedimiento validado. Un timeout de pago o compra con resultado desconocido se concilia; no se trata como permiso para repetir. La recuperación de configuración se hace mediante una nueva versión validada; una acción financiera o publicitaria ya ejecutada puede exigir compensación y no se supone reversible con un rollback.
+
+El supervisor de plataforma es una capacidad transversal, no un décimo módulo del ERP ni una skill 43. No hereda acceso a los datos de todas las agencias: cada investigación opera con alcance de tenant e identidad autorizados; el acceso de soporte de la plataforma se concede, limita y audita por separado. El coordinador y los ocho especialistas mantienen la distribución exacta de las 42 skills.
+
+Vercel Agent puede complementar las investigaciones técnicas de la infraestructura conforme a su disponibilidad y permisos. Sus acciones y propuestas no autorizan pagos, campañas ni cambios del ERP de AgeOS. La integración concreta y las pruebas de este circuito forman parte del trabajo pendiente de V1.
+Fuentes de las capacidades de plataforma que inspiran esta separación:
+https://vercel.com/docs/agent
+https://vercel.com/changelog/eve-agent-observability
+
+9. CONEXIONES Y SECRETOS
+
+Para Connect, guardar la relación entre agencia, conector e instalación. Cuando el proveedor soporte instalaciones múltiples, seleccionar la instalación concreta para cada petición; no usar una instalación predeterminada como atajo multiempresa.
+
+Los tipos de conector difieren. Para los que solo llegan a una cuenta, crear una conexión independiente por agencia. Cuando una integración no esté cubierta, usar un adaptador de OAuth o claves con cifrado y control de acceso, manteniendo la clave de cifrado separada de los datos cifrados. El orden de desarrollo puede comenzar con documentos y una integración validada; la entrega del MVP debe cubrir las dependencias de todos los módulos comprometidos, sin reducir su alcance. Véase la sección 9.2 para herramientas propias, MCP y proveedores externos.
+
+Fuente: https://vercel.com/docs/connect/concepts/installations
+
+9.1. CATÁLOGO COMPLETO Y EJECUCIÓN A LA MEDIDA
+
+Regla central del producto: todas las capacidades del repositorio forman parte del MVP; cada agencia determina el subconjunto que utiliza. Capacidad incluida, capacidad habilitada y recurso ejecutándose son tres estados diferentes.
+
+El panel guarda una configuración de agencia que determina:
+- Módulos y flujos habilitados, sus etapas, parámetros y dependencias.
+- Skills disponibles para cada etapa y herramientas permitidas.
+- Subagentes que pueden participar y los límites de su delegación.
+- Instrucciones de negocio particulares, construidas sobre la plantilla y su política versionada.
+- Conexiones, responsables y puntos de revisión o aprobación.
+- Perfil del sandbox cuando se necesite ejecutar código, recursos permitidos y límites de consumo.
+
+Un componente de resolución de capacidades valida esa configuración y produce un plan de ejecución versionado. Cuando se activa una capacidad, se comprueban las dependencias: por ejemplo, si faltan datos maestros, una conexión o una aprobación, se muestra el requisito concreto. No se habilita un flujo incoherente ni se oculta el motivo de bloqueo.
+
+El coordinador carga las instrucciones y skills pertinentes al trabajo. Invoca subagentes según necesidad y crea sandboxes cuando una herramienta lo requiere. Habilitar todos los módulos no significa ejecutar simultáneamente 42 agentes ni mantener 42 sandboxes encendidos.
+
+La agencia puede ampliar o reducir su configuración desde el mismo panel. El cambio genera una versión nueva para trabajos futuros. Los trabajos en curso conservan una política de transición explícita: continuar con su versión, migrar de manera validada o cancelar con autorización. Reducir capacidades no borra documentos, historial, registros contables ni decisiones previas. Revocar acceso o credenciales sí debe surtir efecto inmediatamente al autorizar la siguiente acción, aunque el trabajo use una versión anterior de configuración.
+
+El cliente ve lenguaje de negocio y controles progresivos. Puede usar perfiles sugeridos y luego ajustar el detalle; no tiene que conocer nombres de modelos, cuentas cloud ni comandos de despliegue. El resultado es una aplicación que se adapta a su operación sobre una base completa y común.
+
+9.2. HERRAMIENTAS PROPIAS, MCP Y SERVICIOS DE TERCEROS
+
+Decisión de producto: cada agencia conecta sus propias plataformas y elige las herramientas que necesita. El catálogo combina herramientas propias y externas. El cliente configura objetivos, cuentas, permisos y límites; el equipo de plataforma implementa y mantiene las funciones TypeScript y sus adaptadores.
+
+Tres caminos compatibles:
+A. Funciones TypeScript: consultas, cálculos y operaciones ERP implementados en código bajo nuestro control. Eve documenta que estas tools se ejecutan en el runtime de la aplicación. No requieren Sandbox por el hecho de ser tools.
+B. Adaptadores TypeScript a API/SDK: una función controlada llama a Firecrawl, Composio u otro servicio y normaliza sus entradas, resultados y errores. Una misma herramienta puede combinar lógica propia y una llamada externa.
+C. Conexiones MCP/OpenAPI: acceso a herramientas publicadas por servidores externos compatibles. MCP es un protocolo de acceso; no sustituye la identidad, los permisos ni la política de negocio de la agencia. Para MCP alojado, preferir transporte HTTP y credenciales gestionadas por el backend.
+
+Fuentes:
+https://eve.dev/docs/tools
+https://eve.dev/docs/connections
+https://ai-sdk.dev/docs/ai-sdk-core/tools-and-tool-calling
+https://ai-sdk.dev/docs/ai-sdk-core/mcp-tools
+
+Recorrido propuesto:
+Configuración de agencia → catálogo autorizado → Eve → control de permisos y ejecución → función propia / API externa / MCP → resultado y registro de uso.
+Sandbox es una rama opcional para ejecutar código aislado o trabajar con archivos. Las llamadas normales a APIs no pasan obligatoriamente por él.
+
+Registro de herramientas propuesto: nombre, versión, módulo/skill, esquema de entrada y salida, modo de ejecución, proveedor, conexión necesaria, acciones permitidas, límites, aprobación aplicable y estrategia de reintento. El backend determina la agencia desde la sesión o el trabajo autorizado, y resuelve la cuenta correcta; el modelo no selecciona credenciales de otra agencia. Filtrar el catálogo visible ayuda al agente, pero la autorización se verifica también al ejecutar.
+
+Connect y Composio:
+Vercel Connect gestiona el acceso para mecanismos y proveedores compatibles. Composio es un servicio externo que puede aportar conexiones autenticadas y ejecución de herramientas. Elegir una ruta por integración y documentarla; no se necesita encadenar ambos para toda llamada.
+
+Para Composio, usar inicialmente un proyecto por ambiente y una identidad estable que incluya agencia y miembro para conexiones personales, o agencia e integración para conexiones compartidas. Nuestra aplicación comprueba membresía y acceso antes de crear o recuperar una sesión. Fijar la cuenta conectada y la lista de herramientas permitidas; no depender de una cuenta elegida por defecto.
+Fuente: https://docs.composio.dev/docs/b2b-agents
+
+Configurar límites y herramientas explícitamente. Si la decisión es usar Vercel Sandbox como entorno de ejecución de código de los agentes, desactivar el sandbox de Composio. Esto no hace que las APIs externas se ejecuten dentro de Vercel.
+Fuente: https://docs.composio.dev/docs/configuring-sessions
+
+Composio admite sesiones mediante MCP, pero los modificadores locales del SDK y las herramientas locales personalizadas no se ejecutan a través de ese endpoint. Las aprobaciones, permisos y auditoría deben aplicarse en nuestra capa antes de invocarlo. Para acciones ERP con efectos externos, se prefieren adaptadores TypeScript explícitos. Guardar las credenciales exclusivamente en backend.
+Fuente: https://docs.composio.dev/docs/sessions-via-mcp
+
+Firecrawl:
+Puede integrarse por API/SDK Node o MCP para obtener y extraer información web. La herramienta de AgeOS registra fuente, trabajo, agencia y consumo. Los trabajos largos se siguen mediante ejecución durable; aplicar cuotas por agencia y los límites vigentes del proveedor. La cuenta puede ser propia del cliente o provista por la plataforma, según el modelo comercial que se defina; dejar visible quién paga y qué se comparte.
+Fuentes:
+https://docs.firecrawl.dev/sdks/node
+https://docs.firecrawl.dev/mcp-server
+https://docs.firecrawl.dev/rate-limits
+
+Plataformas del cliente:
+SAP, Google Sheets, Meta y Google Ads son ejemplos solicitados para el catálogo de integraciones. Su inclusión en el diseño no acredita soporte listo de todas sus acciones. Cada adaptador exige validar API o MCP disponible, permisos, cuenta, restricciones y operaciones concretas de lectura/escritura. El inventario de implementación debe identificar las integraciones necesarias para cada flujo comprometido. El nombre «Monit.ai» queda pendiente de identificar y verificar; se conserva como candidato sin atribuirle funciones o compatibilidad.
+
+Panel de conexiones propuesto:
+El administrador selecciona la plataforma, conecta su cuenta, elige la cuenta de negocio o publicitaria, concede permisos, asigna los flujos que pueden usarla y prueba la conexión. Se muestran estados disponible, sin conectar, conectado, requiere renovación, error o pendiente de implementar; el panel distingue ejemplos del diseño de conexiones reales. Revocar una conexión bloquea el siguiente uso y conserva los resultados e historial ya guardados.
+
+Criterios de aceptación añadidos:
+- Una agencia usa una herramienta TypeScript, una API externa y una herramienta MCP con su contexto y permisos verificados.
+- Dos agencias conectadas al mismo proveedor nunca cruzan cuentas, resultados o credenciales.
+- Una herramienta deshabilitada, una conexión revocada o una cuota agotada se bloquea también desde subagentes y tareas reanudadas.
+- Las aprobaciones requeridas se aplican antes de la llamada externa y se registra su resultado; los reintentos no duplican efectos.
+- Los conectores necesarios para el alcance comprometido se prueban de extremo a extremo. Disponibilidad en un catálogo externo no equivale a integración terminada.
+
+Esta sección define la arquitectura y los requisitos de implementación; no instala conectores ni despliega herramientas.
+
+9.3. CATÁLOGO BASE DE HERRAMIENTAS PARA LA VERSIÓN UNO
+
+El equipo de plataforma entrega un catálogo predefinido y versionado de herramientas e integraciones verificadas. El asistente de configuración selecciona capacidades existentes y prepara la configuración de la agencia; el backend valida dependencias, permisos y autorizaciones antes de publicarla. Las cuentas conectadas se registran por separado del catálogo y de sus credenciales.
+
+Por defecto significa disponible para configurar, no habilitado para toda agencia ni autorizado a utilizar una cuenta sin consentimiento. El asistente puede identificar una integración faltante y preparar una solicitud; incorporarla exige implementar y validar el adaptador antes de ofrecerlo en producción.
+
+Entregar una matriz de cobertura con una fila por caso de uso requerido: módulo, skill, entradas, resultado, herramienta propia/API/MCP, proveedor, conexión, permisos, aprobación, dependencias, formato de archivo, manejo de errores y prueba de aceptación. La selección parte de todos los módulos y las 42 skills del repositorio. El listado de marcas o proveedores por sí solo no acredita esa cobertura.
+
+10. PROTOTIPO Y MVP COMPLETO: ORDEN DE CONSTRUCCIÓN
+
+Prototipo verificable:
+Una agencia de demostración, registro de prueba, asistente/formulario de configuración y el catálogo completo visible. Un recorrido inicial de prueba puede ser alta de cliente y brief → apertura de trabajo → presupuesto calculado → aprobación → entregable guardado. Sirve para validar la arquitectura y no limita el alcance del MVP. Los pagos se prueban en modo de prueba.
+
+MVP para diez agencias:
+Entregar las 42 skills y los nueve módulos del repositorio integrados en el runtime sobre el modelo común de trabajo, junto con aislamiento, usuarios y roles, cobro real, límites de uso, historial de aprobaciones, supervisión, recuperación y activación idempotente. La interfaz y los agentes comparten métricas, consultas y acciones. El circuito de operación presenta diagnósticos y propuestas concretas con aprobación y verificación. Cada capacidad debe tener entradas, resultados, herramientas, dependencias y controles verificados antes de declarar completo el MVP. No se acepta sustituir módulos funcionales por pantallas vacías o dejarlos para una versión futura.
+
+Tres ejemplos de prueba transversal, además de los casos exigidos para las 42 capacidades:
+A. Cliente/brief → trabajo → presupuesto de producción → aprobación.
+B. Plan de medios → propuesta de compra → conciliación de evidencia y factura.
+C. Borradores de facturación → reporte de rentabilidad y caja.
+
+La cobertura funcional debe respetar lo que realmente define el repositorio: preparar, revisar, calcular y someter acciones a aprobación cuando corresponda. Una capacidad que opere con archivos sigue disponible para agencias sin conexión externa. Los conectores necesarios para ejecutar acciones reales deben implementarse y validarse dentro del alcance comprometido; instalar una skill por sí solo no demuestra que pueda emitir una factura fiscal, mover dinero o publicar publicidad. El panel indica claramente si el módulo trabaja con archivos, está conectado o necesita que el cliente autorice su cuenta.
+
+Después del piloto: nuevos proveedores y capacidades que no estén incluidos en el repositorio, opciones empresariales y modalidad dedicada. Marca blanca, biblioteca privada y el recorrido de dominio propio forman parte de V1; las compras reales de dominios requieren resolver la condición comercial descrita en 4.1. Ninguno de los módulos actuales del repositorio se difiere para reducir el MVP. El desarrollo puede organizarse por etapas internas; la versión entregada a las diez agencias debe cubrir todo el catálogo.
+
+11. QUÉ SIGNIFICA QUE FUNCIONE PARA DIEZ AGENCIAS
+
+Criterios de aceptación del piloto:
+- Diez organizaciones pueden registrarse, configurarse y activarse con políticas diferentes.
+- Las 42 skills y todos los módulos del repositorio están disponibles, integrados y validados; cada agencia decide cuáles utiliza.
+- Cada capacidad tiene al menos un caso de aceptación de funcionamiento y casos de error, permisos y dependencias aplicables.
+- Una persona de una agencia no puede acceder a recursos de otra, incluso conociendo sus identificadores.
+- Una ejecución pausada se retoma con sus archivos y decisiones correctos.
+- Repetir la activación o un webhook de pago no duplica cargos ni recursos de negocio.
+- La aprobación permanece ligada a la versión exacta del resultado.
+- Los documentos sobreviven al fin del sandbox y el ERP conserva su historial.
+- Se conoce el consumo por agencia y una agencia no agota la capacidad de todas las demás.
+- Una recuperación de respaldo se prueba satisfactoriamente.
+- Se prueba carga de diez agencias con un patrón de concurrencia declarado y medido.
+- Cada agencia carga y recupera PDF, Word, Excel y CSV privados, con cuotas y procesamiento a demanda.
+- Cambiar logo, colores o dominio de una agencia no altera la identidad ni los datos de otra.
+- Un dominio pendiente de verificación no se presenta como activo; un reintento no duplica órdenes de compra.
+- La autenticación y las integraciones funcionan desde los dominios autorizados sin cruzar agencias.
+- La descripción de una agencia produce un borrador válido y revisable; su activación conserva la versión exacta y las cuentas autorizadas. Cambiar una opción comercial no exige desplegar un proyecto independiente.
+- Un trabajo se sigue desde contrato y presupuesto hasta entrega, factura y margen sin duplicar sus importes entre módulos. Los IDs externos, fuentes y revisiones son inspeccionables.
+- El panel y un agente autorizado obtienen el mismo resultado para una métrica, con definición, moneda, fecha y permisos equivalentes. Casos con varias líneas/adjuntos no multiplican los totales.
+- El servicio de consulta impide lectura entre agencias y de campos restringidos, incluso mediante agregados, cachés, exportación o tareas reanudadas. Se prueban límites y consultas que exceden el presupuesto de ejecución.
+- Una fuente atrasada o un resultado incompleto aparece como tal; una optimización que depende de datos vigentes se bloquea hasta resolver la condición definida.
+- Una operación de escritura conserva agencia, cuenta, parámetros, aprobación y resultado. Cambiar importe, destino o revisión invalida la aprobación anterior; un timeout incierto se concilia antes del reintento.
+- Una anomalía de ejemplo produce evidencia y una propuesta de configuración revisable; un fallo que requiere código produce una propuesta técnica/PR con prueba en entorno de validación. Ninguna se publica en producción sin el permiso aplicable.
+- El supervisor respeta permisos, límites de costo y número de intentos. Se comprueba la recuperación de una configuración anterior y se diferencia de compensar una acción externa ya ejecutada.
+- El historial de negocio conserva decisiones y evidencia después de expirar las trazas técnicas del proveedor. La restauración recupera relaciones del trabajo, archivos y revisiones correspondientes.
+
+Aplicar límites de presupuesto, tiempo, tamaño de archivo, concurrencia y reintentos por agencia. Los valores iniciales se fijan tras medir el primer flujo; no hay evidencia para prometer una cuota o un precio total exactos en este diseño.
+
+Modelo de costo operativo: base de alojamiento, autenticación y base de datos + modelos consumidos + ejecución + almacenamiento + servicios externos. Para el cliente conviene una suscripción con uso incluido y un límite visible; evitar prometer uso ilimitado antes de medir costos.
+
+11.1. PLANES, CUPOS Y PROTECCIÓN DE CAPACIDAD
+
+El ERP conserva todo su catálogo funcional. Los tiers diferencian principalmente usuarios, almacenamiento, tamaño de archivo, consumo de IA, conexiones y trabajos simultáneos; pueden añadir soporte y personalización avanzada. La distribución comercial concreta de marca blanca y dominios se define antes del lanzamiento, sin inventar precios o cupos en este documento.
+
+El plan determina lo contratado, la configuración de agencia selecciona lo utilizado y el backend aplica límites y mide consumo. Guardar versiones de permisos comerciales, cuotas, reservas y eventos de uso. Comprobar capacidad en cargas, programación de trabajos, reintentos, subagentes y llamadas de herramientas. Los webhooks de facturación actualizan la suscripción mediante eventos verificados y procesamiento idempotente.
+
+Separar cupos de almacenamiento y procesamiento. Aplicar colas y concurrencia por agencia junto con un límite global; planificar trabajos de manera que una sola agencia no monopolice los recursos. En trabajos de costo incierto, reservar presupuesto, detener o pausar al alcanzar el límite y conciliar el consumo observado. El panel avisa antes de agotar capacidad y ofrece ampliación o compra de uso adicional autorizada.
+
+Bajar de plan conserva los datos. Si el almacenamiento supera el nuevo cupo, aplicar una política comunicada de gracia, descarga y restricción de nuevas cargas, sin eliminación automática silenciosa. La compra y renovación de un dominio son cargos con su propio consentimiento y ciclo; no presumir que cancelar el SaaS cancela o renueva el dominio.
+
+Pruebas: dos agencias con planes distintos reciben límites diferentes; no se evaden desde herramientas o trabajos de fondo; un aumento habilita los nuevos cupos; una reducción conserva datos y trabajos según su política; el consumo se atribuye a la agencia correcta.
+
+12. LOS CAMINOS DE INFRAESTRUCTURA
+
+CAMINO A — VERCEL ADMINISTRADO: RECOMENDADO PARA EL PROTOTIPO Y EL MVP
+Una aplicación común y servicios administrados. El equipo del producto opera la plataforma y cada agencia solo usa su panel. Es la menor carga de operación para empezar.
+
+CAMINO B — PROYECTO DEDICADO EN VERCEL: OPCIÓN POSTERIOR
+Misma plantilla, proyecto y eventualmente base/almacenamiento independientes para una agencia que necesite versiones o aislamiento de recursos distinto. El aislamiento de datos debe seguir implementándose correctamente; un proyecto independiente no lo resuelve todo por sí solo. La plataforma puede automatizar creación y despliegue mediante API/SDK.
+
+CAMINO C — VERCEL BYOC CON AWS: OPCIÓN ENTERPRISE
+Bring Your Own Cloud pasó a disponibilidad general el 15 de octubre de 2026. Permite ejecutar Vercel Functions compatibles de Node.js y Python en AWS Lambda dentro de una cuenta AWS conectada. Vercel mantiene routing, estáticos y distribución; las peticiones y respuestas pasan por Vercel.
+
+La documentación limita el soporte: Services, contenedores y Edge no están incluidos. No se debe asumir que Sandbox, Drives, Blob, AI Gateway, Connect y el estado de Workflow se trasladan íntegramente. La compatibilidad del runtime elegido debe probarse. La habilitación requiere Enterprise; la operación de infraestructura AWS y su automatización corresponden al proveedor de esta plataforma.
+
+Una cuenta AWS por agencia como oferta autoservicio requiere validar condiciones y mecanismos con Vercel. No está establecida por este diseño como integración lista.
+
+Fuentes:
+https://vercel.com/docs/networking/bring-your-own-cloud
+https://vercel.com/changelog/bring-your-own-cloud-on-aws-is-now-generally-available
+
+CAMINO D — EJECUCIÓN COMPLETA EN AWS: IMPLEMENTACIÓN ALTERNATIVA
+Si se necesita que el runtime y los datos estén bajo AWS propio, Eve admite self-hosting. Una arquitectura propuesta es Next.js y Eve en servicios Node de ECS/Fargate, RDS PostgreSQL para negocio y almacenamiento de ejecución separado, S3 para archivos, Secrets Manager para credenciales y CloudWatch para observabilidad.
+
+Se requiere adaptar y operar el proveedor de Workflow, autenticación y sandbox. El sandbox debe ser un servicio aislado apropiado; no improvisar Docker dentro de Fargate. Sustituir los servicios de Vercel que no se quieran conservar y probar reanudación, concurrencia y recuperación. Los proveedores externos de modelos/pagos siguen siendo externos salvo sustitución explícita.
+
+Esta opción tiene más ingeniería y operación. Se conserva la misma experiencia de cliente mediante una capa de servicios y adaptadores; no es una migración automática ofrecida por BYOC.
+
+Fuentes:
+https://eve.dev/docs/guides/deployment/self-hosting
+https://workflow-sdk.dev/worlds
+
+13. ENTREGA A QUIEN VAYA A PROGRAMAR
+
+El objetivo de implementación es el camino A. El diseño del resto de caminos preserva una evolución posible; no obliga a implementarlos en el MVP.
+
+Orden recomendado de implementación:
+1) Fijar los contratos de las 42 capacidades y su matriz de herramientas. Conservar el inventario completo; elegir conexiones y autoridad de datos por agencia/entidad/país.
+2) Construir el modelo común de trabajo, relaciones, estados, fuentes y diccionario de métricas. Definir campos configurables, esquemas y revisiones sin debilitar restricciones financieras.
+3) Implementar identidad, tenants, roles, configuración versionada, biblioteca privada y recuperación. Probar aislamiento también en evidencia, consultas, cachés y conexiones.
+4) Entregar los servicios comunes: consultas/métricas de lectura, 26 calculadoras adaptadas, acciones transaccionales, aprobación, idempotencia, sincronización y auditoría. La UI y los agentes consumen los mismos contratos.
+5) Integrar Eve/Workflow, el coordinador y ocho especialistas, todos los flujos/skills y los tres perfiles de Sandbox a demanda. Probar dependencias y entregables según la matriz de 42 skills.
+6) Construir la configuración guiada, los campos/vistas de negocio, marca blanca, dominios y activación. El agente propone un borrador y el usuario conserva el control de cuentas y autorizaciones.
+7) Completar suscripciones, cupos, colas, medición y el circuito de operación con agentes: detectar, investigar, proponer, aprobar, aplicar y verificar. Implementar tanto propuestas de configuración como el recorrido técnico de cambios de código cuando corresponda.
+8) Validar la cobertura completa, recuperación, carga y costos con diez agencias y sus conexiones/mercados. Cerrar toda condición necesaria para las acciones externas comprometidas antes de anunciar la V1 como operativa.
+
+Mantener el paquete de conocimiento de la agencia separado del código de plataforma, con versión y pruebas propias. El orden de desarrollo no reduce el alcance obligatorio de entrega. Las tres pruebas transversales de la sección 10 son ejemplos adicionales, no una sustitución de las 42 pruebas de capacidades.
+
+Antes de programar, verificar versiones y documentación oficial de Eve y sus integraciones. Durante esta investigación algunos productos y guías cambiaron recientemente. Los diagramas representan responsabilidades y límites de confianza; no garantizan compatibilidad de paquetes sin ejecutar las pruebas correspondientes.
+
+Resultado esperado: una agencia puede entrar, pagar, configurar y activar la aplicación completa; tiene acceso a todos los procesos del repositorio según sus permisos, configuración y conexiones, sin usar una consola de infraestructura, con datos persistentes y aislados, costo atribuible e historial revisable. Construye su agencia, la activa con ayuda de agentes y la opera con agentes sobre una única estructura de negocio.
+
+14. CATÁLOGO OBLIGATORIO DEL MVP: 42 SKILLS
+
+Arranque y gobierno:
+1. agency-orchestrator — coordinación del trabajo completo.
+2. agency-integrations — conexiones y aplicaciones por etapa.
+3. agency-access-governance — permisos, aprobaciones y separación de funciones.
+4. agency-master-data — clientes, proveedores, medios y cuentas.
+
+Clientes y contratos:
+5. agency-onboarding — alta de cliente, marcas y brief.
+6. agency-job-lifecycle — apertura, evolución y cierre de trabajos.
+7. agency-contract-po — contratos y órdenes de compra.
+8. agency-budget-control — presupuestos y límites de crédito.
+9. agency-fee-contracts — honorarios fijos y por horas.
+10. agency-billing-requirements — condiciones previas a facturación.
+
+Trabajo y producción:
+11. agency-tasks-timesheets — tareas y registro de horas.
+12. agency-production-estimating — estimación y cotizaciones.
+13. agency-production — entregables, derechos y talento.
+
+Planificación de medios:
+14. agency-media-ranking — audiencias y ranking.
+15. agency-media-planning — plan de medios y revisión.
+16. agency-tv-radio-planning — televisión y radio.
+17. agency-ooh-planning — exterior e impresos.
+18. agency-digital-planning — planificación digital.
+19. agency-plan-changes — revisiones de planes aprobados.
+
+Compra y operación de medios:
+20. agency-rate-cards-contracts — tarifas y contratos con medios.
+21. agency-media-buying — órdenes de publicidad.
+22. agency-campaign-activation — activación con aprobación.
+23. agency-campaign-optimization — optimización de campañas.
+24. agency-transmission-control — verificación de emisiones.
+25. agency-ooh-inventory — inventario de soportes exteriores.
+
+Proveedores y pagos:
+26. agency-delivery-reconciliation — conciliación contra órdenes y evidencia.
+27. agency-payables — facturas de proveedores.
+28. agency-payment-run — propuestas y órdenes de pago.
+29. agency-cash-settlement — bancos y conciliación.
+30. agency-expenses — gastos y viáticos.
+
+Facturación y cobranza:
+31. agency-client-billing — facturas y notas a clientes.
+32. agency-collections — cobranza y antigüedad de saldos.
+33. agency-rebates — comisiones adicionales y rebates.
+34. agency-tax-compliance — reglas e información fiscal.
+
+Contabilidad y cierre:
+35. agency-general-ledger — cuentas y asientos.
+36. agency-accruals-revaluation — provisiones y cambios de valor.
+37. agency-fixed-assets — activos fijos y depreciación.
+38. agency-period-close — cierre de períodos.
+
+Rentabilidad y planeación financiera:
+39. agency-profitability — rentabilidad por trabajo y cliente.
+40. agency-revenue-budget — presupuesto de ingresos.
+41. agency-cash-forecast — proyección de caja.
+42. agency-management-reporting — reportes gerenciales.
+
+Fuente del inventario: https://github.com/afelipeg/agentic-advertising-agency-erp/blob/main/README.es.md
+Las descripciones resumen el catálogo; su comportamiento, reglas y dependencias deben verificarse en los archivos de cada skill y en los contratos del repositorio al implementar.
+
+15. CONEXIONES Y COBERTURA POR PAÍS — ACTUALIZACIÓN 17 OCTUBRE 2026
+
+Mercado confirmado por Andrés: LATAM, Estados Unidos y Canadá. Los países concretos
+de LATAM se completan al incorporar las primeras diez agencias. Todos los módulos
+y las 42 skills permanecen incluidos; país, cuenta y licencia determinan qué
+acciones externas se pueden habilitar.
+
+La especificación detallada vigente de conexiones está en:
+• agency-erp-catalogo-conexiones-v1.md y su versión JSON.
+• agency-erp-matriz-42-skills.md y su versión JSON.
+
+Estos documentos precisan las menciones generales a integraciones de esta guía.
+La matriz preserva inputs, outputs y calculadoras de contracts/workflows.json en
+la revisión d73539e62ec27060347763f0ec40115c36be6f16 del repositorio.
+
+Selección: Salesforce/Attio; Drive, Notion, OneDrive/SharePoint, Dropbox y Box
+opcional; Excel/Sheets con únicamente Harvest y ClickUp adicionales en producción.
+Cobros con Stripe/PayPal; pagos con Wise según acceso y BILL como alternativa
+elegible. Libro contable seleccionado por entidad: QuickBooks Online, Xero,
+Alegra/Siigo según país o NetSuite para quien ya lo utiliza. Facturación fiscal
+se adapta por jurisdicción; no afirmar cobertura automática para todo LATAM.
+
+Medios: Meta/IG, Google Ads, TikTok, Amazon, DV360, Netflix por un DSP habilitado
+y OpenAI Ads por su Advertiser API. Mediaocean/FreeWheel son rutas comerciales
+para flujos tradicionales; Vistar para DOOH y Broadsign para evidencia del operador.
+Sin API disponible, se conserva el flujo con archivos, órdenes y comprobantes;
+la interfaz diferencia gestión externa pendiente de una ejecución confirmada.
+
+Planificación y compra comparten audiencias, tarifas, inventario, especificaciones,
+revisiones del plan y resultados. Audiencias licenciadas por mercado: GWI, Nielsen,
+Kantar o Numeris según contrato; GA4 y plataformas aportan datos autorizados propios.
+No inferir que conectar un MCP concede datos, permisos de escritura o inventario.
+
+Herramientas: Firecrawl para buscar/extraer; lectores de documentos y OCR a demanda;
+importación validada; 26 calculadoras deterministas del repo; consultas privadas;
+control de creativos; reportes y pacing; aprobación/ejecución/verificación; conciliación;
+generación de documentos y auditoría. Credenciales siempre fuera del catálogo y prompt.
+
+La ruta preferida usa adaptadores TypeScript y APIs o MCP remotos, Connect cuando
+encaje su modelo de instalación y Composio como alternativa acotada. MCP stdio
+no significa proceso permanente en una Function. Workflow gestiona pasos y esperas;
+Sandbox queda para procesamiento aislado. Subastas publicitarias se ejecutan en el DSP.
+
+Estado: documentación y diseño revisados; ninguna cuenta autenticada ni escritura
+externa probada durante esta revisión. El detalle de conectores se encuentra en los
+documentos correspondientes. El paquete de arquitectura de esta revisión incorpora
+los tres pilares de AgeOS, el contexto común del trabajo y la separación entre
+consultas, acciones y operación de plataforma. No acredita una implementación.
+
+16. EVE, ESPECIALISTAS Y PLANTILLAS DE SANDBOX — 17 OCTUBRE 2026
+
+La definición detallada está en agency-erp-eve-tools-sandboxes-v1.md y su JSON.
+Prioridad: integración preparada Eve/Connect, Composio si cubre la acción,
+adaptador propio API/OpenAPI/MCP, y circuito explícito por archivos cuando
+la contraparte no ofrece una interfaz accesible. OAuth autoriza; MCP/API
+ofrece la interfaz. Se selecciona la ruta por operación, sin failover ciego
+de escrituras que pueda duplicar pagos o campañas.
+
+La V1 tendrá un coordinador de arranque/gobierno y ocho especialistas alineados
+con los demás bloques; entre ellos se distribuyen exactamente las 42 skills.
+Herramientas, conexiones y contexto se restringen por función y agencia.
+Los especialistas serán subagentes declarados; la copia genérica del coordinador
+no estará disponible como herramienta de delegación del modelo.
+
+Tres perfiles preparados de Vercel Sandbox: Documentos, Datos y reportes,
+y Piezas publicitarias. Instancias aisladas por sesión, abiertas a demanda,
+con dependencias fijadas, datos privados fuera de snapshots de plantilla y
+credenciales externas fuera del sandbox. Llamadas API/MCP y búsqueda mediante
+Firecrawl se ejecutan como herramientas sin requerir otro sandbox.
+
+Se revisó documentación instalada de Eve 0.80.1 y AI SDK 7.0.143 en un espacio
+temporal. No se construyó ni desplegó la aplicación; las imágenes y sandboxes
+del producto deben implementarse y probarse con esta especificación.
+
+
+ASISTENTE GLOBAL DEL ERP — AMPLIACIÓN DEL CHASIS, 17 OCT 2026
+
+AgeOS Assistant ES el orquestador existente (coordinador, skill agency-orchestrator). No es un chatbot genérico adicional. El orquestador utiliza el contexto autorizado y delega en los ocho especialistas. El catálogo mantiene nueve módulos y 42 skills; no se añade una skill de negocio número 43.
+
+Dos superficies del mismo agente: una página de chat /a/:agencySlug/assistant, implementada en page.tsx del App Router, y un panel derecho contextual disponible desde todas las pantallas de agencia. El sidebar abre la página; el botón de cabecera y Ask assistant abren el panel. El layout de agencia conserva hilo y mensajes al navegar. En la página completa no se duplica el panel. En móvil se usa Sheet accesible. Cambiar de agencia resuelve otro ámbito y nunca conserva el contexto anterior dentro del nuevo hilo.
+
+Puede consultar clientes, contratos, trabajos, producción, planes, campañas, proveedores, facturación, contabilidad y rentabilidad. Consulta el catálogo semántico autorizado (entidades, relaciones, campos y métricas), no tablas indiscriminadas ni SQL arbitrario. Cada tool vuelve a comprobar actor, agencia, acceso a registros/campos y límites. Los datos de archivos, páginas y proveedores son evidencia, nunca instrucciones para cambiar permisos.
+
+Puede preparar y ejecutar acciones mediante los mismos comandos que la interfaz: crear un trabajo, preparar un plan, cambiar un presupuesto o proponer una campaña. Los cambios de riesgo muestran diferencias e impacto, requieren aprobación por política y una revisión vigente; el modelo no puede autoaprobar. Las cifras, resultados y enlaces proceden de servicios del ERP y muestran corte, moneda y fuente. Tras un comando, panel, expediente y reportes vuelven a consultar el mismo estado persistente.
+
+Alcance definitivo del chasis: demo determinista y hardcodeada, sin modelo ni credenciales externas. El orquestador usa escenarios preprogramados, alias EN/ES y plantillas de respuesta que consultan los mismos datos y comandos que la UI. La inferencia, Ads, pagos, contabilidad externa, OAuth y DNS se simulan de forma explícita. El runtime Eve/AI SDK queda como contrato para integración futura; no bloquea esta entrega. No afirmar comprensión general ni uso real de tokens. Los cálculos, estados, aprobaciones y persistencia sí funcionan y responden a las acciones. Instrucción 1 construye el chasis; instrucción 2 programa y prueba todos los recorridos E2E, nueve módulos y 42 skills.
+
+Postgres guarda conversaciones, mensajes, referencias de contexto y ejecuciones con permisos por agencia/usuario; adjuntos privados en almacenamiento autorizado. Cancelación, cierre de panel y navegación son distintos de cancelar una operación. Una acción ya confirmada conserva su recibo; un resultado externo incierto se concilia antes de repetir. Reanudación y reintentos no duplican mensajes, comandos ni pagos simulados.
+
+ReUI verificado por MCP: ai-chat-6 como conversación/composer/plan; app-shell-18 solo como patrón de panel derecho y Sheet móvil, conservando Verve; agent-activity-1 para actividad y auditoría. Sustituir datos, archivos prefabricados y handlers demo del bloque por servicios reales. Consultar las APIs instaladas antes de escribir props.
+https://reui.io/preview/base/ai-chat-6?ref=mcp
+https://reui.io/preview/base/app-shell-18?ref=mcp
+
+Contrato detallado: claude-code-chasis-v1/07-asistente-global-erp.md y asistente-global-v1.json. Prompt actualizado: claude-code-chasis-v1/PROMPT-PARA-CLAUDE-CODE.txt. El repositorio airline-banking-commerce-agent se usó como referencia de interacción, no como sustituto de stack, autenticación o persistencia.
+Estado: documentación e instrucciones; aplicación y asistente aún pendientes de implementación y pruebas.
+
+La instrucción 2 está en claude-code-chasis-v1/PROMPT-2-DEMO-E2E.txt y 08-instruccion-2-demo-e2e.md. demo-scenarios-v1.json exige un caso positivo y uno negativo por cada una de las 42 skills, más recorridos de producto, chat, marca, archivos y operación.

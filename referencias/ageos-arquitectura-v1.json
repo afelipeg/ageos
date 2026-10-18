@@ -1,0 +1,523 @@
+{
+  "schema_version": "1.0.0-design",
+  "date": "2026-10-17",
+  "product_name": "AgeOS",
+  "previous_project_label": "AgencyOS — ERP Agéntico",
+  "status": "target_architecture_not_implemented",
+  "implemented": false,
+  "value_proposition": "Construya su agencia con el poder de la infraestructura agéntica ERP de AgeOS.",
+  "pillars": [
+    {
+      "id": "build",
+      "title": "Construya su agencia",
+      "promise": "Configure su aplicación, marca, equipo, conexiones y procesos sobre el ERP completo.",
+      "acceptance": "Las nueve áreas y las 42 skills están disponibles; una configuración elige capacidades, reglas y límites sin duplicar el producto."
+    },
+    {
+      "id": "activate",
+      "title": "Actívela con agentes",
+      "promise": "Describa cómo trabaja y deje que los agentes preparen su configuración y activación.",
+      "steps": [
+        "recopilar necesidades de negocio",
+        "proponer configuración versionada y diferencias",
+        "autorizar cuentas y validar cobertura, dependencias, permisos y cupos",
+        "revisar y aprobar la activación",
+        "aprovisionar agencia, reglas, biblioteca y marca dentro de la aplicación compartida",
+        "comprobar disponibilidad y entregar dirección provisional o dominio verificado"
+      ],
+      "acceptance": "La activación es reanudable y no duplica cuentas ni cargos; el dominio puede seguir pendiente con una dirección provisional operativa."
+    },
+    {
+      "id": "operate",
+      "title": "Opérela con agentes",
+      "promise": "Los agentes ejecutan los procesos habilitados, investigan desvíos y presentan correcciones concretas.",
+      "acceptance": "Cada propuesta incluye evidencia, impacto, responsable y estado; las acciones de impacto requieren aprobación. La investigación puede ser automática dentro de permisos y presupuesto."
+    }
+  ],
+  "v1_scope": {
+    "pilot_agencies": 10,
+    "regions": [
+      "LATAM",
+      "US",
+      "CAN"
+    ],
+    "latam_countries": "Definir con las entidades legales del piloto.",
+    "modules": [
+      {
+        "name": "01 Arranque",
+        "skill_count": 4,
+        "skills": [
+          "agency-orchestrator",
+          "agency-integrations",
+          "agency-access-governance",
+          "agency-master-data"
+        ],
+        "available_in_v1": true,
+        "activation": "Funciones configurables con controles de acceso, aislamiento y auditoría siempre activos; ocultar una vista no los desactiva."
+      },
+      {
+        "name": "02 Clientes y contratos",
+        "skill_count": 6,
+        "skills": [
+          "agency-onboarding",
+          "agency-job-lifecycle",
+          "agency-contract-po",
+          "agency-budget-control",
+          "agency-fee-contracts",
+          "agency-billing-requirements"
+        ],
+        "available_in_v1": true,
+        "activation": "Por configuración y permisos de cada agencia; se validan dependencias antes de activar o desactivar."
+      },
+      {
+        "name": "03 Trabajo y producción",
+        "skill_count": 3,
+        "skills": [
+          "agency-tasks-timesheets",
+          "agency-production-estimating",
+          "agency-production"
+        ],
+        "available_in_v1": true,
+        "activation": "Por configuración y permisos de cada agencia; se validan dependencias antes de activar o desactivar."
+      },
+      {
+        "name": "04 Planificación de medios",
+        "skill_count": 6,
+        "skills": [
+          "agency-media-ranking",
+          "agency-media-planning",
+          "agency-tv-radio-planning",
+          "agency-ooh-planning",
+          "agency-digital-planning",
+          "agency-plan-changes"
+        ],
+        "available_in_v1": true,
+        "activation": "Por configuración y permisos de cada agencia; se validan dependencias antes de activar o desactivar."
+      },
+      {
+        "name": "05 Compra de medios",
+        "skill_count": 6,
+        "skills": [
+          "agency-rate-cards-contracts",
+          "agency-media-buying",
+          "agency-campaign-activation",
+          "agency-campaign-optimization",
+          "agency-transmission-control",
+          "agency-ooh-inventory"
+        ],
+        "available_in_v1": true,
+        "activation": "Por configuración y permisos de cada agencia; se validan dependencias antes de activar o desactivar."
+      },
+      {
+        "name": "06 Proveedores y pagos",
+        "skill_count": 5,
+        "skills": [
+          "agency-delivery-reconciliation",
+          "agency-payables",
+          "agency-payment-run",
+          "agency-cash-settlement",
+          "agency-expenses"
+        ],
+        "available_in_v1": true,
+        "activation": "Por configuración y permisos de cada agencia; se validan dependencias antes de activar o desactivar."
+      },
+      {
+        "name": "07 Facturación y cobranza",
+        "skill_count": 4,
+        "skills": [
+          "agency-client-billing",
+          "agency-collections",
+          "agency-rebates",
+          "agency-tax-compliance"
+        ],
+        "available_in_v1": true,
+        "activation": "Por configuración y permisos de cada agencia; se validan dependencias antes de activar o desactivar."
+      },
+      {
+        "name": "08 Contabilidad y cierre",
+        "skill_count": 4,
+        "skills": [
+          "agency-general-ledger",
+          "agency-accruals-revaluation",
+          "agency-fixed-assets",
+          "agency-period-close"
+        ],
+        "available_in_v1": true,
+        "activation": "Por configuración y permisos de cada agencia; se validan dependencias antes de activar o desactivar."
+      },
+      {
+        "name": "09 Rentabilidad",
+        "skill_count": 4,
+        "skills": [
+          "agency-profitability",
+          "agency-revenue-budget",
+          "agency-cash-forecast",
+          "agency-management-reporting"
+        ],
+        "available_in_v1": true,
+        "activation": "Por configuración y permisos de cada agencia; se validan dependencias antes de activar o desactivar."
+      }
+    ],
+    "module_count": 9,
+    "skill_count": 42,
+    "calculator_count": 26,
+    "erp_agents": 9,
+    "sandbox_profiles": [
+      "documentos",
+      "datos-reportes",
+      "piezas-publicitarias"
+    ],
+    "no_module_reduction": true,
+    "configuration_not_code_generation_per_customer": true,
+    "non_optional_controls": [
+      "aislamiento por agencia",
+      "autorización de acceso",
+      "auditoría de negocio",
+      "límites de consumo",
+      "validación de aprobaciones"
+    ]
+  },
+  "experience": {
+    "setup_inputs": [
+      "tipo de agencia",
+      "servicios",
+      "forma de cobro",
+      "responsables y aprobaciones",
+      "plataformas y cuentas",
+      "marca y dominio"
+    ],
+    "primary_workspace": [
+      "trabajos",
+      "pendientes y excepciones",
+      "aprobaciones",
+      "resultados y rentabilidad"
+    ],
+    "advanced_configuration": [
+      "campos y vistas",
+      "flujos y reglas",
+      "skills y subagentes habilitados",
+      "conexiones y permisos"
+    ],
+    "single_job_record": "Contrato, presupuesto, producción, plan y compra de medios, entregas, facturas, cobros, pagos y margen comparten referencias.",
+    "global_assistant": {
+      "agent_id": "coordinador",
+      "skill_id": "agency-orchestrator",
+      "identity": "El asistente es el orquestador ERP existente; delega en los ocho especialistas. No crea un décimo agente ERP ni una skill 43.",
+      "surfaces": {
+        "full_page": "/a/:agencySlug/assistant",
+        "page_file": "app/a/[agencySlug]/assistant/page.tsx dentro del App Router de la aplicación, con src/ si la plantilla lo usa",
+        "sidebar": "AgeOS Assistant abre chat completo",
+        "global_panel": "Botón en cabecera y Ask assistant contextual abren el panel derecho desde cualquier pantalla de agencia",
+        "mobile": "Sheet accesible; el chat completo sigue disponible"
+      },
+      "shared_state": "Mismo runtime, hilo y mensajes persistidos por agencia/usuario. Provider en layout de agencia; navegar conserva conversación. Chat completo y panel no se duplican simultáneamente.",
+      "context": "Ruta, filtros, selección y archivos son pistas revalidadas en servidor. Cambio de agencia separa hilo, contexto y permisos.",
+      "queries": "Catálogo semántico de entidades, relaciones y métricas de los nueve módulos, filtrado por autorización; no acceso libre a la base de datos.",
+      "actions": "Proponer y ejecutar comandos compartidos, con validaciones, políticas, aprobación exacta cuando corresponde, idempotencia y recibo.",
+      "reui": {
+        "conversation": "ai-chat-6",
+        "docking_reference_only": "app-shell-18",
+        "run_audit": "agent-activity-1",
+        "icon": "MessagesSquare"
+      },
+      "specification": "claude-code-chasis-v1/07-asistente-global-erp.md"
+    }
+  },
+  "operational_context": {
+    "store": "Neon PostgreSQL",
+    "scope": "Datos compartidos entre personas y agentes autorizados de la misma agencia; aislamiento entre agencias.",
+    "core_entities": [
+      "agency",
+      "legal_entity",
+      "client",
+      "brand",
+      "contract",
+      "job",
+      "budget_revision",
+      "media_plan_revision",
+      "task",
+      "timesheet",
+      "campaign",
+      "order",
+      "delivery",
+      "supplier",
+      "payable",
+      "receivable",
+      "payment",
+      "collection",
+      "accounting_reference",
+      "approval",
+      "evidence",
+      "business_event",
+      "assistant_conversation",
+      "assistant_message",
+      "assistant_run",
+      "assistant_tool_call",
+      "assistant_delegation",
+      "assistant_context_snapshot",
+      "assistant_source_reference",
+      "assistant_run_event"
+    ],
+    "typed_invariants": [
+      "identidad de agencia y entidad legal",
+      "moneda e importes con precisión decimal",
+      "versiones y estados de aprobación",
+      "periodos y estados de cierre",
+      "cuenta y proveedor autorizados",
+      "documentos y evidencias"
+    ],
+    "extensions": [
+      "campos tipados con esquema",
+      "nombres y vistas",
+      "responsables",
+      "reglas de aprobación versionadas",
+      "selección de módulos y flujos"
+    ],
+    "source_metadata": [
+      "provider",
+      "external_id",
+      "source_of_truth_by_field",
+      "last_synced_at",
+      "effective_period",
+      "currency",
+      "revision",
+      "reconciliation_status"
+    ],
+    "source_authority": "AgeOS gobierna configuración, planes, aprobaciones y decisiones. El sistema contable conectado conserva autoridad sobre asientos contabilizados; los estados externos requieren comprobante de su proveedor.",
+    "metrics": [
+      "margen por trabajo",
+      "ingreso neto de agencia separado de inversión publicitaria administrada",
+      "costo incurrido separado de gasto comprometido",
+      "horas aprobadas y costo",
+      "pendiente de facturar",
+      "cartera vencida",
+      "caja prevista con supuestos"
+    ],
+    "query_policy": "Lectura mediante catálogo semántico de vistas/métricas y consultas parametrizadas; permisos por agencia, actor, entidad y campo en cada llamada. Sin SQL arbitrario ni credenciales de base de datos para el modelo. La base calcula; los contratos semánticos definen significado, granularidad y evidencia.",
+    "external_freshness": "Las fuentes externas sincronizan con sus demoras y límites. Toda respuesta relevante muestra corte y procedencia; no se promete consistencia instantánea entre proveedores.",
+    "volume_policy": "Conservar el detalle necesario, por ejemplo campaña/día; no importar eventos publicitarios individuales sin un caso y presupuesto explícitos.",
+    "cost_recognition": "Orden/compromiso, entrega, factura y pago se vinculan al mismo costo según la política contable. Al conciliar se consume el compromiso pendiente; no se suman todas las etapas como gastos nuevos. El pago afecta caja y liquidación, no crea un costo duplicado."
+  },
+  "shared_business_tools": [
+    {
+      "id": "consultar_operacion",
+      "purpose": "Consultar registros y métricas definidas del trabajo, con fuentes y fecha de actualización.",
+      "mode": "read",
+      "implementation": "Consultas parametrizadas y vistas autorizadas; SQL generado solo mediante gateway restringido.",
+      "controls": [
+        "tenant y actor desde contexto autenticado",
+        "roles de lectura sin bypass RLS",
+        "tablas, columnas y funciones autorizadas",
+        "límites de filas, tiempo, costo y concurrencia",
+        "sin credenciales generales para el modelo"
+      ]
+    },
+    {
+      "id": "buscar_evidencia",
+      "purpose": "Recuperar contratos, documentos, versiones y decisiones vinculados al trabajo.",
+      "mode": "read",
+      "controls": [
+        "permisos por agencia y expediente",
+        "referencias de documento/página/celda",
+        "respetar retención y revocación"
+      ]
+    },
+    {
+      "id": "preparar_accion",
+      "purpose": "Preparar un cambio de configuración o acción de negocio con motivo, impacto y versión esperada.",
+      "mode": "draft",
+      "controls": [
+        "validación de reglas de negocio",
+        "diferencia entre estado actual y propuesto",
+        "payload exacto y cuenta destino"
+      ]
+    },
+    {
+      "id": "solicitar_aprobacion",
+      "purpose": "Presentar la propuesta al responsable habilitado y registrar la decisión.",
+      "mode": "approval_request",
+      "controls": [
+        "sin autoaprobación del agente",
+        "aprobación ligada a payload, revisión y cuenta",
+        "revocación y vencimiento"
+      ]
+    },
+    {
+      "id": "ejecutar_accion_aprobada",
+      "purpose": "Invocar la herramienta específica habilitada y conciliar el resultado externo.",
+      "mode": "controlled_write",
+      "controls": [
+        "autorización comprobada en backend",
+        "idempotencia por operación",
+        "conciliar resultados inciertos antes de repetir",
+        "comprobante y evento persistente"
+      ]
+    }
+  ],
+  "activation_contract": {
+    "config_version_required": true,
+    "preview_before_activation": true,
+    "checks": [
+      "cobertura de capacidades",
+      "dependencias",
+      "permisos",
+      "conexiones",
+      "cupos",
+      "marca",
+      "dominio"
+    ],
+    "business_tenant_activation": "Instancia lógica en aplicación común; no requiere un deployment de código por agencia.",
+    "states": [
+      "draft",
+      "validating",
+      "awaiting_authorization",
+      "approved",
+      "provisioning",
+      "ready",
+      "blocked"
+    ],
+    "domain_state_independent": true,
+    "rollback": "Restaurar configuración compatible; acciones externas requieren conciliación o compensación explícita, no se revierten por magia."
+  },
+  "operations": {
+    "plane": "Capacidad administrativa de la plataforma separada de los nueve módulos del ERP; no añade una skill de negocio al catálogo de 42.",
+    "business_loop": [
+      "evento o desviación de negocio",
+      "investigación de lectura",
+      "propuesta con evidencia y diferencia",
+      "aprobación según política",
+      "herramienta de negocio específica",
+      "verificación y registro"
+    ],
+    "technical_loop": [
+      "traza o error",
+      "diagnóstico acotado",
+      "propuesta de configuración o PR si afecta código",
+      "pruebas y preview aislados",
+      "aprobación",
+      "despliegue por identidad administrativa",
+      "verificación y rollback de configuración/código cuando proceda"
+    ],
+    "telemetry": [
+      "tenant_id",
+      "job_id cuando corresponda",
+      "actor y permisos",
+      "run_id y correlation_id",
+      "config_version",
+      "acción y resultado",
+      "latencia",
+      "tokens y costo atribuido",
+      "estado y frescura de conexión",
+      "referencia de evidencia"
+    ],
+    "autonomous_actions": [
+      "lecturas autorizadas",
+      "clasificar anomalías",
+      "preparar borradores",
+      "reintentos seguros y acotados por política previa",
+      "pausar una tarea según política acordada"
+    ],
+    "approval_required": [
+      "cambiar permisos o alcance de una conexión",
+      "variar presupuesto o gasto",
+      "pagar, comprar, emitir o cancelar según circuito",
+      "activar una revisión de configuración con impacto",
+      "fusionar o desplegar cambios de código"
+    ],
+    "controls": [
+      "sin secretos ni documentos completos en trazas",
+      "roles de mantenimiento separados de agentes ERP",
+      "sin CLI general de Vercel en subagentes de negocio",
+      "límites de investigación y retención",
+      "aprobación nunca concedida por el propio agente"
+    ],
+    "persistence": "La bitácora de negocio, aprobaciones y evidencia se conserva según política en almacenamiento del producto; la retención de trazas del proveedor no reemplaza el registro del ERP.",
+    "vercel_agent": "Complemento opcional para diagnóstico técnico según disponibilidad y plan. No entiende automáticamente contratos, márgenes o decisiones del ERP."
+  },
+  "infrastructure": {
+    "application": "Vercel / Next.js",
+    "agents": "Eve y Workflow",
+    "model_access": "AI Gateway",
+    "identity": "Clerk Organizations + autorización de AgeOS",
+    "operational_database": "Neon PostgreSQL",
+    "private_files": "Vercel Blob privado",
+    "isolated_compute": "Vercel Sandbox bajo demanda; tres perfiles limpios y versionados",
+    "persistent_workspace": "Drive solo cuando un job lo necesita, un escritor activo y región compatible",
+    "connections": [
+      "eve_catalog_or_official_connection_with_vercel_connect",
+      "composio_scoped_capability",
+      "custom_typescript_api_openapi_or_remote_mcp",
+      "validated_file_import_or_explicit_external_step"
+    ],
+    "white_label": "Nombre, logo, colores y dominio/subdominio por agencia; verificación, certificado y política comercial de dominios.",
+    "plans": "Capacidad por usuarios, almacenamiento, consumo de IA, conexiones y concurrencia; catálogo ERP completo.",
+    "aws": "Alternativa empresarial; BYOC mueve funciones compatibles. Un despliegue completo en AWS exige implementación adicional."
+  },
+  "product_advantage": {
+    "customer_message": "Construya su agencia con el poder de la infraestructura agéntica ERP de AgeOS.",
+    "implementation_basis": [
+      "configuración rápida de una operación completa",
+      "datos y reglas conectados desde el brief al cobro",
+      "ejecución confiable y correcciones con evidencia"
+    ],
+    "validation": "Medir tiempo hasta primer trabajo operativo, tareas duplicadas, resolución de excepciones y margen trazable con el piloto; son objetivos, no resultados medidos."
+  },
+  "acceptance_tests": [
+    "Las 42 skills de la matriz mantienen responsable y entregables.",
+    "Dos agencias que usan la misma plataforma no comparten registros, cuentas, SQL, archivos ni trazas.",
+    "Un job mantiene las mismas referencias desde contrato hasta margen.",
+    "UI y agente aplican el mismo validador de negocio.",
+    "Una métrica muestra definición, moneda, corte y evidencia; no duplica gasto al conciliar.",
+    "Una configuración rechaza dependencias inválidas antes de activarse.",
+    "Una aprobación de otra revisión no ejecuta la actual.",
+    "Un timeout externo se concilia antes de repetir una escritura.",
+    "Una investigación técnica no accede libremente al libro ni a credenciales de clientes.",
+    "La V1 valida todos los módulos y no se limita a tres recorridos."
+  ],
+  "references": [
+    {
+      "url": "https://attio.com/architecture",
+      "use": "Inspiración: contexto, orquestación y ecosistema sobre datos compartidos."
+    },
+    {
+      "url": "https://attio.com/blog/introducing-the-architecture-for-agentic-revenue",
+      "use": "SQL y conexiones de lectura como referencia de diseño."
+    },
+    {
+      "url": "https://vercel.com/blog/vercel-ship-2026-recap",
+      "published": "2026-10-15",
+      "use": "Tres pilares adaptados a la promesa de AgeOS; no se atribuyen capacidades ya implementadas."
+    },
+    {
+      "url": "https://vercel.com/docs/agent",
+      "use": "Diagnóstico y acciones con plan y aprobación."
+    },
+    {
+      "url": "https://vercel.com/changelog/eve-agent-observability",
+      "use": "Trazas de ejecución de agentes complementarias al registro de negocio."
+    },
+    {
+      "url": "https://neon.com/docs/guides/vercel-overview",
+      "use": "Postgres administrado integrado con Vercel."
+    }
+  ],
+  "related_files": {
+    "diagram": "agency-erp-arquitectura.html",
+    "guide": "agency-erp-guia-de-implementacion.txt",
+    "coverage": "agency-erp-matriz-42-skills.json",
+    "runtime": "agency-erp-eve-tools-sandboxes-v1.json",
+    "connections": "agency-erp-catalogo-conexiones-v1.json"
+  },
+  "demo_contract": {
+    "kernel": "Reglas, consultas, comandos, estados y persistencia deterministas; datos sintéticos precargados.",
+    "assistant": "Orquestador con driver scripted: casos preprogramados, alias EN/ES y respuestas con valores derivados del estado persistido. No requiere LLM ni credenciales.",
+    "external_business_integrations": "Todos los proveedores y la inferencia están simulados en este chasis; no se llama a Ads, pagos, OAuth, DNS ni modelos.",
+    "delivery_order": [
+      "Instrucción 1: chasis con las pantallas, página chat y panel global",
+      "Instrucción 2: todos los recorridos E2E deterministas y hardcodeados, cubriendo nueve módulos y 42 skills"
+    ],
+    "live_agent": "Arquitectura futura, fuera de la aceptación de esta demo",
+    "implemented": false
+  },
+  "assistant_persistence": "Conversaciones, mensajes, referencias de contexto, llamadas y recibos persisten en Postgres con aislamiento de agencia y política de acceso al hilo. Las aprobaciones conservan su autoridad en el núcleo ERP. Cancelar streaming no revierte una operación confirmada; resultado incierto exige conciliación antes de repetir."
+}

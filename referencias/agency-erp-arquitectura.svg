@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1169" height="2502" viewBox="0 0 1169 2502"><title>AgeOS — construya, active y opere su agencia</title><desc>Arquitectura propuesta V1, con nueve módulos y cuarenta y dos skills. Exportación estática del mismo grafo incluido en el HTML.</desc><style>text {font-family: Arial, Helvetica, sans-serif;} .t-primary{fill:#172033;} .t-muted{fill:#546277;} .c-mask{fill:white;stroke:none;} .c-grid{stroke:none;fill:none;} .c-region{fill:#f8fafc;stroke:#94a3b8;stroke-dasharray:8 4;} .a-default{fill:none;stroke:#75849a;} .a-emphasis{fill:none;stroke:#2563eb;} .a-security{fill:none;stroke:#be3855;stroke-dasharray:5 5;} .a-dashed{fill:none;stroke:#8b5cf6;stroke-dasharray:4 4;} .m-default{fill:#75849a;} .m-emphasis{fill:#2563eb;} .m-security{fill:#be3855;} .m-dashed{fill:#8b5cf6;} .t-edge-default{fill:#546277;} .t-edge-emphasis{fill:#1d4ed8;} .t-edge-security{fill:#be123c;} .semantic-sigil{fill:none;stroke-width:1.2;} .sigil-fill{fill:currentColor;stroke:none;}.c-frontend{fill:#e8f4ff;stroke:#3b82f6;} .t-frontend{fill:#1d4ed8;} .s-frontend{stroke:#3b82f6;color:#3b82f6;}.c-backend{fill:#e8f8f0;stroke:#10b981;} .t-backend{fill:#047857;} .s-backend{stroke:#10b981;color:#10b981;}.c-database{fill:#f1edff;stroke:#8b5cf6;} .t-database{fill:#6d28d9;} .s-database{stroke:#8b5cf6;color:#8b5cf6;}.c-cloud{fill:#fff8e7;stroke:#e8aa24;} .t-cloud{fill:#a16207;} .s-cloud{stroke:#e8aa24;color:#e8aa24;}.c-security{fill:#fff0f1;stroke:#e56076;} .t-security{fill:#be123c;} .s-security{stroke:#e56076;color:#e56076;}.c-messagebus{fill:#fff1e7;stroke:#e98b3a;} .t-messagebus{fill:#c2410c;} .s-messagebus{stroke:#e98b3a;color:#e98b3a;}.c-external{fill:#f2f4f7;stroke:#8491a3;} .t-external{fill:#475569;} .s-external{stroke:#8491a3;color:#8491a3;}.t-edge-dashed{fill:#7c3aed;} text{font-family:Arial,Helvetica,sans-serif;}</style><rect width="1169" height="2502" fill="#ffffff"/>
+<rect x="0" y="0" width="1169" height="198" fill="#f6f8fc"/>
+<text x="40" y="36" font-size="13" fill="#526179" letter-spacing="2">AGEOS · ARQUITECTURA PROPUESTA · 17 OCT 2026</text>
+<text x="40" y="78" font-size="32" font-weight="700" fill="#142038">Construya su agencia</text>
+<text x="40" y="108" font-size="19" fill="#344762">con el poder de la infraestructura agéntica ERP de AgeOS.</text>
+<text x="40" y="149" font-size="15" font-weight="700" fill="#2563eb">01 Construya su agencia</text>
+<text x="420" y="149" font-size="15" font-weight="700" fill="#047857">02 Actívela con agentes</text>
+<text x="800" y="149" font-size="15" font-weight="700" fill="#6d28d9">03 Opérela con agentes</text>
+<text x="40" y="177" font-size="13" fill="#526179">10 agencias · Una aplicación compartida · Configuración, marca y datos propios</text><g transform="translate(0 220)">
+        <title id="archify-diagram-title">AgeOS · construya y opere su agencia</title>
+        <desc id="archify-diagram-description">Arquitectura propuesta · 10 agencias · 9 módulos y 42 skills en V1</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        
+
+        <!-- Boundaries (behind everything) -->
+
+
+        <!-- Connection paths (before components for correct z-order) -->
+        <g data-graph-role="automatic-crossover" style="--step:0">
+          <path data-graph-role="automatic-crossover-underlay" d="M 240 302 L 440 302" fill="none" stroke="var(--mask)" stroke-width="5.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="agencies" data-edge-to="panel" data-edge-label="Configura" data-edge-key="0" data-edge-id="customer-panel" data-composition-points="240,302;440,302" data-composition-crossover="halo" data-composition-independent="true" d="M 240 302 L 440 302" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:1">
+          <path data-graph-role="automatic-crossover-underlay" d="M 560 344 L 560 520" fill="none" stroke="var(--mask)" stroke-width="5.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="panel" data-edge-to="api" data-edge-label="Sesión + contexto" data-edge-key="1" data-edge-id="panel-api" data-composition-points="560,344;560,520" data-composition-crossover="halo" data-composition-independent="true" d="M 560 344 L 560 520" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:2">
+          <path data-graph-role="automatic-crossover-underlay" d="M 290 562 L 440 562" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="auth" data-edge-to="api" data-edge-label="Valida sesión" data-edge-key="2" data-edge-id="auth-api" data-composition-points="290,562;440,562" data-composition-crossover="halo" data-composition-independent="true" d="M 290 562 L 440 562" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:3">
+          <path data-graph-role="automatic-crossover-underlay" d="M 690 570.05 L 757 570.05 Q 765 570.05 765 562.05 L 765 561.95 Q 765 553.95 773 553.95 L 840 553.95" fill="none" stroke="var(--mask)" stroke-width="5.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="api" data-edge-to="activation" data-edge-label="Revisa y activa" data-edge-key="3" data-edge-id="api-activation" data-composition-points="690,570.05;765,570.05;765,553.95;840,553.95" data-composition-crossover="halo" data-composition-independent="true" d="M 690 570.05 L 757 570.05 Q 765 570.05 765 562.05 L 765 561.95 Q 765 553.95 773 553.95 L 840 553.95" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:4">
+          <path data-graph-role="automatic-crossover-underlay" d="M 840 42 L 824 42 Q 816 42 816 50 L 816 509 Q 816 517 824 517 L 1121 517 Q 1129 517 1129 525 L 1129 554 Q 1129 562 1121 562 L 1105 562" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="billing" data-edge-to="activation" data-edge-label="Plan activo" data-edge-key="4" data-edge-id="billing-activation" data-composition-points="840,42;816,42;816,517;1129,517;1129,562;1105,562" data-composition-crossover="halo" data-composition-independent="true" d="M 840 42 L 824 42 Q 816 42 816 50 L 816 509 Q 816 517 824 517 L 1121 517 Q 1129 517 1129 525 L 1129 554 Q 1129 562 1121 562 L 1105 562" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:5">
+          <path data-graph-role="automatic-crossover-underlay" d="M 565 604 L 565 780" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="api" data-edge-to="data" data-edge-label="Autoriza" data-edge-key="5" data-edge-id="api-data" data-composition-points="565,604;565,780" data-composition-crossover="halo" data-composition-independent="true" d="M 565 604 L 565 780" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:6">
+          <path data-graph-role="automatic-crossover-underlay" d="M 840 569 L 773 569 Q 765 569 765 577 L 765 807 Q 765 815 757 815 L 690 815" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="activation" data-edge-to="data" data-edge-label="Aplica versión" data-edge-key="6" data-edge-id="activation-data" data-composition-points="840,569;765,569;765,815;690,815" data-composition-crossover="halo" data-composition-independent="true" d="M 840 569 L 773 569 Q 765 569 765 577 L 765 807 Q 765 815 757 815 L 690 815" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:7">
+          <path data-graph-role="automatic-crossover-underlay" d="M 840 822 L 773 822 Q 765 822 765 830 L 765 1062 Q 765 1070 757 1070 L 690 1070" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="template" data-edge-to="eve" data-edge-label="Configura" data-edge-key="7" data-edge-id="template-eve" data-composition-points="840,822;765,822;765,1070;690,1070" data-composition-crossover="halo" data-composition-independent="true" d="M 840 822 L 773 822 Q 765 822 765 830 L 765 1062 Q 765 1070 757 1070 L 690 1070" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:8">
+          <path data-graph-role="automatic-crossover-underlay" d="M 440 822 L 300 822" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="data" data-edge-to="postgres" data-edge-label="Escritura validada" data-edge-key="8" data-edge-id="data-postgres" data-composition-points="440,822;300,822" data-composition-crossover="halo" data-composition-independent="true" d="M 440 822 L 300 822" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:9">
+          <path data-graph-role="automatic-crossover-underlay" d="M 565 864 L 565 1040" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="data" data-edge-to="eve" data-edge-label="Turno autorizado" data-edge-key="9" data-edge-id="data-eve" data-composition-points="565,864;565,1040" data-composition-crossover="halo" data-composition-independent="true" d="M 565 864 L 565 1040" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:10">
+          <path data-graph-role="automatic-crossover-underlay" d="M 551 1124 L 551 1140 Q 551 1148 559 1148 L 808 1148 Q 816 1148 816 1140 L 816 1090 Q 816 1082 824 1082 L 840 1082" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="eve" data-edge-to="workflow" data-edge-label="Reanuda" data-edge-key="10" data-edge-id="eve-workflow" data-composition-points="551,1124;551,1148;816,1148;816,1082;840,1082" data-composition-crossover="halo" data-composition-independent="true" d="M 551 1124 L 551 1140 Q 551 1148 559 1148 L 808 1148 Q 816 1148 816 1140 L 816 1090 Q 816 1082 824 1082 L 840 1082" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:11">
+          <path data-graph-role="automatic-crossover-underlay" d="M 565 1124 L 565 1300" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="eve" data-edge-to="gateway" data-edge-label="Inferencia" data-edge-key="11" data-edge-id="eve-gateway" data-composition-points="565,1124;565,1300" data-composition-crossover="halo" data-composition-independent="true" d="M 565 1124 L 565 1300" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:12">
+          <path data-graph-role="automatic-crossover-underlay" d="M 440 1342 L 424 1342 Q 416 1342 416 1350 L 416 1594 Q 416 1602 408 1602 L 240 1602" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="gateway" data-edge-to="models" data-edge-label="Inferencia" data-edge-key="12" data-edge-id="gateway-models" data-composition-points="440,1342;416,1342;416,1602;240,1602" data-composition-crossover="halo" data-composition-independent="true" d="M 440 1342 L 424 1342 Q 416 1342 416 1350 L 416 1594 Q 416 1602 408 1602 L 240 1602" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:13">
+          <path data-graph-role="automatic-crossover-underlay" d="M 690 1094 L 800 1094 Q 808 1094 808 1102 L 808 1327 Q 808 1335 816 1335 L 840 1335" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="eve" data-edge-to="sandbox" data-edge-label="Ejecución aislada" data-edge-key="13" data-edge-id="eve-sandbox" data-composition-points="690,1094;808,1094;808,1335;840,1335" data-composition-crossover="halo" data-composition-independent="true" d="M 690 1094 L 800 1094 Q 808 1094 808 1102 L 808 1327 Q 808 1335 816 1335 L 840 1335" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:14">
+          <path data-graph-role="automatic-crossover-underlay" d="M 965 1384 L 965 1560" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="sandbox" data-edge-to="drives" data-edge-label="Monta" data-edge-key="14" data-edge-id="sandbox-drives" data-composition-points="965,1384;965,1560" data-composition-crossover="halo" data-composition-independent="true" d="M 965 1384 L 965 1560" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:15">
+          <path data-graph-role="automatic-crossover-underlay" d="M 840 1349 L 768 1349 Q 760 1349 760 1357 L 760 1594 Q 760 1602 752 1602 L 680 1602" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="sandbox" data-edge-to="blob" data-edge-label="Acceso acotado" data-edge-key="15" data-edge-id="sandbox-blob" data-composition-points="840,1349;760,1349;760,1602;680,1602" data-composition-crossover="halo" data-composition-independent="true" d="M 840 1349 L 768 1349 Q 760 1349 760 1357 L 760 1594 Q 760 1602 752 1602 L 680 1602" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:16">
+          <path data-graph-role="automatic-crossover-underlay" d="M 690 1108 L 791.8000000000001 1108 Q 799.8000000000001 1108 799.8000000000001 1116 L 799.8000000000001 1854 Q 799.8000000000001 1862 791.8000000000001 1862 L 690 1862" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="eve" data-edge-to="connect" data-edge-label="Permiso + política" data-edge-key="16" data-edge-id="eve-tools" data-composition-points="690,1108;799.8000000000001,1108;799.8000000000001,1862;690,1862" data-composition-crossover="halo" data-composition-independent="true" d="M 690 1108 L 791.8000000000001 1108 Q 799.8000000000001 1108 799.8000000000001 1116 L 799.8000000000001 1854 Q 799.8000000000001 1862 791.8000000000001 1862 L 690 1862" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:17">
+          <path data-graph-role="automatic-crossover-underlay" d="M 440 1862 L 280 1862" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="connect" data-edge-to="apps" data-edge-label="API / MCP" data-edge-key="17" data-edge-id="connect-apps" data-composition-points="440,1862;280,1862" data-composition-crossover="halo" data-composition-independent="true" d="M 440 1862 L 280 1862" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:18">
+          <path data-graph-role="automatic-crossover-underlay" d="M 690 1056 L 706 1056 Q 714 1056 714 1048 L 714 837 Q 714 829 706 829 L 690 829" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="eve" data-edge-to="data" data-edge-label="Aprobación según política" data-edge-key="18" data-edge-id="agent-action-gate" data-composition-points="690,1056;714,1056;714,829;690,829" data-composition-crossover="halo" data-composition-independent="true" d="M 690 1056 L 706 1056 Q 714 1056 714 1048 L 714 837 Q 714 829 706 829 L 690 829" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:19">
+          <path data-graph-role="automatic-crossover-underlay" d="M 690 555 L 706 555 Q 714 555 714 547 L 714 310 Q 714 302 722 302 L 840 302" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="api" data-edge-to="domains" data-edge-label="Gestiona dominio" data-edge-key="19" data-edge-id="api-domains" data-composition-points="690,555;714,555;714,302;840,302" data-composition-crossover="halo" data-composition-independent="true" d="M 690 555 L 706 555 Q 714 555 714 547 L 714 310 Q 714 302 722 302 L 840 302" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:20">
+          <path data-graph-role="automatic-crossover-underlay" d="M 440 1075 L 300 1075" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="eve" data-edge-to="sql" data-edge-label="Pregunta autorizada" data-edge-key="20" data-edge-id="eve-sql" data-composition-points="440,1075;300,1075" data-composition-crossover="halo" data-composition-independent="true" d="M 440 1075 L 300 1075" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:21">
+          <path data-graph-role="automatic-crossover-underlay" d="M 170 1040 L 170 864" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="sql" data-edge-to="postgres" data-edge-label="Solo lectura" data-edge-key="21" data-edge-id="sql-postgres" data-composition-points="170,1040;170,864" data-composition-crossover="halo" data-composition-independent="true" d="M 170 1040 L 170 864" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:22">
+          <path data-graph-role="automatic-crossover-underlay" d="M 170 1300 L 170 1124" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="operations" data-edge-to="sql" data-edge-label="Investiga" data-edge-key="22" data-edge-id="operations-sql" data-composition-points="170,1300;170,1124" data-composition-crossover="halo" data-composition-independent="true" d="M 170 1300 L 170 1124" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        </g>
+        <g data-graph-role="automatic-crossover" style="--step:23">
+          <path data-graph-role="automatic-crossover-underlay" d="M 300 1342 L 362 1342 Q 370 1342 370 1334 L 370 1097 Q 370 1089 378 1089 L 440 1089" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="operations" data-edge-to="eve" data-edge-label="Propone corrección" data-edge-key="23" data-edge-id="operations-eve" data-composition-points="300,1342;370,1342;370,1089;440,1089" data-composition-crossover="halo" data-composition-independent="true" d="M 300 1342 L 362 1342 Q 370 1342 370 1334 L 370 1097 Q 370 1089 378 1089 L 440 1089" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        </g>
+
+        <!-- Components -->
+        <g id="node-agencies" data-node-id="agencies" data-node-label="Su agencia" tabindex="0" role="button" aria-label="Enfocar Su agencia, Configura cómo trabaja su negocio, Componente de arquitectura" aria-pressed="false" data-node-kind="external" data-node-sublabel="Configura cómo trabaja su negocio" data-node-tag="V1 · 10 agencias" data-node-context="Componente de arquitectura">
+          <title>Su agencia · Configura cómo trabaja su negocio · Componente de arquitectura · V1 · 10 agencias</title>
+          <rect x="40" y="260" width="200" height="84" rx="6" class="c-mask"/>
+          <rect x="40" y="260" width="200" height="84" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(46 266) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="140" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Su agencia</text>
+        <text data-detail="context" x="140" y="316" class="t-muted" font-size="9" text-anchor="middle">Configura cómo trabaja su negocio</text>
+        <text data-detail="fine" x="140" y="336" class="t-external" font-size="7" text-anchor="middle">V1 · 10 agencias</text>
+        </g>
+
+        <g id="node-panel" data-node-id="panel" data-node-label="AgeOS · pantallas y chat" tabindex="0" role="button" aria-label="Enfocar AgeOS · pantallas y chat, Chat completo + panel derecho global, Componente de arquitectura" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="Chat completo + panel derecho global" data-node-tag="Un hilo al navegar por la agencia" data-node-context="Componente de arquitectura">
+          <title>AgeOS · pantallas y chat · Chat completo + panel derecho global · Componente de arquitectura · Un hilo al navegar por la agencia</title>
+          <rect x="440" y="260" width="240" height="84" rx="6" class="c-mask"/>
+          <rect x="440" y="260" width="240" height="84" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(446 266) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="560" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">AgeOS · pantallas y chat</text>
+        <text data-detail="context" x="560" y="316" class="t-muted" font-size="9" text-anchor="middle">Chat completo + panel derecho global</text>
+        <text data-detail="fine" x="560" y="336" class="t-frontend" font-size="7" text-anchor="middle">Un hilo al navegar por la agencia</text>
+        </g>
+
+        <g id="node-api" data-node-id="api" data-node-label="Reglas compartidas" tabindex="0" role="button" aria-label="Enfocar Reglas compartidas, Personas y agentes: mismos permisos, Componente de arquitectura" aria-pressed="false" data-node-kind="security" data-node-sublabel="Personas y agentes: mismos permisos" data-node-tag="Sesión, agencia, cliente y trabajo" data-node-context="Componente de arquitectura">
+          <title>Reglas compartidas · Personas y agentes: mismos permisos · Componente de arquitectura · Sesión, agencia, cliente y trabajo</title>
+          <rect x="440" y="520" width="250" height="84" rx="6" class="c-mask"/>
+          <rect x="440" y="520" width="250" height="84" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(446 526) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="565" y="560" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Reglas compartidas</text>
+        <text data-detail="context" x="565" y="576" class="t-muted" font-size="9" text-anchor="middle">Personas y agentes: mismos permisos</text>
+        <text data-detail="fine" x="565" y="596" class="t-security" font-size="7" text-anchor="middle">Sesión, agencia, cliente y trabajo</text>
+        </g>
+
+        <g id="node-activation" data-node-id="activation" data-node-label="Agentes de configuración" tabindex="0" role="button" aria-label="Enfocar Agentes de configuración, Validan y preparan su entorno, Componente de arquitectura" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Validan y preparan su entorno" data-node-tag="Versión + revisión + activación" data-node-context="Componente de arquitectura">
+          <title>Agentes de configuración · Validan y preparan su entorno · Componente de arquitectura · Versión + revisión + activación</title>
+          <rect x="840" y="520" width="265" height="84" rx="6" class="c-mask"/>
+          <rect x="840" y="520" width="265" height="84" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(846 526) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="972.5" y="560" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Agentes de configuración</text>
+        <text data-detail="context" x="972.5" y="576" class="t-muted" font-size="9" text-anchor="middle">Validan y preparan su entorno</text>
+        <text data-detail="fine" x="972.5" y="596" class="t-backend" font-size="7" text-anchor="middle">Versión + revisión + activación</text>
+        </g>
+
+        <g id="node-auth" data-node-id="auth" data-node-label="Clerk Organizations" tabindex="0" role="button" aria-label="Enfocar Clerk Organizations, Usuarios, equipo y sesión, Componente de arquitectura" aria-pressed="false" data-node-kind="security" data-node-sublabel="Usuarios, equipo y sesión" data-node-tag="Socio · Marketplace" data-node-context="Componente de arquitectura">
+          <title>Clerk Organizations · Usuarios, equipo y sesión · Componente de arquitectura · Socio · Marketplace</title>
+          <rect x="40" y="520" width="250" height="84" rx="6" class="c-mask"/>
+          <rect x="40" y="520" width="250" height="84" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(46 526) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="165" y="560" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Clerk Organizations</text>
+        <text data-detail="context" x="165" y="576" class="t-muted" font-size="9" text-anchor="middle">Usuarios, equipo y sesión</text>
+        <text data-detail="fine" x="165" y="596" class="t-security" font-size="7" text-anchor="middle">Socio · Marketplace</text>
+        </g>
+
+        <g id="node-billing" data-node-id="billing" data-node-label="Stripe Billing" tabindex="0" role="button" aria-label="Enfocar Stripe Billing, Suscripción y eventos verificados, Componente de arquitectura" aria-pressed="false" data-node-kind="external" data-node-sublabel="Suscripción y eventos verificados" data-node-tag="Servicio externo" data-node-context="Componente de arquitectura">
+          <title>Stripe Billing · Suscripción y eventos verificados · Componente de arquitectura · Servicio externo</title>
+          <rect x="840" y="0" width="265" height="84" rx="6" class="c-mask"/>
+          <rect x="840" y="0" width="265" height="84" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(846 6) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="972.5" y="40" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Stripe Billing</text>
+        <text data-detail="context" x="972.5" y="56" class="t-muted" font-size="9" text-anchor="middle">Suscripción y eventos verificados</text>
+        <text data-detail="fine" x="972.5" y="76" class="t-external" font-size="7" text-anchor="middle">Servicio externo</text>
+        </g>
+
+        <g id="node-template" data-node-id="template" data-node-label="9 módulos · 42 skills" tabindex="0" role="button" aria-label="Enfocar 9 módulos · 42 skills, Catálogo completo, uso configurable, Componente de arquitectura" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Catálogo completo, uso configurable" data-node-tag="1 coordinador + 8 especialistas" data-node-context="Componente de arquitectura">
+          <title>9 módulos · 42 skills · Catálogo completo, uso configurable · Componente de arquitectura · 1 coordinador + 8 especialistas</title>
+          <rect x="840" y="780" width="240" height="84" rx="6" class="c-mask"/>
+          <rect x="840" y="780" width="240" height="84" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(846 786) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="960" y="820" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">9 módulos · 42 skills</text>
+        <text data-detail="context" x="960" y="836" class="t-muted" font-size="9" text-anchor="middle">Catálogo completo, uso configurable</text>
+        <text data-detail="fine" x="960" y="856" class="t-backend" font-size="7" text-anchor="middle">1 coordinador + 8 especialistas</text>
+        </g>
+
+        <g id="node-data" data-node-id="data" data-node-label="Acciones del negocio" tabindex="0" role="button" aria-label="Enfocar Acciones del negocio, Herramientas específicas y validadas, Componente de arquitectura" aria-pressed="false" data-node-kind="security" data-node-sublabel="Herramientas específicas y validadas" data-node-tag="Aprobación por política + auditoría" data-node-context="Componente de arquitectura">
+          <title>Acciones del negocio · Herramientas específicas y validadas · Componente de arquitectura · Aprobación por política + auditoría</title>
+          <rect x="440" y="780" width="250" height="84" rx="6" class="c-mask"/>
+          <rect x="440" y="780" width="250" height="84" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(446 786) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="565" y="820" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Acciones del negocio</text>
+        <text data-detail="context" x="565" y="836" class="t-muted" font-size="9" text-anchor="middle">Herramientas específicas y validadas</text>
+        <text data-detail="fine" x="565" y="856" class="t-security" font-size="7" text-anchor="middle">Aprobación por política + auditoría</text>
+        </g>
+
+        <g id="node-postgres" data-node-id="postgres" data-node-label="Neon Postgres · trabajo" tabindex="0" role="button" aria-label="Enfocar Neon Postgres · trabajo, Datos, métricas y conversaciones, Componente de arquitectura" aria-pressed="false" data-node-kind="database" data-node-sublabel="Datos, métricas y conversaciones" data-node-tag="Persistencia y permisos por agencia" data-node-context="Componente de arquitectura">
+          <title>Neon Postgres · trabajo · Datos, métricas y conversaciones · Componente de arquitectura · Persistencia y permisos por agencia</title>
+          <rect x="40" y="780" width="260" height="84" rx="6" class="c-mask"/>
+          <rect x="40" y="780" width="260" height="84" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(46 786) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="170" y="820" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Neon Postgres · trabajo</text>
+        <text data-detail="context" x="170" y="836" class="t-muted" font-size="9" text-anchor="middle">Datos, métricas y conversaciones</text>
+        <text data-detail="fine" x="170" y="856" class="t-database" font-size="7" text-anchor="middle">Persistencia y permisos por agencia</text>
+        </g>
+
+        <g id="node-eve" data-node-id="eve" data-node-label="Eve · orquestador ERP" tabindex="0" role="button" aria-label="Enfocar Eve · orquestador ERP, El asistente coordina 8 especialistas, Componente de arquitectura" aria-pressed="false" data-node-kind="backend" data-node-sublabel="El asistente coordina 8 especialistas" data-node-tag="Mismo agente para chat y panel" data-node-context="Componente de arquitectura">
+          <title>Eve · orquestador ERP · El asistente coordina 8 especialistas · Componente de arquitectura · Mismo agente para chat y panel</title>
+          <rect x="440" y="1040" width="250" height="84" rx="6" class="c-mask"/>
+          <rect x="440" y="1040" width="250" height="84" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(446 1046) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="565" y="1080" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Eve · orquestador ERP</text>
+        <text data-detail="context" x="565" y="1096" class="t-muted" font-size="9" text-anchor="middle">El asistente coordina 8 especialistas</text>
+        <text data-detail="fine" x="565" y="1116" class="t-backend" font-size="7" text-anchor="middle">Mismo agente para chat y panel</text>
+        </g>
+
+        <g id="node-workflow" data-node-id="workflow" data-node-label="Vercel Workflow" tabindex="0" role="button" aria-label="Enfocar Vercel Workflow, Espera, reanuda y conserva progreso, Componente de arquitectura" aria-pressed="false" data-node-kind="messagebus" data-node-sublabel="Espera, reanuda y conserva progreso" data-node-tag="Ejecución durable" data-node-context="Componente de arquitectura">
+          <title>Vercel Workflow · Espera, reanuda y conserva progreso · Componente de arquitectura · Ejecución durable</title>
+          <rect x="840" y="1040" width="265" height="84" rx="6" class="c-mask"/>
+          <rect x="840" y="1040" width="265" height="84" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(846 1046) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="972.5" y="1080" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Vercel Workflow</text>
+        <text data-detail="context" x="972.5" y="1096" class="t-muted" font-size="9" text-anchor="middle">Espera, reanuda y conserva progreso</text>
+        <text data-detail="fine" x="972.5" y="1116" class="t-messagebus" font-size="7" text-anchor="middle">Ejecución durable</text>
+        </g>
+
+        <g id="node-gateway" data-node-id="gateway" data-node-label="Vercel AI Gateway" tabindex="0" role="button" aria-label="Enfocar Vercel AI Gateway, Acceso y control de modelos, Componente de arquitectura" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Acceso y control de modelos" data-node-tag="Vercel" data-node-context="Componente de arquitectura">
+          <title>Vercel AI Gateway · Acceso y control de modelos · Componente de arquitectura · Vercel</title>
+          <rect x="440" y="1300" width="240" height="84" rx="6" class="c-mask"/>
+          <rect x="440" y="1300" width="240" height="84" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(446 1306) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="560" y="1340" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Vercel AI Gateway</text>
+        <text data-detail="context" x="560" y="1356" class="t-muted" font-size="9" text-anchor="middle">Acceso y control de modelos</text>
+        <text data-detail="fine" x="560" y="1376" class="t-cloud" font-size="7" text-anchor="middle">Vercel</text>
+        </g>
+
+        <g id="node-models" data-node-id="models" data-node-label="Modelos de IA" tabindex="0" role="button" aria-label="Enfocar Modelos de IA, Proveedor elegido por el operador, Componente de arquitectura" aria-pressed="false" data-node-kind="external" data-node-sublabel="Proveedor elegido por el operador" data-node-tag="Servicio externo" data-node-context="Componente de arquitectura">
+          <title>Modelos de IA · Proveedor elegido por el operador · Componente de arquitectura · Servicio externo</title>
+          <rect x="40" y="1560" width="200" height="84" rx="6" class="c-mask"/>
+          <rect x="40" y="1560" width="200" height="84" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(46 1566) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="140" y="1600" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Modelos de IA</text>
+        <text data-detail="context" x="140" y="1616" class="t-muted" font-size="9" text-anchor="middle">Proveedor elegido por el operador</text>
+        <text data-detail="fine" x="140" y="1636" class="t-external" font-size="7" text-anchor="middle">Servicio externo</text>
+        </g>
+
+        <g id="node-sandbox" data-node-id="sandbox" data-node-label="Vercel Sandbox" tabindex="0" role="button" aria-label="Enfocar Vercel Sandbox, Documentos · Datos · Revisión creativa, Componente de arquitectura" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Documentos · Datos · Revisión creativa" data-node-tag="Tres perfiles limpios, bajo demanda" data-node-context="Componente de arquitectura">
+          <title>Vercel Sandbox · Documentos · Datos · Revisión creativa · Componente de arquitectura · Tres perfiles limpios, bajo demanda</title>
+          <rect x="840" y="1300" width="250" height="84" rx="6" class="c-mask"/>
+          <rect x="840" y="1300" width="250" height="84" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(846 1306) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="965" y="1340" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Vercel Sandbox</text>
+        <text data-detail="context" x="965" y="1356" class="t-muted" font-size="9" text-anchor="middle">Documentos · Datos · Revisión creativa</text>
+        <text data-detail="fine" x="965" y="1376" class="t-cloud" font-size="7" text-anchor="middle">Tres perfiles limpios, bajo demanda</text>
+        </g>
+
+        <g id="node-drives" data-node-id="drives" data-node-label="Vercel Drives" tabindex="0" role="button" aria-label="Enfocar Vercel Drives, Archivos de trabajo persistentes, Componente de arquitectura" aria-pressed="false" data-node-kind="database" data-node-sublabel="Archivos de trabajo persistentes" data-node-tag="Un escritor por unidad" data-node-context="Componente de arquitectura">
+          <title>Vercel Drives · Archivos de trabajo persistentes · Componente de arquitectura · Un escritor por unidad</title>
+          <rect x="840" y="1560" width="265" height="84" rx="6" class="c-mask"/>
+          <rect x="840" y="1560" width="265" height="84" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(846 1566) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="972.5" y="1600" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Vercel Drives</text>
+        <text data-detail="context" x="972.5" y="1616" class="t-muted" font-size="9" text-anchor="middle">Archivos de trabajo persistentes</text>
+        <text data-detail="fine" x="972.5" y="1636" class="t-database" font-size="7" text-anchor="middle">Un escritor por unidad</text>
+        </g>
+
+        <g id="node-blob" data-node-id="blob" data-node-label="Vercel Blob privado" tabindex="0" role="button" aria-label="Enfocar Vercel Blob privado, PDF · Word · Excel · CSV originales, Componente de arquitectura" aria-pressed="false" data-node-kind="database" data-node-sublabel="PDF · Word · Excel · CSV originales" data-node-tag="Biblioteca privada por agencia" data-node-context="Componente de arquitectura">
+          <title>Vercel Blob privado · PDF · Word · Excel · CSV originales · Componente de arquitectura · Biblioteca privada por agencia</title>
+          <rect x="440" y="1560" width="240" height="84" rx="6" class="c-mask"/>
+          <rect x="440" y="1560" width="240" height="84" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(446 1566) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="560" y="1600" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Vercel Blob privado</text>
+        <text data-detail="context" x="560" y="1616" class="t-muted" font-size="9" text-anchor="middle">PDF · Word · Excel · CSV originales</text>
+        <text data-detail="fine" x="560" y="1636" class="t-database" font-size="7" text-anchor="middle">Biblioteca privada por agencia</text>
+        </g>
+
+        <g id="node-connect" data-node-id="connect" data-node-label="Catálogo de conexiones" tabindex="0" role="button" aria-label="Enfocar Catálogo de conexiones, Eve / Connect → Composio → adaptador, Componente de arquitectura" aria-pressed="false" data-node-kind="security" data-node-sublabel="Eve / Connect → Composio → adaptador" data-node-tag="TypeScript · API / OpenAPI · MCP" data-node-context="Componente de arquitectura">
+          <title>Catálogo de conexiones · Eve / Connect → Composio → adaptador · Componente de arquitectura · TypeScript · API / OpenAPI · MCP</title>
+          <rect x="440" y="1820" width="250" height="84" rx="6" class="c-mask"/>
+          <rect x="440" y="1820" width="250" height="84" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(446 1826) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="565" y="1860" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Catálogo de conexiones</text>
+        <text data-detail="context" x="565" y="1876" class="t-muted" font-size="9" text-anchor="middle">Eve / Connect → Composio → adaptador</text>
+        <text data-detail="fine" x="565" y="1896" class="t-security" font-size="7" text-anchor="middle">TypeScript · API / OpenAPI · MCP</text>
+        </g>
+
+        <g id="node-apps" data-node-id="apps" data-node-label="Cuentas de cada agencia" tabindex="0" role="button" aria-label="Enfocar Cuentas de cada agencia, CRM, medios, finanzas y documentos, Componente de arquitectura" aria-pressed="false" data-node-kind="external" data-node-sublabel="CRM, medios, finanzas y documentos" data-node-tag="Servicios externos · acceso validado" data-node-context="Componente de arquitectura">
+          <title>Cuentas de cada agencia · CRM, medios, finanzas y documentos · Componente de arquitectura · Servicios externos · acceso validado</title>
+          <rect x="40" y="1820" width="240" height="84" rx="6" class="c-mask"/>
+          <rect x="40" y="1820" width="240" height="84" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(46 1826) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="160" y="1860" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cuentas de cada agencia</text>
+        <text data-detail="context" x="160" y="1876" class="t-muted" font-size="9" text-anchor="middle">CRM, medios, finanzas y documentos</text>
+        <text data-detail="fine" x="160" y="1896" class="t-external" font-size="7" text-anchor="middle">Servicios externos · acceso validado</text>
+        </g>
+
+        <g id="node-domains" data-node-id="domains" data-node-label="Dominios Vercel" tabindex="0" role="button" aria-label="Enfocar Dominios Vercel, Traer dominio o comprar en el panel, Componente de arquitectura" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Traer dominio o comprar en el panel" data-node-tag="Verificar propiedad, DNS y TLS" data-node-context="Componente de arquitectura">
+          <title>Dominios Vercel · Traer dominio o comprar en el panel · Componente de arquitectura · Verificar propiedad, DNS y TLS</title>
+          <rect x="840" y="260" width="265" height="84" rx="6" class="c-mask"/>
+          <rect x="840" y="260" width="265" height="84" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(846 266) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="972.5" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Dominios Vercel</text>
+        <text data-detail="context" x="972.5" y="316" class="t-muted" font-size="9" text-anchor="middle">Traer dominio o comprar en el panel</text>
+        <text data-detail="fine" x="972.5" y="336" class="t-cloud" font-size="7" text-anchor="middle">Verificar propiedad, DNS y TLS</text>
+        </g>
+
+        <g id="node-sql" data-node-id="sql" data-node-label="Consultas del ERP" tabindex="0" role="button" aria-label="Enfocar Consultas del ERP, Catálogo semántico autorizado, Componente de arquitectura" aria-pressed="false" data-node-kind="security" data-node-sublabel="Catálogo semántico autorizado" data-node-tag="SQL parametrizado · solo lectura" data-node-context="Componente de arquitectura">
+          <title>Consultas del ERP · Catálogo semántico autorizado · Componente de arquitectura · SQL parametrizado · solo lectura</title>
+          <rect x="40" y="1040" width="260" height="84" rx="6" class="c-mask"/>
+          <rect x="40" y="1040" width="260" height="84" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(46 1046) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="170" y="1080" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Consultas del ERP</text>
+        <text data-detail="context" x="170" y="1096" class="t-muted" font-size="9" text-anchor="middle">Catálogo semántico autorizado</text>
+        <text data-detail="fine" x="170" y="1116" class="t-security" font-size="7" text-anchor="middle">SQL parametrizado · solo lectura</text>
+        </g>
+
+        <g id="node-operations" data-node-id="operations" data-node-label="Operación asistida por IA" tabindex="0" role="button" aria-label="Enfocar Operación asistida por IA, Detecta, investiga y propone, Componente de arquitectura" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Detecta, investiga y propone" data-node-tag="Contexto ERP + trazas operativas" data-node-context="Componente de arquitectura">
+          <title>Operación asistida por IA · Detecta, investiga y propone · Componente de arquitectura · Contexto ERP + trazas operativas</title>
+          <rect x="40" y="1300" width="260" height="84" rx="6" class="c-mask"/>
+          <rect x="40" y="1300" width="260" height="84" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 1306) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="170" y="1340" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Operación asistida por IA</text>
+        <text data-detail="context" x="170" y="1356" class="t-muted" font-size="9" text-anchor="middle">Detecta, investiga y propone</text>
+        <text data-detail="fine" x="170" y="1376" class="t-backend" font-size="7" text-anchor="middle">Contexto ERP + trazas operativas</text>
+        </g>
+
+        <!-- Connection labels -->
+        <g data-detail="context" data-edge-from="agencies" data-edge-to="panel" data-edge-label="Configura" data-edge-key="0" data-edge-id="customer-panel">
+          <rect x="313.4" y="282" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="340" y="292" class="t-edge-emphasis" font-size="8" text-anchor="middle">Configura</text>
+        </g>
+        <g data-detail="context" data-edge-from="panel" data-edge-to="api" data-edge-label="Sesión + contexto" data-edge-key="1" data-edge-id="panel-api">
+          <rect x="462.40000000000003" y="425" width="91.6" height="14" rx="3" class="c-mask"/>
+          <text x="508.20000000000005" y="435" class="t-edge-emphasis" font-size="8" text-anchor="middle">Sesión + contexto</text>
+        </g>
+        <g data-detail="context" data-edge-from="auth" data-edge-to="api" data-edge-label="Valida sesión" data-edge-key="2" data-edge-id="auth-api">
+          <rect x="328.8" y="542" width="72.4" height="14" rx="3" class="c-mask"/>
+          <text x="365" y="552" class="t-edge-security" font-size="8" text-anchor="middle">Valida sesión</text>
+        </g>
+        <g data-detail="context" data-edge-from="api" data-edge-to="activation" data-edge-label="Revisa y activa" data-edge-key="3" data-edge-id="api-activation">
+          <rect x="724" y="542" width="82" height="14" rx="3" class="c-mask"/>
+          <text x="765" y="552" class="t-edge-emphasis" font-size="8" text-anchor="middle">Revisa y activa</text>
+        </g>
+        <g data-detail="context" data-edge-from="billing" data-edge-to="activation" data-edge-label="Plan activo" data-edge-key="4" data-edge-id="billing-activation">
+          <rect x="747.2" y="272.5" width="62.8" height="14" rx="3" class="c-mask"/>
+          <text x="778.6" y="282.5" class="t-edge-security" font-size="8" text-anchor="middle">Plan activo</text>
+        </g>
+        <g data-detail="context" data-edge-from="api" data-edge-to="data" data-edge-label="Autoriza" data-edge-key="5" data-edge-id="api-data">
+          <rect x="510.59999999999997" y="685" width="48.4" height="14" rx="3" class="c-mask"/>
+          <text x="534.8" y="695" class="t-edge-security" font-size="8" text-anchor="middle">Autoriza</text>
+        </g>
+        <g data-detail="context" data-edge-from="activation" data-edge-to="data" data-edge-label="Aplica versión" data-edge-key="6" data-edge-id="activation-data">
+          <rect x="726.4" y="672" width="77.2" height="14" rx="3" class="c-mask"/>
+          <text x="765" y="682" class="t-edge-default" font-size="8" text-anchor="middle">Aplica versión</text>
+        </g>
+        <g data-detail="context" data-edge-from="template" data-edge-to="eve" data-edge-label="Configura" data-edge-key="7" data-edge-id="template-eve">
+          <rect x="775.9" y="802" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="802.5" y="812" class="t-edge-default" font-size="8" text-anchor="middle">Configura</text>
+        </g>
+        <g data-detail="context" data-edge-from="data" data-edge-to="postgres" data-edge-label="Escritura validada" data-edge-key="8" data-edge-id="data-postgres">
+          <rect x="321.8" y="802" width="96.39999999999999" height="14" rx="3" class="c-mask"/>
+          <text x="370" y="812" class="t-edge-security" font-size="8" text-anchor="middle">Escritura validada</text>
+        </g>
+        <g data-detail="context" data-edge-from="data" data-edge-to="eve" data-edge-label="Turno autorizado" data-edge-key="9" data-edge-id="data-eve">
+          <rect x="472.20000000000005" y="945" width="86.8" height="14" rx="3" class="c-mask"/>
+          <text x="515.6" y="955" class="t-edge-security" font-size="8" text-anchor="middle">Turno autorizado</text>
+        </g>
+        <g data-detail="context" data-edge-from="eve" data-edge-to="workflow" data-edge-label="Reanuda" data-edge-key="10" data-edge-id="eve-workflow">
+          <rect x="661.7" y="1128" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="683.5" y="1138" class="t-edge-default" font-size="8" text-anchor="middle">Reanuda</text>
+        </g>
+        <g data-detail="context" data-edge-from="eve" data-edge-to="gateway" data-edge-label="Inferencia" data-edge-key="11" data-edge-id="eve-gateway">
+          <rect x="501" y="1205" width="58" height="14" rx="3" class="c-mask"/>
+          <text x="530" y="1215" class="t-edge-default" font-size="8" text-anchor="middle">Inferencia</text>
+        </g>
+        <g data-detail="context" data-edge-from="gateway" data-edge-to="models" data-edge-label="Inferencia" data-edge-key="12" data-edge-id="gateway-models">
+          <rect x="387" y="1452" width="58" height="14" rx="3" class="c-mask"/>
+          <text x="416" y="1462" class="t-edge-default" font-size="8" text-anchor="middle">Inferencia</text>
+        </g>
+        <g data-detail="context" data-edge-from="eve" data-edge-to="sandbox" data-edge-label="Ejecución aislada" data-edge-key="13" data-edge-id="eve-sandbox">
+          <rect x="703.2" y="1074" width="91.6" height="14" rx="3" class="c-mask"/>
+          <text x="749" y="1084" class="t-edge-default" font-size="8" text-anchor="middle">Ejecución aislada</text>
+        </g>
+        <g data-detail="context" data-edge-from="sandbox" data-edge-to="drives" data-edge-label="Monta" data-edge-key="14" data-edge-id="sandbox-drives">
+          <rect x="925" y="1465" width="34" height="14" rx="3" class="c-mask"/>
+          <text x="942" y="1475" class="t-edge-default" font-size="8" text-anchor="middle">Monta</text>
+        </g>
+        <g data-detail="context" data-edge-from="sandbox" data-edge-to="blob" data-edge-label="Acceso acotado" data-edge-key="15" data-edge-id="sandbox-blob">
+          <rect x="668.8" y="1468.5" width="77.2" height="14" rx="3" class="c-mask"/>
+          <text x="707.4" y="1478.5" class="t-edge-default" font-size="8" text-anchor="middle">Acceso acotado</text>
+        </g>
+        <g data-detail="context" data-edge-from="eve" data-edge-to="connect" data-edge-label="Permiso + política" data-edge-key="16" data-edge-id="eve-tools">
+          <rect x="805.8000000000001" y="1478" width="96.39999999999999" height="14" rx="3" class="c-mask"/>
+          <text x="854.0000000000001" y="1488" class="t-edge-security" font-size="8" text-anchor="middle">Permiso + política</text>
+        </g>
+        <g data-detail="context" data-edge-from="connect" data-edge-to="apps" data-edge-label="API / MCP" data-edge-key="17" data-edge-id="connect-apps">
+          <rect x="333.4" y="1842" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="360" y="1852" class="t-edge-security" font-size="8" text-anchor="middle">API / MCP</text>
+        </g>
+        <g data-detail="context" data-edge-from="eve" data-edge-to="data" data-edge-label="Aprobación según política" data-edge-key="18" data-edge-id="agent-action-gate">
+          <rect x="578" y="935.5" width="130" height="14" rx="3" class="c-mask"/>
+          <text x="643" y="945.5" class="t-edge-security" font-size="8" text-anchor="middle">Aprobación según política</text>
+        </g>
+        <g data-detail="context" data-edge-from="api" data-edge-to="domains" data-edge-label="Gestiona dominio" data-edge-key="19" data-edge-id="api-domains">
+          <rect x="670.6" y="408.5" width="86.8" height="14" rx="3" class="c-mask"/>
+          <text x="714" y="418.5" class="t-edge-security" font-size="8" text-anchor="middle">Gestiona dominio</text>
+        </g>
+        <g data-detail="context" data-edge-from="eve" data-edge-to="sql" data-edge-label="Pregunta autorizada" data-edge-key="20" data-edge-id="eve-sql">
+          <rect x="319.4" y="1055" width="101.2" height="14" rx="3" class="c-mask"/>
+          <text x="370" y="1065" class="t-edge-security" font-size="8" text-anchor="middle">Pregunta autorizada</text>
+        </g>
+        <g data-detail="context" data-edge-from="sql" data-edge-to="postgres" data-edge-label="Solo lectura" data-edge-key="21" data-edge-id="sql-postgres">
+          <rect x="136.2" y="1020" width="67.6" height="14" rx="3" class="c-mask"/>
+          <text x="170" y="1030" class="t-edge-security" font-size="8" text-anchor="middle">Solo lectura</text>
+        </g>
+        <g data-detail="context" data-edge-from="operations" data-edge-to="sql" data-edge-label="Investiga" data-edge-key="22" data-edge-id="operations-sql">
+          <rect x="143.4" y="1280" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="170" y="1290" class="t-edge-security" font-size="8" text-anchor="middle">Investiga</text>
+        </g>
+        <g data-detail="context" data-edge-from="operations" data-edge-to="eve" data-edge-label="Propone corrección" data-edge-key="23" data-edge-id="operations-eve">
+          <rect x="321.8" y="1195.5" width="96.39999999999999" height="14" rx="3" class="c-mask"/>
+          <text x="370" y="1205.5" class="t-edge-dashed" font-size="8" text-anchor="middle">Propone corrección</text>
+        </g>
+
+        <!-- Boundary labels (foreground masks keep routes out of titles) -->
+
+
+        <!-- Legend -->
+        <g data-legend="" data-legend-bridge="">
+          <text x="40" y="1936" class="t-primary" font-size="12" font-weight="650">Leyenda</text>
+          <g data-legend-semantic-kind="frontend" data-legend-kind="frontend" data-legend-label="Frontend" data-legend-x="40" data-legend-baseline="1956" data-legend-width="83">
+            <rect x="40" y="1947" width="16" height="10" rx="2.5" class="c-frontend" stroke-width="1"/>
+            <text x="62" y="1956" class="t-muted" font-size="10" font-weight="500">Frontend</text>
+          </g>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Backend" data-legend-x="145" data-legend-baseline="1956" data-legend-width="78">
+            <rect x="145" y="1947" width="16" height="10" rx="2.5" class="c-backend" stroke-width="1"/>
+            <text x="167" y="1956" class="t-muted" font-size="10" font-weight="500">Backend</text>
+          </g>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Base de datos" data-legend-x="245" data-legend-baseline="1956" data-legend-width="108">
+            <rect x="245" y="1947" width="16" height="10" rx="2.5" class="c-database" stroke-width="1"/>
+            <text x="267" y="1956" class="t-muted" font-size="10" font-weight="500">Base de datos</text>
+          </g>
+          <g data-legend-semantic-kind="cloud" data-legend-kind="cloud" data-legend-label="Nube" data-legend-x="375" data-legend-baseline="1956" data-legend-width="63">
+            <rect x="375" y="1947" width="16" height="10" rx="2.5" class="c-cloud" stroke-width="1"/>
+            <text x="397" y="1956" class="t-muted" font-size="10" font-weight="500">Nube</text>
+          </g>
+          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Seguridad" data-legend-x="460" data-legend-baseline="1956" data-legend-width="88">
+            <rect x="460" y="1947" width="16" height="10" rx="2.5" class="c-security" stroke-width="1"/>
+            <text x="482" y="1956" class="t-muted" font-size="10" font-weight="500">Seguridad</text>
+          </g>
+          <g data-legend-semantic-kind="messagebus" data-legend-kind="messagebus" data-legend-label="Bus de mensajes" data-legend-x="570" data-legend-baseline="1956" data-legend-width="118">
+            <rect x="570" y="1947" width="16" height="10" rx="2.5" class="c-messagebus" stroke-width="1"/>
+            <text x="592" y="1956" class="t-muted" font-size="10" font-weight="500">Bus de mensajes</text>
+          </g>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="Externo" data-legend-x="710" data-legend-baseline="1956" data-legend-width="78">
+            <rect x="710" y="1947" width="16" height="10" rx="2.5" class="c-external" stroke-width="1"/>
+            <text x="732" y="1956" class="t-muted" font-size="10" font-weight="500">Externo</text>
+          </g>
+        </g>
+      </g><rect x="20" y="2212" width="1129" height="258" rx="12" fill="#f6f8fc"/><text x="40" y="2244" font-size="19" font-weight="700" fill="#142038">V1 completa: nueve módulos · 42 skills</text><text x="40" y="2278" font-size="14" fill="#344762">01 Arranque · 4 skills</text><text x="415" y="2278" font-size="14" fill="#344762">02 Clientes y contratos · 6 skills</text><text x="790" y="2278" font-size="14" fill="#344762">03 Trabajo y producción · 3 skills</text><text x="40" y="2310" font-size="14" fill="#344762">04 Planificación de medios · 6 skills</text><text x="415" y="2310" font-size="14" fill="#344762">05 Compra de medios · 6 skills</text><text x="790" y="2310" font-size="14" fill="#344762">06 Proveedores y pagos · 5 skills</text><text x="40" y="2342" font-size="14" fill="#344762">07 Facturación y cobranza · 4 skills</text><text x="415" y="2342" font-size="14" fill="#344762">08 Contabilidad y cierre · 4 skills</text><text x="790" y="2342" font-size="14" fill="#344762">09 Rentabilidad · 4 skills</text><text x="40" y="2367" font-size="12" fill="#526179">Cliente → contrato → presupuesto → plan → orden → entrega → facturas → cobros / pagos → margen.</text><text x="40" y="2393" font-size="13" fill="#526179">Cada agencia activa lo que necesita. Personas y agentes comparten datos, reglas y permisos.</text><text x="40" y="2413" font-size="13" fill="#526179">Chat completo y panel derecho: un orquestador, mismas consultas y acciones autorizadas.</text><text x="40" y="2447" font-size="12" fill="#6d7787">Propuesta por implementar. El HTML y la guía contienen los detalles, límites, fuentes y alternativas AWS.</text></svg>

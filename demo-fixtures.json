@@ -1,0 +1,1199 @@
+{
+  "schema_version": "1.0.0-fixtures",
+  "seed_version": "ageos-demo-2027-aurora-v1",
+  "synthetic": true,
+  "implemented": false,
+  "disclosure": {
+    "en": "Demo workspace · Synthetic data · External actions are simulated",
+    "es": "Espacio demo · Datos ficticios · Acciones externas simuladas"
+  },
+  "identity_policy": "Keys below are seed aliases, mapped to internal IDs. Actor and tenant authorization always come from trusted server session.",
+  "clock": {
+    "business_as_of": "2027-03-15",
+    "period_start": "2027-03-01",
+    "period_end": "2027-03-31",
+    "timezone": "America/Mexico_City",
+    "audit_timestamps": "real wall-clock recorded separately",
+    "advance_clock": "Presenter action, server-authorized and audited; never silently age real records"
+  },
+  "money_policy": {
+    "currency": "USD",
+    "exponent": 2,
+    "integer_units": "minor",
+    "rounding": "HALF_UP as calculator contract requires",
+    "percentage_ui_decimals": 1,
+    "margin_denominator": "net_agency_revenue",
+    "managed_media_treatment": "demo_agent_passthrough_excluded_from_agency_margin",
+    "fiscal_profile": "DEMO_NO_TAX; synthetic simplification, not legal exemption"
+  },
+  "agencies": [
+    {
+      "id": "tenant_demo_rayo",
+      "slug": "rayo-de-sol",
+      "name": "Rayo de Sol",
+      "app_name": "Estudio Solar",
+      "currency": "USD",
+      "locale": "en-US",
+      "enabled_modules": 9,
+      "enabled_skills": 42,
+      "timezone": "America/Mexico_City",
+      "requested_domain": "estudio.rayodesol.example",
+      "domain_state": "simulated_pending",
+      "actual_demo_path": "/a/rayo-de-sol"
+    },
+    {
+      "id": "tenant_demo_norte",
+      "slug": "norte-studio",
+      "name": "Norte Studio",
+      "app_name": "Norte Workspace",
+      "currency": "CAD",
+      "locale": "en-US",
+      "enabled_modules": 9,
+      "enabled_skills": 42,
+      "purpose": "Isolation test; never aggregate with Rayo without explicit authorized consolidation and FX policy"
+    }
+  ],
+  "users": [
+    {
+      "id": "user_demo_owner",
+      "name": "Alex Rivera",
+      "role": "owner",
+      "tenant_id": "tenant_demo_rayo"
+    },
+    {
+      "id": "user_demo_operator",
+      "name": "Sam Cruz",
+      "role": "account_manager",
+      "tenant_id": "tenant_demo_rayo"
+    },
+    {
+      "id": "user_demo_finance",
+      "name": "Morgan Lee",
+      "role": "finance_approver",
+      "tenant_id": "tenant_demo_rayo"
+    },
+    {
+      "id": "user_demo_producer",
+      "name": "Taylor Chen",
+      "role": "producer",
+      "tenant_id": "tenant_demo_rayo"
+    },
+    {
+      "id": "user_demo_viewer",
+      "name": "Jordan Kim",
+      "role": "viewer",
+      "tenant_id": "tenant_demo_rayo"
+    },
+    {
+      "id": "user_demo_norte_owner",
+      "name": "Casey Martin",
+      "role": "owner",
+      "tenant_id": "tenant_demo_norte"
+    }
+  ],
+  "clients": [
+    {
+      "id": "client_demo_aurora",
+      "tenant_id": "tenant_demo_rayo",
+      "name": "Aurora Beverages",
+      "code": "AUR",
+      "product_code": "SL",
+      "billing_currency": "USD",
+      "credit_limit_minor": 6000000,
+      "country": "US",
+      "fiscal_profile": "DEMO_NO_TAX"
+    },
+    {
+      "id": "client_demo_norte",
+      "tenant_id": "tenant_demo_norte",
+      "name": "Maple Fictional Foods",
+      "billing_currency": "CAD"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "job_demo_aurora",
+      "tenant_id": "tenant_demo_rayo",
+      "client_id": "client_demo_aurora",
+      "name": "Aurora Spring Launch",
+      "display_reference": "RDS-2027-001",
+      "job_number": "AURSL7AF0001",
+      "job_number_inputs": {
+        "client_code": "AUR",
+        "product_code": "SL",
+        "year": 2027,
+        "job_type": "A",
+        "billing_code": "F",
+        "sequence": 1
+      },
+      "period": "2027-03",
+      "owner_id": "user_demo_operator",
+      "state": "in_progress"
+    },
+    {
+      "id": "job_demo_lab",
+      "tenant_id": "tenant_demo_rayo",
+      "name": "Secondary feature laboratory",
+      "reporting_group": "demo-lab",
+      "exclude_from_primary_scenario": true
+    },
+    {
+      "id": "job_demo_norte",
+      "tenant_id": "tenant_demo_norte",
+      "name": "Private Norte launch",
+      "currency": "CAD",
+      "amount_minor": 990000,
+      "purpose": "Must not appear in Rayo queries, files, exports or approvals"
+    }
+  ],
+  "scenario": {
+    "id": "aurora_scope_change",
+    "title": "From scope change to protected margin",
+    "entry_checkpoint": "ready_for_scope_review",
+    "starting_basis": "forecast",
+    "alternate_entry": "from_intake",
+    "plan_initial_revision": 1,
+    "plan_reallocation_revision": 2,
+    "budget_initial_revision": 1,
+    "budget_amended_revision": 2,
+    "created_by": "user_demo_operator",
+    "client_acceptance_evidence": "evidence_demo_aurora_acceptance",
+    "steps": [
+      "intake",
+      "approve_initial_authority",
+      "approve_estimate_and_plan",
+      "record_scope_change",
+      "prepare_fee_amendment",
+      "record_client_amendment_authority",
+      "approve_amendment_by_finance",
+      "reallocate_media",
+      "issue_simulated_orders",
+      "accept_deliveries",
+      "approve_hours_and_expense",
+      "reconcile_supplier_invoices",
+      "recognize_accepted_fee_and_costs",
+      "issue_demo_client_invoice",
+      "receive_and_allocate_first_collection_40000",
+      "preview_available_payment_funds_43000",
+      "approve_payment_batch_by_finance",
+      "validate_and_reserve_payment_funds_43000",
+      "simulate_media_payment_30000",
+      "simulate_production_payment_5500_with_unknown_outcome",
+      "reconcile_existing_production_payment_receipt",
+      "simulate_expense_reimbursement_500",
+      "simulate_payroll_settlement_7000",
+      "receive_and_allocate_final_collection_13000",
+      "reconcile_all_demo_journals",
+      "close_period"
+    ],
+    "initial_authority_approved_by": "user_demo_owner",
+    "amendment_approved_by": "user_demo_finance",
+    "payment_approved_by": "user_demo_finance",
+    "journal_approved_by": "user_demo_finance",
+    "client_amendment_authority_evidence": "evidence_demo_po_r2",
+    "client_authority_rule": "Internal approval does not equal client acceptance. Apply fee amendment only after the separately reviewed synthetic client PO revision2 authorizes53,000 and links to the exact payload. All users and evidence remain fictional."
+  },
+  "financial_checkpoints": [
+    {
+      "id": "initial_plan",
+      "basis": "forecast",
+      "agency_fee_minor": 2000000,
+      "managed_media_minor": 3000000,
+      "labor_minutes": 6000,
+      "labor_hourly_cost_minor": 5000,
+      "labor_cost_minor": 500000,
+      "production_vendor_minor": 550000,
+      "expense_minor": 50000,
+      "agency_cost_minor": 1100000,
+      "margin_minor": 900000,
+      "margin_bps": 4500,
+      "margin_display": "45.0%",
+      "client_authority_minor": 5000000
+    },
+    {
+      "id": "unpriced_scope_change",
+      "basis": "forecast",
+      "agency_fee_minor": 2000000,
+      "managed_media_minor": 3000000,
+      "labor_minutes": 8400,
+      "labor_hourly_cost_minor": 5000,
+      "labor_cost_minor": 700000,
+      "production_vendor_minor": 550000,
+      "expense_minor": 50000,
+      "agency_cost_minor": 1300000,
+      "margin_minor": 700000,
+      "margin_bps": 3500,
+      "margin_display": "35.0%",
+      "client_authority_minor": 5000000,
+      "delta_minutes": 2400,
+      "delta_cost_minor": 200000
+    },
+    {
+      "id": "approved_amendment",
+      "basis": "forecast",
+      "agency_fee_minor": 2300000,
+      "managed_media_minor": 3000000,
+      "labor_minutes": 8400,
+      "labor_hourly_cost_minor": 5000,
+      "labor_cost_minor": 700000,
+      "production_vendor_minor": 550000,
+      "expense_minor": 50000,
+      "agency_cost_minor": 1300000,
+      "margin_minor": 1000000,
+      "margin_bps": 4348,
+      "margin_display": "43.5%",
+      "client_authority_minor": 5300000,
+      "approved_fee_increase_minor": 300000
+    },
+    {
+      "id": "final_recognized",
+      "basis": "incurred",
+      "agency_fee_minor": 2300000,
+      "managed_media_minor": 3000000,
+      "labor_minutes": 8400,
+      "labor_hourly_cost_minor": 5000,
+      "labor_cost_minor": 700000,
+      "production_vendor_minor": 550000,
+      "expense_minor": 50000,
+      "agency_cost_minor": 1300000,
+      "margin_minor": 1000000,
+      "margin_bps": 4348,
+      "margin_display": "43.5%",
+      "requires": [
+        "accepted_service_delivery",
+        "approved_timesheets",
+        "approved_expense",
+        "matched_supplier_costs",
+        "recognition_policy_applied"
+      ]
+    }
+  ],
+  "media_plan_lines": [
+    {
+      "id": "line_meta",
+      "channel": "meta",
+      "placement": "Demo Feed",
+      "provider": "meta_ads",
+      "amount_minor": 1000000,
+      "after_reallocation_minor": 900000,
+      "account_id": "demo_meta_aurora",
+      "simulation": true
+    },
+    {
+      "id": "line_google",
+      "channel": "google",
+      "placement": "Demo Search",
+      "provider": "google_ads",
+      "amount_minor": 800000,
+      "after_reallocation_minor": 900000,
+      "account_id": "demo_google_aurora",
+      "simulation": true
+    },
+    {
+      "id": "line_tiktok",
+      "channel": "tiktok",
+      "placement": "Demo In-feed",
+      "provider": "tiktok_ads",
+      "amount_minor": 400000,
+      "after_reallocation_minor": 400000,
+      "account_id": "demo_tiktok_aurora",
+      "simulation": true
+    },
+    {
+      "id": "line_ctv",
+      "channel": "ctv",
+      "placement": "Fictional CTV inventory",
+      "provider": "dv360_demo",
+      "amount_minor": 400000,
+      "after_reallocation_minor": 400000,
+      "account_id": "demo_dv360_aurora",
+      "simulation": true,
+      "note": "Does not claim real Netflix inventory entitlement or API access"
+    },
+    {
+      "id": "line_radio",
+      "channel": "radio",
+      "placement": "Fictional City Radio",
+      "provider": "offline_file_demo",
+      "quantity": 20,
+      "unit_cost_minor": 10000,
+      "amount_minor": 200000,
+      "after_reallocation_minor": 200000,
+      "simulation": true
+    },
+    {
+      "id": "line_ooh",
+      "channel": "ooh",
+      "placement": "Fictional Station Faces A/B",
+      "provider": "offline_file_demo",
+      "quantity": 2,
+      "unit_cost_minor": 100000,
+      "amount_minor": 200000,
+      "after_reallocation_minor": 200000,
+      "simulation": true
+    }
+  ],
+  "production": {
+    "vendor_id": "supplier_demo_lumen",
+    "vendor_name": "Lumen Production Demo",
+    "cost_item_id": "cost_aurora_production",
+    "order_id": "order_demo_production",
+    "ordered_minor": 550000,
+    "accepted_delivery_minor": 550000,
+    "invoice_bad_minor": 600000,
+    "invoice_correct_minor": 550000,
+    "invoice_number": "DEMO-LUM-031",
+    "duplicate_invoice_key": "supplier_demo_lumen|DEMO-LUM-031|USD",
+    "expense_id": "expense_demo_aurora",
+    "expense_minor": 50000,
+    "timesheet_ids": [
+      "time_demo_base_100h",
+      "time_demo_scope_40h"
+    ],
+    "timesheet_minutes": [
+      6000,
+      2400
+    ],
+    "hourly_cost_minor": 5000
+  },
+  "client_invoice": {
+    "id": "invoice_demo_aurora",
+    "number": "DEMO-INV-0001",
+    "state_after_issue": "issued_demo",
+    "fee_minor": 2300000,
+    "media_recovery_minor": 3000000,
+    "net_minor": 5300000,
+    "tax_minor": 0,
+    "gross_minor": 5300000,
+    "requires_evidence": [
+      "evidence_demo_po_r2",
+      "evidence_demo_aurora_acceptance"
+    ],
+    "collections": [
+      {
+        "id": "collection_demo_first",
+        "amount_minor": 4000000,
+        "resulting_ar_minor": 1300000,
+        "provider": "demo_bank",
+        "provider_receipt_id": "sim_receipt_collection_demo_first",
+        "idempotency_key": "receive_collection_demo_first",
+        "allocation_id": "allocation_collection_demo_first",
+        "business_date": "2027-03-23"
+      },
+      {
+        "id": "collection_demo_final",
+        "amount_minor": 1300000,
+        "resulting_ar_minor": 0,
+        "provider": "demo_bank",
+        "provider_receipt_id": "sim_receipt_collection_demo_final",
+        "idempotency_key": "receive_collection_demo_final",
+        "allocation_id": "allocation_collection_demo_final",
+        "business_date": "2027-03-27"
+      }
+    ]
+  },
+  "final_cash": {
+    "basis": "realized_demo_bank",
+    "opening_minor": 1000000,
+    "collections_minor": 5300000,
+    "media_payments_minor": 3000000,
+    "production_payments_minor": 550000,
+    "expense_reimbursement_minor": 50000,
+    "payroll_payment_minor": 700000,
+    "total_payments_minor": 4300000,
+    "closing_minor": 2000000,
+    "note": "Payroll payment settles labor already recognized; expense reimbursement settles expense already recognized. Neither creates new cost."
+  },
+  "anomalies": [
+    {
+      "id": "anomaly_scope_overrun",
+      "trigger": "required labor rises100h to140h while fee20k unchanged",
+      "severity": "attention",
+      "rule_id": "margin-floor-v1",
+      "threshold_bps": 4000,
+      "observed_bps": 3500,
+      "suggested_action": "Draft USD3,000 scope amendment; review impact then approval",
+      "expected_after_approval_bps": 4348
+    },
+    {
+      "id": "anomaly_invoice_mismatch",
+      "trigger": "invoice6000 against order/delivery5500",
+      "rule_id": "three-way-match-v1",
+      "difference_minor": 50000,
+      "suggested_action": "Hold payment; prepare correction request; record corrected invoice after simulated supplier response",
+      "expected_status": "hold_until_corrected"
+    },
+    {
+      "id": "anomaly_unknown_payment",
+      "trigger": "simulated provider accepted payment but response timed out",
+      "rule_id": "unknown-outcome-v1",
+      "payment_id": "payment_demo_production",
+      "amount_minor": 550000,
+      "adapter_failure_mode": "timeout_after_effect",
+      "expected_application_status": "outcome_unknown",
+      "expected_provider_effect_count": 1,
+      "resolution": "Reconcile existing operation; persist same receipt; effect count remains1"
+    }
+  ],
+  "secondary_test_cases": [
+    {
+      "id": "budget_concurrency",
+      "skill": "agency-budget-control",
+      "authorized_minor": 100000,
+      "spent_minor": 0,
+      "open_commitments_minor": 0,
+      "reservations_minor": 0,
+      "concurrent_requests_minor": [
+        70000,
+        70000
+      ],
+      "expected_successes": 1,
+      "expected_available_after_minor": 30000
+    },
+    {
+      "id": "radio_missing_spot",
+      "skill": "agency-transmission-control",
+      "scheduled_spots": 20,
+      "confirmed_unique_spots": 19,
+      "duplicate_emission_records": 1,
+      "expected_missing_spots": 1,
+      "make_good_spots": 1,
+      "cash_cost_change_minor": 0,
+      "note": "A make-good is required to finish delivery; duplicate emission does not count"
+    },
+    {
+      "id": "ooh_overlap",
+      "skill": "agency-ooh-inventory",
+      "face_id": "face_demo_a",
+      "start": "2027-03-10",
+      "end": "2027-03-24",
+      "concurrent_requests": 2,
+      "expected_successes": 1
+    },
+    {
+      "id": "discounts",
+      "skill": "agency-rate-cards-contracts",
+      "gross_minor": 100000,
+      "discount_bps": [
+        1000,
+        500
+      ],
+      "expected_net_minor": 85500
+    },
+    {
+      "id": "rebate_lab",
+      "skill": "agency-rebates",
+      "job_id": "job_demo_lab",
+      "eligible_minor": 1000000,
+      "rate_bps": 200,
+      "client_share_bps": 5000,
+      "expected_rebate_minor": 20000,
+      "expected_client_return_minor": 10000,
+      "expected_retained_minor": 10000
+    },
+    {
+      "id": "tax_lab",
+      "skill": "agency-tax-compliance",
+      "job_id": "job_demo_lab",
+      "profile": "DEMO_SYNTHETIC_5_PERCENT",
+      "net_minor": 10000,
+      "tax_bps": 500,
+      "expected_tax_minor": 500,
+      "expected_gross_minor": 10500,
+      "fiscal_validity": false
+    },
+    {
+      "id": "fx_lab",
+      "skill": "agency-accruals-revaluation",
+      "job_id": "job_demo_lab",
+      "balance_type": "payable",
+      "foreign_currency": "CAD",
+      "foreign_minor": 100000,
+      "foreign_exponent": 2,
+      "local_currency": "USD",
+      "local_exponent": 2,
+      "previous_rate": "0.75",
+      "closing_rate": "0.78",
+      "expected_old_local_minor": 75000,
+      "expected_new_local_minor": 78000,
+      "expected_liability_increase_minor": 3000,
+      "expected_fx_loss_minor": 3000
+    },
+    {
+      "id": "asset_lab",
+      "skill": "agency-fixed-assets",
+      "job_id": "job_demo_lab",
+      "cost_minor": 120000,
+      "residual_minor": 0,
+      "life_months": 12,
+      "expected_monthly_minor": 10000,
+      "expected_total_minor": 120000
+    },
+    {
+      "id": "journal_reject",
+      "skill": "agency-general-ledger",
+      "debits_minor": 10000,
+      "credits_minor": 9000,
+      "expected": "blocked_unbalanced"
+    },
+    {
+      "id": "collections_aging",
+      "skill": "agency-collections",
+      "job_id": "job_demo_lab",
+      "invoice_due": "2027-02-01",
+      "as_of": "2027-03-15",
+      "outstanding_minor": 25000,
+      "expected_days_overdue": 42,
+      "expected_bucket": "31-60"
+    },
+    {
+      "id": "allocation_rounding",
+      "skill": "agency-fee-contracts",
+      "total_minor": 100,
+      "stable_ids": [
+        "a",
+        "b",
+        "c"
+      ],
+      "weights": [
+        1,
+        1,
+        1
+      ],
+      "expected_allocations_minor": [
+        34,
+        33,
+        33
+      ]
+    },
+    {
+      "id": "stale_approval",
+      "skill": "agency-campaign-activation",
+      "approved_revision": 1,
+      "current_revision": 2,
+      "expected": "blocked_new_approval_required"
+    },
+    {
+      "id": "tenant_boundary",
+      "skill": "agency-access-governance",
+      "actor_id": "user_demo_operator",
+      "target_job_id": "job_demo_norte",
+      "expected": "not_found_or_forbidden_without_record_disclosure"
+    },
+    {
+      "id": "revenue_budget",
+      "skill": "agency-revenue-budget",
+      "job_id": "job_demo_lab",
+      "baseline_minor": 2000000,
+      "scenario_minor": 2500000,
+      "posted_revenue_minor": 1000000,
+      "expected_posted_after_scenario_minor": 1000000
+    },
+    {
+      "id": "unknown_country",
+      "skill": "agency-tax-compliance",
+      "country": "UNCONFIGURED",
+      "expected": "blocked_no_fiscal_profile"
+    },
+    {
+      "id": "payment_insufficient_funds",
+      "skill": "agency-payment-run",
+      "cash_minor": 1000000,
+      "request_minor": 4300000,
+      "expected": "blocked_insufficient_funds",
+      "expected_provider_effect_count": 0
+    },
+    {
+      "id": "collection_receipt_duplicate",
+      "skill": "agency-collections",
+      "receipt_id": "sim_receipt_collection_demo_first",
+      "repeated_receipts": 2,
+      "amount_minor": 4000000,
+      "expected_cash_credit_minor": 4000000,
+      "expected_ar_after_minor": 1300000
+    },
+    {
+      "id": "ops_csv_delimiter_mismatch",
+      "plane": "platform_operations",
+      "fixture_ref": "platform_operations_case",
+      "expected_before_columns": 1,
+      "expected_after_columns": 6,
+      "expected_erp_skill_count": 42
+    }
+  ],
+  "evidence": [
+    {
+      "id": "evidence_demo_brief",
+      "name": "Aurora creative brief",
+      "format": "pdf",
+      "synthetic": true,
+      "tenant_id": "tenant_demo_rayo"
+    },
+    {
+      "id": "evidence_demo_po_r1",
+      "name": "Aurora approved authority50,000",
+      "format": "pdf",
+      "synthetic": true,
+      "tenant_id": "tenant_demo_rayo"
+    },
+    {
+      "id": "evidence_demo_po_r2",
+      "name": "Aurora amendment authority53,000",
+      "format": "pdf",
+      "synthetic": true,
+      "tenant_id": "tenant_demo_rayo"
+    },
+    {
+      "id": "evidence_demo_aurora_acceptance",
+      "name": "Aurora accepted delivery",
+      "format": "pdf",
+      "synthetic": true,
+      "tenant_id": "tenant_demo_rayo"
+    },
+    {
+      "id": "evidence_demo_norte_private",
+      "name": "Norte private brief",
+      "format": "pdf",
+      "synthetic": true,
+      "tenant_id": "tenant_demo_norte"
+    }
+  ],
+  "seed_modes": {
+    "from_intake": "Create configured agency and masters; all financial entities arise through user commands. Expected final values are assertions, not seeded posted results.",
+    "ready_for_scope_review": "Materialize coherent initial plan with100h forecast, accepted initial authority and open job; hours/costs/payment status clearly reflects this checkpoint. Introduce40h scope requirement only when presenter triggers incident.",
+    "final_read_only": "Optional separate run with all approved commands replayed and simulated receipts; label Complete synthetic scenario. Never mutate active presenter run to fake completion."
+  },
+  "report_filters": {
+    "primary_tenant": "tenant_demo_rayo",
+    "primary_job": "job_demo_aurora",
+    "exclude_reporting_groups": [
+      "demo-lab"
+    ],
+    "do_not_add_cross_currency": true
+  },
+  "reset_contract": {
+    "authorization": "server owner or presenter permission in demo environment",
+    "scope": "one tenant and demo run only",
+    "preserve": "global audit reset record, other tenants, non-demo data",
+    "concurrency": "exclusive run lock or invalidate active run with explicit notice",
+    "no_external_effects": true
+  },
+  "journal_policy": {
+    "label": "Demo ledger — synthetic, non-fiscal",
+    "recognition": "Recognize fee on accepted service; customer invoice reclassifies unbilled revenue to AR. Delivery recognizes costs/accrual; supplier invoice reclassifies liability. Cash settlements do not re-recognize cost or revenue.",
+    "final_state_only": "Replay these only once their underlying business steps are complete; never seed as posted in initial forecast checkpoint."
+  },
+  "expected_final_demo_journals": [
+    {
+      "id": "journal_opening",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": null,
+      "currency": "USD",
+      "period": "2027-03",
+      "lines": [
+        {
+          "account": "cash",
+          "side": "debit",
+          "amount_minor": 1000000
+        },
+        {
+          "account": "opening_equity",
+          "side": "credit",
+          "amount_minor": 1000000
+        }
+      ],
+      "business_date": "2027-03-01",
+      "expected_cash_after_minor": 1000000
+    },
+    {
+      "id": "journal_labor",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "lines": [
+        {
+          "account": "labor_expense",
+          "side": "debit",
+          "amount_minor": 700000
+        },
+        {
+          "account": "payroll_payable",
+          "side": "credit",
+          "amount_minor": 700000
+        }
+      ],
+      "business_date": "2027-03-22",
+      "expected_cash_after_minor": 1000000
+    },
+    {
+      "id": "journal_production_delivery",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "lines": [
+        {
+          "account": "production_expense",
+          "side": "debit",
+          "amount_minor": 550000
+        },
+        {
+          "account": "accrued_production",
+          "side": "credit",
+          "amount_minor": 550000
+        }
+      ],
+      "business_date": "2027-03-22",
+      "expected_cash_after_minor": 1000000
+    },
+    {
+      "id": "journal_production_invoice",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "lines": [
+        {
+          "account": "accrued_production",
+          "side": "debit",
+          "amount_minor": 550000
+        },
+        {
+          "account": "ap_production",
+          "side": "credit",
+          "amount_minor": 550000
+        }
+      ],
+      "business_date": "2027-03-22",
+      "expected_cash_after_minor": 1000000
+    },
+    {
+      "id": "journal_expense",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "lines": [
+        {
+          "account": "direct_expense",
+          "side": "debit",
+          "amount_minor": 50000
+        },
+        {
+          "account": "expense_payable",
+          "side": "credit",
+          "amount_minor": 50000
+        }
+      ],
+      "business_date": "2027-03-22",
+      "expected_cash_after_minor": 1000000
+    },
+    {
+      "id": "journal_media_delivery",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "lines": [
+        {
+          "account": "media_recovery_asset",
+          "side": "debit",
+          "amount_minor": 3000000
+        },
+        {
+          "account": "accrued_media",
+          "side": "credit",
+          "amount_minor": 3000000
+        }
+      ],
+      "business_date": "2027-03-22",
+      "expected_cash_after_minor": 1000000
+    },
+    {
+      "id": "journal_media_invoice",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "lines": [
+        {
+          "account": "accrued_media",
+          "side": "debit",
+          "amount_minor": 3000000
+        },
+        {
+          "account": "ap_media",
+          "side": "credit",
+          "amount_minor": 3000000
+        }
+      ],
+      "business_date": "2027-03-22",
+      "expected_cash_after_minor": 1000000
+    },
+    {
+      "id": "journal_fee_acceptance",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "lines": [
+        {
+          "account": "unbilled_fee_asset",
+          "side": "debit",
+          "amount_minor": 2300000
+        },
+        {
+          "account": "agency_fee_revenue",
+          "side": "credit",
+          "amount_minor": 2300000
+        }
+      ],
+      "business_date": "2027-03-22",
+      "expected_cash_after_minor": 1000000
+    },
+    {
+      "id": "journal_client_invoice",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "lines": [
+        {
+          "account": "accounts_receivable",
+          "side": "debit",
+          "amount_minor": 5300000
+        },
+        {
+          "account": "unbilled_fee_asset",
+          "side": "credit",
+          "amount_minor": 2300000
+        },
+        {
+          "account": "media_recovery_asset",
+          "side": "credit",
+          "amount_minor": 3000000
+        }
+      ],
+      "business_date": "2027-03-22",
+      "expected_cash_after_minor": 1000000
+    },
+    {
+      "id": "journal_first_collection",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "business_date": "2027-03-23",
+      "lines": [
+        {
+          "account": "cash",
+          "side": "debit",
+          "amount_minor": 4000000
+        },
+        {
+          "account": "accounts_receivable",
+          "side": "credit",
+          "amount_minor": 4000000
+        }
+      ],
+      "expected_cash_after_minor": 5000000
+    },
+    {
+      "id": "journal_media_payment",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "business_date": "2027-03-24",
+      "lines": [
+        {
+          "account": "ap_media",
+          "side": "debit",
+          "amount_minor": 3000000
+        },
+        {
+          "account": "cash",
+          "side": "credit",
+          "amount_minor": 3000000
+        }
+      ],
+      "expected_cash_after_minor": 2000000
+    },
+    {
+      "id": "journal_production_payment",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "business_date": "2027-03-24",
+      "lines": [
+        {
+          "account": "ap_production",
+          "side": "debit",
+          "amount_minor": 550000
+        },
+        {
+          "account": "cash",
+          "side": "credit",
+          "amount_minor": 550000
+        }
+      ],
+      "expected_cash_after_minor": 1450000
+    },
+    {
+      "id": "journal_expense_reimbursement",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "business_date": "2027-03-24",
+      "lines": [
+        {
+          "account": "expense_payable",
+          "side": "debit",
+          "amount_minor": 50000
+        },
+        {
+          "account": "cash",
+          "side": "credit",
+          "amount_minor": 50000
+        }
+      ],
+      "expected_cash_after_minor": 1400000
+    },
+    {
+      "id": "journal_payroll_settlement",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "business_date": "2027-03-25",
+      "lines": [
+        {
+          "account": "payroll_payable",
+          "side": "debit",
+          "amount_minor": 700000
+        },
+        {
+          "account": "cash",
+          "side": "credit",
+          "amount_minor": 700000
+        }
+      ],
+      "expected_cash_after_minor": 700000
+    },
+    {
+      "id": "journal_final_collection",
+      "tenant_id": "tenant_demo_rayo",
+      "job_id": "job_demo_aurora",
+      "currency": "USD",
+      "period": "2027-03",
+      "business_date": "2027-03-27",
+      "lines": [
+        {
+          "account": "cash",
+          "side": "debit",
+          "amount_minor": 1300000
+        },
+        {
+          "account": "accounts_receivable",
+          "side": "credit",
+          "amount_minor": 1300000
+        }
+      ],
+      "expected_cash_after_minor": 2000000
+    }
+  ],
+  "expected_final_trial_balance": {
+    "debit_positive_credit_negative": true,
+    "balances_minor": {
+      "cash": 2000000,
+      "opening_equity": -1000000,
+      "labor_expense": 700000,
+      "payroll_payable": 0,
+      "production_expense": 550000,
+      "accrued_production": 0,
+      "ap_production": 0,
+      "direct_expense": 50000,
+      "expense_payable": 0,
+      "media_recovery_asset": 0,
+      "accrued_media": 0,
+      "ap_media": 0,
+      "unbilled_fee_asset": 0,
+      "agency_fee_revenue": -2300000,
+      "accounts_receivable": 0
+    },
+    "sum_minor": 0,
+    "net_agency_profit_minor": 1000000
+  },
+  "budget_scopes": [
+    {
+      "id": "client_commercial_authority",
+      "valuation_basis": "client_net_billing",
+      "initial_minor": 5000000,
+      "amended_minor": 5300000,
+      "note": "Fee plus media recovery; not sum of supplier spending and payroll"
+    },
+    {
+      "id": "managed_media_authority",
+      "valuation_basis": "net_media_spend",
+      "initial_minor": 3000000,
+      "amended_minor": 3000000
+    },
+    {
+      "id": "agency_cost_authority",
+      "valuation_basis": "internal_direct_cost",
+      "initial_minor": 1100000,
+      "amended_minor": 1300000
+    }
+  ],
+  "payment_funding_policy": {
+    "overdraft_allowed": false,
+    "available_formula": "confirmed cash minus active payment holds; do not count unpaid invoices or forecast collections as cash",
+    "lock_scope": "tenant+legal entity+bank account+currency",
+    "when": "Reserve approved total atomically before provider execution; check current funds again per policy",
+    "insufficient_funds": "Block or queue without sending; never invent credit line",
+    "outcome_unknown": "Keep hold until reconciliation; on confirmed success consume hold and apply settlement once, on confirmed no-effect release according to policy",
+    "receipt_idempotency": "Unique provider+account+receipt ID and unique collection source reference; one cash receipt may have multiple bounded allocations, sum never above receipt and invoice outstanding",
+    "collection_allocation_rule": "Cash receipt and AR allocation are separate linked records, atomically applied for demo action; repeating request returns prior result without a second cash credit",
+    "pre_collection_attempt": {
+      "cash_minor": 1000000,
+      "requested_payment_minor": 4300000,
+      "expected": "blocked_insufficient_funds"
+    },
+    "after_first_collection": {
+      "cash_minor": 5000000,
+      "requested_payment_minor": 4300000,
+      "expected_available_after_hold_minor": 700000
+    }
+  },
+  "cash_timeline": [
+    {
+      "step": "opening",
+      "business_date": "2027-03-01",
+      "delta_minor": 1000000,
+      "cash_minor": 1000000,
+      "ar_minor": 0
+    },
+    {
+      "step": "invoice_issued",
+      "business_date": "2027-03-22",
+      "delta_minor": 0,
+      "cash_minor": 1000000,
+      "ar_minor": 5300000
+    },
+    {
+      "step": "first_collection",
+      "business_date": "2027-03-23",
+      "delta_minor": 4000000,
+      "cash_minor": 5000000,
+      "ar_minor": 1300000
+    },
+    {
+      "step": "media_payment",
+      "business_date": "2027-03-24",
+      "delta_minor": -3000000,
+      "cash_minor": 2000000,
+      "ar_minor": 1300000
+    },
+    {
+      "step": "production_payment_reconciled",
+      "business_date": "2027-03-24",
+      "delta_minor": -550000,
+      "cash_minor": 1450000,
+      "ar_minor": 1300000
+    },
+    {
+      "step": "expense_reimbursement",
+      "business_date": "2027-03-24",
+      "delta_minor": -50000,
+      "cash_minor": 1400000,
+      "ar_minor": 1300000
+    },
+    {
+      "step": "payroll_settlement",
+      "business_date": "2027-03-25",
+      "delta_minor": -700000,
+      "cash_minor": 700000,
+      "ar_minor": 1300000
+    },
+    {
+      "step": "final_collection",
+      "business_date": "2027-03-27",
+      "delta_minor": 1300000,
+      "cash_minor": 2000000,
+      "ar_minor": 0
+    }
+  ],
+  "platform_users": [
+    {
+      "id": "user_demo_platform_operator",
+      "name": "Avery Park",
+      "role": "platform_operator",
+      "scope": "demo_operations_only"
+    },
+    {
+      "id": "user_demo_platform_admin",
+      "name": "Jamie Torres",
+      "role": "platform_admin",
+      "scope": "approve_allowlisted_demo_import_profile_changes",
+      "independent_of": "user_demo_platform_operator"
+    }
+  ],
+  "platform_operations_case": {
+    "id": "ops_csv_delimiter_mismatch",
+    "plane": "platform_operations",
+    "adds_erp_skill": false,
+    "tenant_id": "tenant_demo_rayo",
+    "profile_id": "import_profile_demo_media_orders",
+    "profile_revision_before": 1,
+    "profile_revision_after": 2,
+    "expected_columns": [
+      "order_id",
+      "channel",
+      "amount_minor",
+      "currency",
+      "job_reference",
+      "service_date"
+    ],
+    "sample_filename": "demo-media-orders.csv",
+    "sample_csv": "order_id;channel;amount_minor;currency;job_reference;service_date\nDEMO-ORD-01;meta;1000000;USD;AURSL7AF0001;2027-03-20\n",
+    "delimiter_before": ",",
+    "delimiter_after": ";",
+    "observed_columns_before": 1,
+    "observed_columns_after": 6,
+    "data_rows_after": 1,
+    "requested_by": "user_demo_platform_operator",
+    "approved_by": "user_demo_platform_admin",
+    "command_type": "updateAllowlistedDemoImportDelimiter",
+    "payload": {
+      "profile_id": "import_profile_demo_media_orders",
+      "expected_revision": 1,
+      "delimiter": ";",
+      "reason": "Expected six columns; current delimiter produces one"
+    },
+    "state_transitions": [
+      "detected",
+      "investigating",
+      "proposed",
+      "awaiting_approval",
+      "approved",
+      "applying",
+      "verifying",
+      "resolved"
+    ],
+    "evidence_before": "Real CSV parser with delimiter comma returns one header column",
+    "evidence_after": "Same parser and same CSV with semicolon returns six header columns and one valid data row",
+    "acceptance": [
+      "Fresh approval bound to tenant/profile/revision/payload; requester cannot approve",
+      "Update only this demo profile, persist revision2 and config diff",
+      "Reparse original bytes; result must actually contain six expected fields",
+      "No media order is sent or financial data imported by applying parser fix",
+      "Profile persists after refresh; repeated apply with same key returns existing result",
+      "Unapproved delimiter/global configuration mutation rejected"
+    ],
+    "effects": "Local demo import parsing configuration and audit only; no provider/API/infra/PR/deployment action",
+    "external_actions": false
+  }
+}

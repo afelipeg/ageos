@@ -1,0 +1,51 @@
+INSTRUCCIÓN 2 PARA CLAUDE CODE — PROGRAMAR LA DEMO COMPLETA DE AGEOS
+
+Continúa sobre el chasis existente de app/. No crees otra aplicación ni cambies Verve. El objetivo ahora es dejar una demo determinista, hardcodeada y recorrible de principio a fin para presentar a inversionistas. Debe funcionar sin LLM, claves de IA, OAuth ni servicios externos de negocio.
+
+Lee CLAUDE.md, 08-instruccion-2-demo-e2e.md, demo-scenarios-v1.json, demo-fixtures.json, cobertura-42-skills.json, 03-chasis-deterministico.md, 07-asistente-global-erp.md, asistente-global-v1.json y los guiones/criterios de 05 y 06. Consulta 02/rutas y 04A para reutilizar pantallas, bloques, componentes e iconos ya elegidos.
+
+ALCANCE
+
+Programa los diez recorridos J01–J10 y los 42 escenarios ERP-01–ERP-42. Cada skill requiere caso positivo y negativo, datos de entrada, comando/consulta, resultado persistido o reporte, evidencia y acceso desde su pantalla y desde el asistente. Son al menos84 comprobaciones funcionales de skills, además de los casos transversales. No dejes módulos “Coming soon”, controles sin acción ni éxitos que solo cambian el texto de una tarjeta.
+
+El orquestador es el existente coordinador/agency-orchestrator y deriva a sus especialistas mediante un driver scripted. Página de chat y panel derecho comparten conversación, contexto, permisos y backend. El asistente puede usar prompts, alias EN/ES, parámetros y respuestas preprogramadas. Para texto fuera del guion, explica que es una demo y ofrece escenarios disponibles. No simules comprensión ilimitada ni cobres/consumas inferencia.
+
+Hardcodear significa datos sintéticos, escenarios, plantillas y respuestas externas reproducibles. Los estados, cálculos, permisos y efectos se procesan mediante los mismos servicios del chasis. No hardcodees cifras diferentes por pantalla ni el éxito de una operación que no ocurrió. No uses localStorage como fuente del ERP ni escribas estado de negocio directamente desde componentes.
+
+IMPLEMENTACIÓN
+
+1. Revisa lo construido y corrige las dependencias que impidan los recorridos. Conserva los nueve módulos,42skills,31patrones de ruta y el diseño ReUI. Usa su MCP para comprobar componentes que falten, sin reemplazar el shell ni estilos.
+2. Implementa seeds/checkpoints reproducibles from_intake y ready_for_scope_review, reloj de negocio fijo, demo_run_id y reset protegido por agencia. Los checkpoints representan estados coherentes completos; nunca adelantes pagos, asientos o aprobaciones que el recorrido aún no ejecutó.
+3. Crea un registro central de escenarios versionado en la aplicación: ID, skill, rol, parámetros, precondiciones, pasos, comandos, resultados esperados, plantillas de respuesta, errores e idempotencia. Usa demo-scenarios-v1.json como especificación; no marques completitud solo por generar ese archivo.
+4. Haz navegable J01configurar/activar, J02cliente-producción, J03plan-campaña, J04cambio de alcance/margen, J05conciliar-facturar-cobrar-pagar, J06contabilidad/cierre/reportes, J07asistente página/panel, J08archivos/conexiones/aislamiento, J09operación plataforma y J10catálogo completo/errores. Completa los flujos secundarios en demo-lab para no contaminar los KPIs de Aurora.
+5. Conecta todos los botones, formularios, grillas, Gantt, filtros, aprobaciones, archivos y enlaces a los registros adecuados. Los resultados deben sobrevivir recarga y verse coherentes en Overview, expediente, módulo, reportes y chat. No añadir temporizadores que declaren éxito sin ejecutar el handler.
+6. Programa las conversaciones del orquestador con presets/alias en inglés y español, aclaraciones por campos faltantes y tarjetas tipadas. Las variables de las respuestas provienen de queries autorizadas del estado vigente. Cada delegación ejecuta la capacidad correspondiente y registra evidencia de demo. No necesita SDK/modelo real para completar esta instrucción.
+7. Preserva aprobaciones exactas, actor elegible, separación de funciones, presupuesto, fondos, revisión, tenant y permisos. La propuesta del asistente no es una autorización. La persona aprobadora usa su sesión; no crear un botón que apruebe en nombre de otro.
+8. Prepara adaptadores simulados con éxito, timeout, acceso revocado y resultado incierto. Un sim_* persistido representa cada operación. Reintentar y reconectar no duplica trabajos, campañas ni pagos. Concilia el efecto incierto antes de repetir.
+9. Prepara archivos sintéticos válidos y datos de audiencias/specs/resultados claramente identificados como demo. Una extracción fixture solo corresponde a su archivo/version/checksum, nunca a cualquier PDF subido. No llamas a proveedores ni modelos reales.
+10. Añade un lanzador protegido de escenarios con punto de inicio, actor, pasos y resultado esperado. La demo sigue permitiendo navegar manualmente. Seed/reset solo afectan el run de demostración, no otras agencias ni datos.
+
+CASO FINANCIERO OBLIGATORIO
+
+Rayo de Sol, Estudio Solar, Aurora Spring Launch. Las cifras exactas están en demo-fixtures.json:
+- Fee20,000, costo11,000, margen9,000/45.0%.
+-40h extra×50: costo13,000, margen7,000/35.0%.
+-Enmienda aprobada+3,000: fee23,000, costo13,000, margen10,000/43.5%.
+-Medios30,000 separados del ingreso de agencia; autoridad cliente50,000→53,000 con evidencia y revisión.
+-Factura proveedor6,000 frente a entrega5,500 bloqueada hasta corrección.
+-Caja10,000+primer cobro40,000−pagos43,000+cobro final13,000=20,000. No permitir sobregiro.
+-15asientos principales equilibrados y cierre consistente. Orden, entrega, factura y pago no son cuatro costos diferentes.
+
+La consulta de margen del chat devuelve el checkpoint actual, con fuentes, fecha y moneda; no responde siempre el mismo porcentaje. Una propuesta prepara el diff; solo la acción aprobada cambia el estado y las cifras de todas las vistas.
+
+PRUEBAS Y ENTREGA
+
+Prueba las42skills con caso positivo/negativo y recorre J01–J10. Incluye autoaprobación, revisión obsoleta, tenantajeno, scope revocado, falta de evidencia, presupuesto/fondos insuficientes, duplicados, cancelación, reconexión, recarga y resultado incierto. Valida que la página chat y el panel conservan un único hilo y no ejecutan dos veces.
+
+Prueba el incidente CSV de plataforma:1columna detectada→propuesta de delimitador→aprobación por otro administrador→6columnas y1fila; sin crear órdenes ni gastar. Las pruebas de UI no deben asumir permisos de administrador por conveniencia.
+
+Ejecuta typecheck, lint, tests de dominio, E2E en navegador y build. Comprueba EN/ES, escritorio/móvil, teclado y temas. La aplicación debe arrancar y completar sus recorridos sin credenciales de modelo/proveedor. Conserva una etiqueta discreta Demo con asistente guionizado e integraciones simuladas.
+
+Entrega instrucciones de inicio/seed/reset, guiones de90segundos y5minutos ensayados, capturas y app/evidence/demo-e2e-results.json, demo-e2e-report.md, assistant-acceptance.md y assistant-tool-coverage.json. Actualiza IMPLEMENTATION_STATUS.md con estado separado de chasis y demo. Registra solo pruebas que ejecutaste; todo caso incompleto queda pendiente explícito. No declares42/42 por el número de filas del catálogo.
+
+Empieza revisando el chasis y continúa hasta dejar la demo completa y reproducible. Resuelve decisiones rutinarias con los contratos existentes; no pidas modelos, cuentas comerciales ni credenciales para una demo que debe ser determinista.

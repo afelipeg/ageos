@@ -1,0 +1,212 @@
+{
+  "date": "2026-10-17",
+  "scope": "Document package integrity and arithmetic; not application implementation or runtime testing",
+  "passed": true,
+  "checks": [
+    {
+      "check": "json_parse",
+      "passed": true,
+      "detail": "15 JSON files parse successfully"
+    },
+    {
+      "check": "required_documents",
+      "passed": true,
+      "detail": [
+        "00-LEEME.md",
+        "CLAUDE.md",
+        "01-brief-y-plan-de-construccion.md",
+        "02-pantallas-y-flujos.md",
+        "03-chasis-deterministico.md",
+        "04-reui-seleccion-e-instalacion.md",
+        "05-guion-demo-inversionistas.md",
+        "06-aceptacion-y-evidencias.md",
+        "PROMPT-PARA-CLAUDE-CODE.txt",
+        "cobertura-42-skills.json",
+        "demo-fixtures.json",
+        "rutas-y-pantallas.json",
+        "reui-inventario-verificado.json",
+        "referencias/agency-erp-all-skills.zip",
+        "07-asistente-global-erp.md",
+        "asistente-global-v1.json",
+        "08-instruccion-2-demo-e2e.md",
+        "PROMPT-2-DEMO-E2E.txt",
+        "demo-scenarios-v1.json",
+        "REFERENCIA-COMMERCE-ASSISTANT.md"
+      ]
+    },
+    {
+      "check": "same_42_skills",
+      "passed": true,
+      "detail": "Coverage, UX and source matrix contain the same 42 unique IDs"
+    },
+    {
+      "check": "skill_routes",
+      "passed": true,
+      "detail": "42 route bindings agree"
+    },
+    {
+      "check": "source_outputs",
+      "passed": true,
+      "detail": "All source output keys retained"
+    },
+    {
+      "check": "nine_modules",
+      "passed": true,
+      "detail": {
+        "setup": 4,
+        "clients-contracts": 6,
+        "work-production": 3,
+        "media-planning": 6,
+        "media-buying": 6,
+        "suppliers-payments": 5,
+        "billing-collections": 4,
+        "accounting-close": 4,
+        "profitability": 4
+      }
+    },
+    {
+      "check": "26_calculators",
+      "passed": true,
+      "detail": [
+        "aging",
+        "allocate",
+        "approval_route",
+        "audience_metrics",
+        "budget_check",
+        "cash_projection",
+        "credit_exposure",
+        "depreciation_schedule",
+        "discount_cascade",
+        "estimate_totals",
+        "flat_rebate",
+        "fx_revaluation",
+        "hourly_fee_settlement",
+        "installment_schedule",
+        "invoice_check",
+        "job_number",
+        "journal_check",
+        "margin",
+        "media_line_cost",
+        "payload_digest",
+        "payment_terms",
+        "plan_diff",
+        "reconcile",
+        "spot_match",
+        "tiered_commission",
+        "withholding"
+      ]
+    },
+    {
+      "check": "unique_route_patterns",
+      "passed": true,
+      "detail": 31
+    },
+    {
+      "check": "scope_not_implemented",
+      "passed": true,
+      "detail": "Specification never marks unbuilt skills as implemented"
+    },
+    {
+      "check": "fixture_margin_arithmetic",
+      "passed": true,
+      "detail": "Forecast 45.0% -> 35.0% -> 43.5%; recognized final 43.5%"
+    },
+    {
+      "check": "final_cash",
+      "passed": true,
+      "detail": "USD 10,000 + 53,000 - 43,000 = 20,000"
+    },
+    {
+      "check": "cash_timeline",
+      "passed": true,
+      "detail": "All cash checkpoints reconcile; no implied overdraft; final receivable zero"
+    },
+    {
+      "check": "balanced_journals",
+      "passed": true,
+      "detail": "15 journals balance individually"
+    },
+    {
+      "check": "trial_balance",
+      "passed": true,
+      "detail": "Computed ledger matches final trial balance exactly"
+    },
+    {
+      "check": "reui_inventory",
+      "passed": true,
+      "detail": "18 template entries, 8 Advanced blocks, 17 selected registry items"
+    },
+    {
+      "check": "reference_hashes",
+      "passed": true,
+      "detail": "8 source snapshots match their SHA256 records"
+    },
+    {
+      "check": "source_skill_archive",
+      "passed": true,
+      "detail": "Source bundle contains all 42 corresponding skill archives"
+    },
+    {
+      "check": "local_markdown_links",
+      "passed": true,
+      "detail": "All authored local Markdown links resolve"
+    },
+    {
+      "check": "assistant_42_bindings",
+      "passed": true,
+      "detail": "Existing 42 IDs exposed through the same orchestrator"
+    },
+    {
+      "check": "scripted_demo_scope",
+      "passed": true,
+      "detail": "Assistant and connectors scripted/simulated, no model credentials required"
+    },
+    {
+      "check": "assistant_page_panel",
+      "passed": true,
+      "detail": "One conversation/runtime in full page and global panel"
+    },
+    {
+      "check": "scenario_42_positive_negative",
+      "passed": true,
+      "detail": "42 positive +42 negative scenarios required, no implementation claimed"
+    },
+    {
+      "check": "scenario_domain_bindings",
+      "passed": true,
+      "detail": "All scenarios preserve actual action, route and output contracts"
+    },
+    {
+      "check": "ten_journeys_valid_modules",
+      "passed": true,
+      "detail": "10 E2E journeys reference existing module keys"
+    },
+    {
+      "check": "reui_combined_resources",
+      "passed": true,
+      "detail": "22 resources,17 sidebar entries; verified assistant and docking references"
+    },
+    {
+      "check": "assistant_canonical_acceptance",
+      "passed": true,
+      "detail": "A01–A18 scenarios distinct from AG01–AG14 delivery criteria"
+    },
+    {
+      "check": "reui_detail_reference",
+      "passed": true,
+      "detail": "Assistant design detail points to an existing document"
+    },
+    {
+      "check": "two_instruction_prompts",
+      "passed": true,
+      "detail": "Separate copy/paste prompts for chassis then E2E demo"
+    }
+  ],
+  "not_performed": [
+    "Application build",
+    "Application browser/E2E tests",
+    "Licensed template download",
+    "Production deployment",
+    "Live external integrations"
+  ]
+}
