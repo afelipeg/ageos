@@ -2,11 +2,13 @@ import { mkdirSync } from "node:fs"
 
 import { expect, test, type Browser, type BrowserContext, type Page } from "@playwright/test"
 
+import { REF_TYPES } from "../../components/workbench/form-values"
+import { INPUT_FIELDS } from "../../lib/capabilities/input-fields"
 import { JOURNEYS, journeyStepHref, type Journey, type JourneyStep, type RuntimeParam } from "../../lib/demo/journeys"
 import { fixtureUuid } from "../../lib/fixture-ids"
 
 import { DEDICATED_SKIP, e2eDatabaseUrl, personaState, resetCheckpoint, type PersonaKey } from "./e2e-env"
-import { expectScreen } from "./support"
+import { expectScreen, ready } from "./support"
 
 // J01–J10 product journeys in a real browser, data-driven from the shared
 // catalog lib/demo/journeys.ts (same steps the presenter launcher shows).
@@ -39,6 +41,9 @@ const L = {
   run: re("Run capability|Run again", "Ejecutar capacidad|Ejecutar de nuevo"),
   passed: /Server validation passed\.|La validación del servidor pasó\./,
   openApproval: /^(Open approval|Abrir aprobación)$/,
+  openJob: re("Open job", "Abrir trabajo"),
+  openClient: re("Open client", "Abrir cliente"),
+  selectPlaceholder: /Select…|Seleccione…|No authorized records available\.|No hay registros autorizados disponibles\./,
   approve: re("Approve exact change", "Aprobar cambio exacto"),
   apply: re("Apply approved change", "Aplicar cambio aprobado"),
   confirmProposal: re("Confirm exact proposal", "Confirmar propuesta exacta"),
@@ -60,6 +65,13 @@ const L = {
   opsApprove: re("Approve exact configuration change", "Aprobar cambio exacto de configuración"),
   opsApply: re("Apply approved local change", "Aplicar cambio local aprobado"),
   opsVerify: re("Verify local result", "Verificar resultado local"),
+  requestChange: re("Request activation change", "Solicitar cambio de activación"),
+  submitChange: re("Submit for approval", "Enviar a aprobación"),
+  approveChange: re("Approve and publish", "Aprobar y publicar"),
+  pendingChange: /^(Revision|Revisión) r\d+$/,
+  reason: /^(Reason|Motivo)$/,
+  markReviewed: re("Mark reviewed", "Marcar como revisada"),
+  evidenceReviewed: /Evidence reviewed|Evidencia revisada/,
 }
 
 function presetText(presetId: string) {
@@ -113,8 +125,25 @@ async function outcomeText(page: Page) {
 
 // ── step handlers ──
 
+/** Required workbench fields still empty after load (prefill from the step's `f.<field>` inputs). */
+async function emptyRequired(page: Page, skillId: string) {
+  const empty: string[] = []
+  for (const f of INPUT_FIELDS[skillId] ?? []) {
+    if (!f.required || f.type === "boolean") continue
+    const el = page.locator(`[id="wb-${f.key}"]`).first()
+    const filled =
+      f.type === "enum" || REF_TYPES.has(f.type)
+        ? (await el.getAttribute("data-placeholder")) === null && !L.selectPlaceholder.test((await el.textContent()) ?? "")
+        : (await el.inputValue()) !== ""
+    if (!filled) empty.push(f.key)
+  }
+  return empty
+}
+
 async function workbench(page: Page, href: string, s: JourneyStep, rt: Runtime) {
   await expectScreen(page, href)
+  const skillId = new URL(href, "http://e2e.local").pathname.split("/").pop()!
+  expect(await emptyRequired(page, skillId), "every required input is prefilled from the journey step").toEqual([])
   const run = page.getByRole("button", { name: L.run }).first()
   await expect(run, "Run is enabled (handler implemented, no precondition block)").toBeEnabled()
   // The workbench output region is the aria-live panel; read only alerts produced by this run.
@@ -125,13 +154,20 @@ async function workbench(page: Page, href: string, s: JourneyStep, rt: Runtime) 
   await expect(page.getByRole("button", { name: L.run }).first()).toBeEnabled({ timeout: 90_000 })
   const text = ((await live.last().textContent()) ?? "").replace(/\s+/g, " ").trim()
   await capture(page, rt)
-  const expectBlock = /Blocked with ([a-z_]+)/.exec(s.expected.en)?.[1]
+  const expectBlock = typeof s.outcome === "object" ? s.outcome.blocked : null
   if (expectBlock) {
     expect(text, `expected a block with ${expectBlock}`).not.toMatch(L.passed)
     expect(text.toLowerCase()).toMatch(new RegExp(`${expectBlock}|${expectBlock.replace(/_/g, " ")}`))
     return `blocked as expected: ${text.slice(0, 160)}`
   }
   expect(text, "server validation passed and the run persisted").toMatch(L.passed)
+  // Ids produced by this run ("Next action" links) feed later steps' runtime inputs.
+  const idOf = async (name: RegExp) => {
+    const link = page.locator("a[href]", { hasText: name })
+    return (await link.count()) ? UUID.exec((await link.first().getAttribute("href")) ?? "")?.[0] : undefined
+  }
+  rt.jobId = (await idOf(L.openJob)) ?? rt.jobId
+  rt.clientId = (await idOf(L.openClient)) ?? rt.clientId
   return text.slice(0, 160)
 }
 
@@ -155,8 +191,9 @@ async function decideApprovalAt(page: Page, href: string) {
 async function approvals(page: Page, hrefs: string[]) {
   expect(hrefs.length, "an approval request was produced by an earlier step").toBeGreaterThan(0)
   const out: string[] = []
-  // Two passes: authority approvals unblock held fee amendments, which can then be applied.
-  for (let pass = 0; pass < 2; pass++) for (const h of hrefs) out.push(await decideApprovalAt(page, h))
+  // Latest request first (a client authority before the amendment it backs);
+  // a second pass applies approvals that were held.
+  for (let pass = 0; pass < 2; pass++) for (const h of [...hrefs].reverse()) out.push(await decideApprovalAt(page, h))
   const decided = out.filter(Boolean)
   expect(decided.length, "the actor could decide at least one pending approval").toBeGreaterThan(0)
   expect(decided.join(" "), "no approval ended in an unexpected error").not.toMatch(/Unexpected error|Error inesperado/)
@@ -274,7 +311,8 @@ async function connection(page: Page, s: JourneyStep, rt: Runtime, slug: string)
   if (!rt.connectionId) {
     await expectScreen(page, `/a/${slug}/connections`)
     const hrefs = await page.locator("a[href]").evaluateAll((els) => els.map((e) => ({ h: e.getAttribute("href") ?? "", t: e.closest("tr")?.textContent ?? e.textContent ?? "" })))
-    const meta = hrefs.find((x) => /\/connections\/[^/]+$/.test(x.h) && /meta/i.test(x.t)) ?? hrefs.find((x) => /\/connections\/[^/]+$/.test(x.h))
+    // The Aurora Meta account (J08.4 activates the Aurora campaign on it).
+    const meta = hrefs.find((x) => /\/connections\/[^/]+$/.test(x.h) && /demo_meta_aurora/.test(x.t)) ?? hrefs.find((x) => /\/connections\/[^/]+$/.test(x.h) && /meta/i.test(x.t))
     rt.connectionId = meta?.h.split("/").pop()
   }
   expect(rt.connectionId, "a connection detail link exists").toBeTruthy()
@@ -331,6 +369,60 @@ async function ops(page: Page, s: JourneyStep, href: string | null, rt: Runtime)
   }
 }
 
+// J01.10/J01.11 (D18): an account manager proposes a capability change on the
+// catalog; a different owner approves its exact digest from the same screen.
+// OOH inventory: no enabled capability depends on it (the global reset restores it).
+const CAP_CHANGE_SKILL = "agency-ooh-inventory"
+
+async function capabilityChange(page: Page, s: JourneyStep, href: string) {
+  await expectScreen(page, href)
+  await ready(page)
+  const pending = page.getByRole("group", { name: L.pendingChange }).filter({ hasText: `−${CAP_CHANGE_SKILL}` })
+  if (s.performs === "proposeCapabilityChange") {
+    await page.getByRole("button", { name: L.requestChange }).click()
+    const dialog = page.getByRole("dialog")
+    await expect(dialog.getByRole("checkbox", { name: /agency-access-governance/ }), "mandatory controls cannot be disabled").toBeDisabled()
+    const cap = dialog.getByRole("checkbox", { name: new RegExp(CAP_CHANGE_SKILL) })
+    await expect(cap, `${CAP_CHANGE_SKILL} starts enabled`).toBeChecked()
+    await cap.click()
+    await dialog.getByLabel(L.reason).fill("E2E: no OOH inventory this quarter")
+    await dialog.getByRole("button", { name: L.submitChange }).click()
+    await expect(dialog).toBeHidden({ timeout: 60_000 })
+    await expect(pending, "the proposal is listed as pending").toHaveCount(1, { timeout: 60_000 })
+    await expect(pending.getByRole("button", { name: L.approveChange }), "the requester cannot approve").toHaveCount(0)
+    return `${await pending.getAttribute("aria-label")} proposed (−${CAP_CHANGE_SKILL}); awaiting another owner`
+  }
+  await expect(pending, "a pending change from the requester").toHaveCount(1)
+  const label = await pending.getAttribute("aria-label")
+  const digest = /[0-9a-f]{12}/.exec((await pending.textContent()) ?? "")?.[0]
+  expect(digest, "the approver sees the digest being approved").toBeTruthy()
+  await pending.getByRole("button", { name: L.approveChange }).click()
+  await expect(pending, "the change left the pending list").toHaveCount(0, { timeout: 60_000 }).catch(async (e: Error) => {
+    const alert = await pending.locator('[data-slot="alert"]').first().textContent().catch(() => null)
+    throw new Error(alert ? `decision failed: ${alert}` : e.message)
+  })
+  // Published (a stale or rejected change would also leave the list, but not disable it).
+  await expectScreen(page, `${href}?tab=disabled`)
+  await expect(page.locator("main"), `${CAP_CHANGE_SKILL} is disabled in the published configuration`).toContainText(CAP_CHANGE_SKILL)
+  return `${label} (digest ${digest}…) approved by another owner and published; ${CAP_CHANGE_SKILL} disabled`
+}
+
+// J04.5: a reviewer other than the submitter reviews the client PO evidence (B06).
+async function reviewEvidence(page: Page, href: string) {
+  await expectScreen(page, href)
+  await ready(page)
+  const review = page.locator('[aria-live="polite"]').filter({ has: page.getByRole("button", { name: L.markReviewed }) })
+  const reason = review.getByLabel(L.reason)
+  await expect(reason, "the persona may review this evidence (not its submitter)").toBeEnabled()
+  await reason.fill("E2E: signed client PO revision 2 matches USD 53,000")
+  await review.getByRole("button", { name: L.markReviewed }).click()
+  const alert = review.locator('[data-slot="alert"]')
+  await expect(alert).toBeVisible({ timeout: 60_000 })
+  const text = ((await alert.textContent()) ?? "").replace(/\s+/g, " ").trim()
+  expect(text, "the review persisted").toMatch(L.evidenceReviewed)
+  return text
+}
+
 async function runStep(j: Journey, s: JourneyStep, page: Page, rt: Runtime): Promise<string> {
   const href = journeyStepHref(s, { fixtureId: fixtureUuid, runtime: rt })
   if (/^404/.test(s.expected.en)) {
@@ -352,9 +444,8 @@ async function runStep(j: Journey, s: JourneyStep, page: Page, rt: Runtime): Pro
   if (s.performs === "uploadFile" || s.performs === "linkFileToJob") return files(page, s, href!, rt)
   if (routeId === "connection-detail") return connection(page, s, rt, "rayo-de-sol")
   if (routeId.startsWith("platform-")) return ops(page, s, href, rt)
-  if (s.performs === "proposeCapabilityChange" || s.performs === "decideCapabilityChange") {
-    throw new Error(`no capability-change control on ${href} (J01.10/J01.11 need a propose/decide UI)`)
-  }
+  if (s.performs === "proposeCapabilityChange" || s.performs === "decideCapabilityChange") return capabilityChange(page, s, href!)
+  if (s.performs === "reviewEvidence") return reviewEvidence(page, href!)
   // Read steps (dossier, overview, catalog, persona home): the screen must render.
   const { heading } = await expectScreen(page, href!)
   await capture(page, rt)

@@ -3,10 +3,12 @@ import Link from "next/link"
 import { PlusIcon } from "lucide-react"
 
 import { PageHeader } from "@/components/app/page-header"
+import { JobImportDialog } from "@/components/jobs/job-import-dialog"
 import { JobsDesk } from "@/components/jobs/jobs-desk"
 import { Frame, FramePanel } from "@/components/reui/frame"
 import { Button } from "@/components/ui/button"
 import { requireAgency } from "@/server/auth/request"
+import { getJobImportProfile } from "@/server/domain/job-import"
 import { listClients, listJobs } from "@/server/domain/jobs"
 import { getI18n } from "@/server/i18n"
 
@@ -27,6 +29,9 @@ export default async function JobsPage({
   const safe = await listJobs(ctx, flat).catch(() => listJobs(ctx, {}))
   const clients = await listClients(ctx)
   const base = `/a/${ctx.tenant.slug}`
+  // Import needs jobs.manage (the job-open command) and files.write (upload).
+  const canImport = ctx.permissions.has("jobs.manage") && ctx.permissions.has("files.write")
+  const importProfile = canImport ? await getJobImportProfile(ctx) : null
   return (
     <>
       <PageHeader
@@ -34,10 +39,13 @@ export default async function JobsPage({
         description={t("jobs.description")}
         actions={
           ctx.permissions.has("jobs.manage") ? (
-            <Button size="sm" nativeButton={false} render={<Link href={`${base}/modules/clients-contracts/workflows/agency-job-lifecycle`} />}>
-              <PlusIcon aria-hidden="true" />
-              {t("jobs.newJob")}
-            </Button>
+            <>
+              {canImport && <JobImportDialog agencySlug={ctx.tenant.slug} profile={importProfile} />}
+              <Button size="sm" nativeButton={false} render={<Link href={`${base}/modules/clients-contracts/workflows/agency-job-lifecycle`} />}>
+                <PlusIcon aria-hidden="true" />
+                {t("jobs.newJob")}
+              </Button>
+            </>
           ) : null
         }
       />

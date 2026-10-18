@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState, useTransition } from "react"
 import Link from "next/link"
-import { CheckIcon, PlayIcon, TriangleAlertIcon } from "lucide-react"
+import { CheckIcon, LinkIcon, PlayIcon, TriangleAlertIcon } from "lucide-react"
 
 import { useI18n } from "@/components/i18n/i18n-provider"
 import { Alert, AlertDescription, AlertTitle } from "@/components/reui/alert"
@@ -18,22 +18,12 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import type { FieldSpec } from "@/lib/capabilities/types"
 import { codeLabel } from "@/components/records/code-label"
+import { buildPayload, initialValues, missingRequired, REF_TYPES, type RefOption } from "@/components/workbench/form-values"
 import { runCapabilityAction } from "@/server/actions/capabilities"
-
-type RefOption = { value: string; label: string; detail?: string; revision?: number }
 
 type Outcome =
   | { kind: "ok"; runId: string; state: string; output: unknown; error: { code: string; message: string; details: Record<string, unknown> } | null; replayed: boolean }
   | { kind: "failure"; code: string; message: string; details: Record<string, unknown> }
-
-const REF_TYPES = new Set(["job", "client", "supplier", "connection", "file", "member", "evidence"])
-
-function initialValue(f: FieldSpec, preset: Record<string, string>): string | boolean {
-  if (preset[f.key] !== undefined) return preset[f.key]!
-  if (f.type === "boolean") return f.example === true
-  if (f.example !== undefined && !REF_TYPES.has(f.type)) return String(f.example)
-  return ""
-}
 
 /**
  * Typed form generated from the capability's FieldSpec contract. The same keys
@@ -45,6 +35,7 @@ export function WorkbenchForm({
   fields,
   refs,
   preset,
+  prefilled = false,
   currency,
   implemented,
   revisionOf,
@@ -55,15 +46,15 @@ export function WorkbenchForm({
   fields: readonly FieldSpec[]
   refs: Partial<Record<string, RefOption[]>>
   preset: Record<string, string>
+  /** Some values came from a demo-journey link (`f.<field>` params). */
+  prefilled?: boolean
   currency: string
   implemented: boolean
   revisionOf: "job" | null
   blockedReason: string | null
 }) {
   const { t, pick, money, messages } = useI18n()
-  const [values, setValues] = useState<Record<string, string | boolean>>(() =>
-    Object.fromEntries(fields.map((f) => [f.key, initialValue(f, preset)]))
-  )
+  const [values, setValues] = useState<Record<string, string | boolean>>(() => initialValues(fields, preset))
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [outcome, setOutcome] = useState<Outcome | null>(null)
   const [pending, start] = useTransition()
@@ -82,20 +73,8 @@ export function WorkbenchForm({
     attemptKey.current = crypto.randomUUID()
   }
 
-  const payload = () => {
-    const out: Record<string, unknown> = {}
-    for (const f of fields) {
-      const v = values[f.key]
-      if (v === "" || v === undefined) continue
-      if (f.type === "integer" || f.type === "minutes" || f.type === "bps") out[f.key] = Number(v)
-      else out[f.key] = v
-    }
-    return out
-  }
-
   const submit = () => {
-    const local: Record<string, string> = {}
-    for (const f of fields) if (f.required && (values[f.key] === "" || values[f.key] === undefined)) local[f.key] = t("common.required")
+    const local: Record<string, string> = Object.fromEntries(missingRequired(fields, values).map((k) => [k, t("common.required")]))
     setErrors(local)
     if (Object.keys(local).length) {
       setOutcome(null)
@@ -103,7 +82,7 @@ export function WorkbenchForm({
       return
     }
     start(async () => {
-      const res = await runCapabilityAction({ agencySlug, skillId, payload: payload(), idempotencyKey: attemptKey.current, expectedRevision })
+      const res = await runCapabilityAction({ agencySlug, skillId, payload: buildPayload(fields, values), idempotencyKey: attemptKey.current, expectedRevision })
       if (!res.ok) {
         setOutcome({ kind: "failure", ...res.error })
         return
@@ -189,6 +168,12 @@ export function WorkbenchForm({
         <FrameHeader>
           <FrameTitle>{t("workbench.regions.inputs")}</FrameTitle>
           <FrameDescription>{t("workbench.examplesNote")}</FrameDescription>
+          {prefilled && (
+            <Badge variant="info-light" className="w-fit">
+              <LinkIcon aria-hidden="true" />
+              {t("workbench.prefilledNote")}
+            </Badge>
+          )}
         </FrameHeader>
         <FramePanel>
           <form

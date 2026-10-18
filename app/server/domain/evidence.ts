@@ -1,6 +1,6 @@
 import "server-only"
 
-import { and, desc, eq, gt, inArray, or } from "drizzle-orm"
+import { and, desc, eq, gt, inArray, isNull, ne, or } from "drizzle-orm"
 import { z } from "zod"
 
 import type { AgencyContext } from "@/server/auth/context"
@@ -117,6 +117,36 @@ export async function verifyEvidencePin(
     now.pin.fileSha256 === pin.fileSha256 &&
     now.pin.fileVersion === pin.fileVersion
   return same ? { ok: true } : { ok: false, rule: "evidence_changed", details: { evidenceId: pin.evidenceId } }
+}
+
+/**
+ * Keeps evidence links in step with its document when the document is linked
+ * to (or unlinked from) a job: evidence not yet reviewed follows the job and
+ * its client. Reviewed evidence keeps the links it was reviewed with; if it
+ * was reviewed without any link (a library document), the first link fills
+ * them once — it is never moved to another job afterwards.
+ */
+export async function linkEvidenceToJob(tx: Tx, tenantId: string, fileLogicalId: string, target: { jobId: string; clientId: string } | null) {
+  const files = await tx
+    .select({ id: fileObject.id })
+    .from(fileObject)
+    .where(and(eq(fileObject.tenantId, tenantId), eq(fileObject.logicalId, fileLogicalId)))
+  if (!files.length) return { linked: [] as string[] }
+  const fileIds = files.map((f) => f.id)
+  const now = new Date()
+  const unreviewed = await tx
+    .update(evidence)
+    .set({ jobId: target?.jobId ?? null, clientId: target?.clientId ?? null, updatedAt: now })
+    .where(and(eq(evidence.tenantId, tenantId), inArray(evidence.fileId, fileIds), ne(evidence.reviewState, "reviewed")))
+    .returning({ id: evidence.id })
+  const firstLink = target
+    ? await tx
+        .update(evidence)
+        .set({ jobId: target.jobId, clientId: target.clientId, updatedAt: now })
+        .where(and(eq(evidence.tenantId, tenantId), inArray(evidence.fileId, fileIds), eq(evidence.reviewState, "reviewed"), isNull(evidence.jobId), isNull(evidence.clientId)))
+        .returning({ id: evidence.id })
+    : []
+  return { linked: [...unreviewed, ...firstLink].map((e) => e.id) }
 }
 
 // ── evidence.register ──

@@ -26,7 +26,9 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
       </div>
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>{t("auth.signInTitle")}</CardTitle>
+          <CardTitle>
+            <h1>{t("auth.signInTitle")}</h1>
+          </CardTitle>
           <CardDescription>{t("auth.signInDescription")}</CardDescription>
         </CardHeader>
         <CardContent>

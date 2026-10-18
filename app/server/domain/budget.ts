@@ -19,6 +19,7 @@ import {
   feeSchedule,
   feeScheduleLine,
   job,
+  mediaPlanRevision,
 } from "@/server/db/schema"
 import {
   createProposal,
@@ -321,9 +322,8 @@ export const proposeFeeAmendment = defineCommand({
     const j = await lockJob(tx, ctx.tenant.id, input.job)
     assertRevision(j.revision, meta.expectedRevision, "job")
     const fin = await loadJobFinancials(tx, ctx.tenant.id, j.id)
-    if (!fin.approvedBudget) {
-      throw new DomainError("blocked_by_rule", "The job has no approved budget", { rule: "approved_budget_required" })
-    }
+    // No approved budget yet: this fee is the job's initial fixed fee.
+    if (!fin.approvedBudget) return proposeInitialBudget(tx, ctx, j, fin, input, meta)
     const currency = j.currency
     const toFee = amount(input.newAgencyFee, currency, "newAgencyFee")
     const fromFee = fin.approvedBudget.agencyFeeMinor
@@ -486,6 +486,232 @@ export const proposeFeeAmendment = defineCommand({
     }
   },
 })
+
+export const INITIAL_BUDGET_POLICY = registerApprovalPolicy({ id: "initial-budget-v1", revision: 1 })
+
+/**
+ * Initial budget (fixture steps approve_initial_authority →
+ * approve_estimate_and_plan): the fixed agency fee is the input; managed media
+ * is the rest of the approved client authority (the PO covers fee + media
+ * recovery); cost comes from the current estimate when there is one. Finance
+ * approves it (requester ≠ approver) and the executor makes it the job's first
+ * approved budget revision.
+ */
+async function proposeInitialBudget(
+  tx: Tx,
+  ctx: AgencyContext,
+  j: typeof job.$inferSelect,
+  fin: JobFinancials,
+  input: z.infer<typeof ProposeFeeAmendmentInput>,
+  meta: CommandMeta
+) {
+  const currency = j.currency
+  const fee = amount(input.newAgencyFee, currency, "newAgencyFee")
+  if (fee === 0n) throw new DomainError("validation", "The agency fee must be positive", { field: "newAgencyFee" })
+  const auth = fin.approvedAuthority
+  if (!auth) {
+    throw new DomainError("blocked_by_rule", "An approved client PO must exist before the initial budget", { rule: "client_authority_required" })
+  }
+  if (auth.currency !== currency) throw new DomainError("blocked_by_rule", "The client PO is in another currency", { rule: "currency_mismatch" })
+  if (auth.evidenceId) {
+    const ev = await checkEvidence(tx, ctx.tenant.id, auth.evidenceId, { kind: "client_po", clientId: j.clientId, jobId: j.id })
+    if (!ev.ok) throw new DomainError("blocked_by_rule", "The client PO evidence no longer supports the budget", { rule: ev.rule })
+  }
+  if (fee > auth.amountMinor) {
+    throw new DomainError("blocked_by_rule", "The agency fee exceeds the client authority", {
+      rule: "fee_exceeds_authority",
+      authorityMinor: auth.amountMinor.toString(),
+      feeMinor: fee.toString(),
+      currency,
+    })
+  }
+  const media = auth.amountMinor - fee
+  const plans = await tx
+    .select({ number: mediaPlanRevision.number, totalMinor: mediaPlanRevision.totalMinor })
+    .from(mediaPlanRevision)
+    .where(and(eq(mediaPlanRevision.tenantId, ctx.tenant.id), eq(mediaPlanRevision.jobId, j.id), eq(mediaPlanRevision.state, "approved")))
+  const plan = plans.sort((a, b) => b.number - a.number)[0]
+  if (plan && plan.totalMinor !== media) {
+    throw new DomainError("blocked_by_rule", "The approved media plan does not match the media part of the client authority", {
+      rule: "media_plan_mismatch",
+      planMinor: plan.totalMinor.toString(),
+      mediaMinor: media.toString(),
+      currency,
+    })
+  }
+  const fee_ = computeFeeSchedule(fin, fee)
+  // A newer initial proposal replaces a pending one.
+  await invalidatePendingApprovals(tx, ctx.tenant.id, "job", j.id, { actionTypes: ["budget.initial"] })
+  const [last] = await tx
+    .select({ number: budgetRevision.number })
+    .from(budgetRevision)
+    .where(and(eq(budgetRevision.tenantId, ctx.tenant.id), eq(budgetRevision.jobId, j.id)))
+    .orderBy(desc(budgetRevision.number))
+    .limit(1)
+  const [draft] = await tx
+    .insert(budgetRevision)
+    .values({
+      tenantId: ctx.tenant.id,
+      jobId: j.id,
+      number: (last?.number ?? 0) + 1,
+      state: "submitted",
+      agencyFeeMinor: fee,
+      managedMediaMinor: media,
+      currency,
+      reason: input.reason,
+      createdBy: ctx.user.id,
+      updatedBy: ctx.user.id,
+    })
+    .returning()
+  await tx
+    .update(feeSchedule)
+    .set({ state: "superseded", updatedAt: new Date(), revision: sql`${feeSchedule.revision} + 1` })
+    .where(and(eq(feeSchedule.tenantId, ctx.tenant.id), eq(feeSchedule.jobId, j.id), eq(feeSchedule.state, "proposed")))
+  const [sched] = await tx
+    .insert(feeSchedule)
+    .values({
+      tenantId: ctx.tenant.id,
+      jobId: j.id,
+      budgetRevisionId: draft!.id,
+      state: "proposed",
+      contractKind: fee_.contractKind,
+      totalMinor: fee,
+      currency,
+      settlement: fee_.settlement ? (toJsonSafe(fee_.settlement) as object) : null,
+      exceptions: toJsonSafe(fee_.exceptions) as object,
+      createdBy: ctx.user.id,
+    })
+    .returning()
+  await tx.insert(feeScheduleLine).values(fee_.lines.map((l) => ({ tenantId: ctx.tenant.id, scheduleId: sched!.id, currency, ...l })))
+  const cost = estimateTotals(fin, fin.currentEstimate?.id ?? null).totalMinor
+  const after = margin({ currency, agencyRevenueMinor: fee, agencyCostMinor: cost, managedSpendMinor: media })
+  const payload = {
+    action: "budget.initial",
+    jobId: j.id,
+    jobRevision: j.revision,
+    budgetRevisionId: draft!.id,
+    budgetRevisionNumber: draft!.number,
+    agencyFeeMinor: fee,
+    managedMediaMinor: media,
+    clientAuthorityMinor: auth.amountMinor,
+    contractId: auth.id,
+    currency,
+    feeScheduleId: sched!.id,
+    feeScheduleLines: fee_.lines,
+  }
+  const proposal = await createProposal(
+    tx,
+    ctx,
+    {
+      actionType: "budget.initial",
+      skillId: "agency-fee-contracts",
+      aggregateType: "job",
+      aggregateId: j.id,
+      baseRevision: j.revision,
+      payload,
+      diff: { agencyFeeMinor: { before: null, after: fee }, managedMediaMinor: { before: null, after: media } },
+      impact: { costMinor: cost, marginAfter: { minor: after.marginMinor, bps: after.marginBps }, clientAuthority: { approvedMinor: auth.amountMinor, reference: auth.reference } },
+      origin: meta.origin,
+    },
+    "awaiting_approval"
+  )
+  await tx.update(feeSchedule).set({ proposalId: proposal.id }).where(eq(feeSchedule.id, sched!.id))
+  const eligibleRoles = ["finance_approver"] as const
+  const { approval, events } = await requestApproval(tx, ctx, proposal, {
+    policyId: INITIAL_BUDGET_POLICY.id,
+    policyRevision: INITIAL_BUDGET_POLICY.revision,
+    eligibleRoles,
+    title: `Initial budget ${j.displayReference}`,
+    amountMinor: fee + media,
+    currency,
+    destination: `job:${j.jobNumber}`,
+    expiresInHours: 24 * 14,
+  })
+  return {
+    result: {
+      proposalId: proposal.id,
+      approvalId: approval.id,
+      payloadDigest: proposal.payloadDigest,
+      budgetRevisionId: draft!.id,
+      marginBeforeBps: null as number | null,
+      marginAfterBps: after.marginBps,
+      fee_contract_draft: {
+        contractKind: fee_.contractKind,
+        kind: "initial_budget",
+        budgetRevisionId: draft!.id,
+        budgetRevisionNumber: draft!.number,
+        feeScheduleId: sched!.id,
+        fromAgencyFeeMinor: null as bigint | null,
+        toAgencyFeeMinor: fee,
+        managedMediaMinor: media,
+        clientAuthorityMinor: auth.amountMinor,
+        currency,
+        state: "pending_approval",
+      },
+      instalment_schedule: { advanceMinor: fee_.schedule.advanceMinor, installments: fee_.schedule.installments, lines: fee_.lines, totalMinor: fee_.schedule.totalMinor, currency },
+      job_allocation: fee_.jobAllocation,
+      hourly_settlement: fee_.settlement ?? { applicable: false, reason: "no_labor_estimate" },
+      approval_proposal: { proposalId: proposal.id, approvalId: approval.id, payloadDigest: proposal.payloadDigest, eligibleRoles, clientAuthoritySufficient: true },
+      fee_exceptions: fee_.exceptions,
+    },
+    events: [
+      {
+        eventType: "budget.initial.proposed",
+        aggregateType: "job",
+        aggregateId: j.id,
+        aggregateRevision: j.revision,
+        jobId: j.id,
+        payload: { ...payload, proposalId: proposal.id, approvalId: approval.id },
+      },
+      ...events.map((e) => ({ ...e, jobId: j.id })),
+    ] as EmittedEvent[],
+  }
+}
+
+/** Executor of `budget.initial`: the proposed revision becomes the first approved budget. */
+export async function applyInitialBudget(
+  tx: Tx,
+  ctx: AgencyContext,
+  payload: { jobId: string; jobRevision: number; budgetRevisionId: string; agencyFeeMinor: string; managedMediaMinor: string; contractId: string; feeScheduleId: string },
+  mode: "check" | "apply"
+): Promise<{ ok: true; events: EmittedEvent[] } | { ok: false; code: string; details: Record<string, unknown> }> {
+  const j = await lockJob(tx, ctx.tenant.id, payload.jobId)
+  if (j.revision !== payload.jobRevision) {
+    return { ok: false, code: "approval_stale", details: { jobRevision: j.revision, approvedRevision: payload.jobRevision } }
+  }
+  const fin = await loadJobFinancials(tx, ctx.tenant.id, j.id)
+  if (fin.approvedBudget) return { ok: false, code: "approval_stale", details: { reason: "budget_already_approved" } }
+  const required = BigInt(payload.agencyFeeMinor) + BigInt(payload.managedMediaMinor)
+  const auth = fin.approvedAuthority
+  if (!auth || auth.id !== payload.contractId || auth.amountMinor < required) {
+    return { ok: false, code: "client_authority_missing", details: { requiredMinor: required.toString(), currency: j.currency } }
+  }
+  if (mode === "check") return { ok: true, events: [] }
+  await tx
+    .update(budgetRevision)
+    .set({ state: "approved", approvedBy: ctx.user.id, approvedAt: new Date(), revision: sql`${budgetRevision.revision} + 1` })
+    .where(and(eq(budgetRevision.tenantId, ctx.tenant.id), eq(budgetRevision.id, payload.budgetRevisionId)))
+  await tx
+    .update(feeSchedule)
+    .set({ state: "approved", updatedAt: new Date(), revision: sql`${feeSchedule.revision} + 1` })
+    .where(and(eq(feeSchedule.tenantId, ctx.tenant.id), eq(feeSchedule.id, payload.feeScheduleId)))
+  const jobRevision = await bumpJobRevision(tx, ctx.tenant.id, j.id, ctx.user.id)
+  const ruleEvents = await evaluateMarginFloor(tx, ctx.tenant.id, ctx.tenant.slug, j.id)
+  return {
+    ok: true,
+    events: [
+      {
+        eventType: "budget.approved",
+        aggregateType: "job",
+        aggregateId: j.id,
+        aggregateRevision: jobRevision,
+        jobId: j.id,
+        payload: { budgetRevisionId: payload.budgetRevisionId, agencyFeeMinor: payload.agencyFeeMinor, managedMediaMinor: payload.managedMediaMinor, initial: true },
+      },
+      ...ruleEvents,
+    ],
+  }
+}
 
 /** Applies an approved fee amendment (called by the approval executor). */
 export async function applyFeeAmendment(

@@ -80,8 +80,8 @@ export async function seedCore3(tx: SeedTx, ids: SeedIds): Promise<void> {
   const [labConn, labEmptyConn] = await tx
     .insert(s.connection)
     .values([
-      { tenantId: RAYO, provider: "demo_bank", category: "payments", mode: "simulated", accountAlias: "rayo_lab_demo", scopes: ["payments.read", "payments.initiate"], state: "connected_demo", ownerUserId: owner },
-      { tenantId: RAYO, provider: "demo_bank", category: "payments", mode: "simulated", accountAlias: "rayo_lab_empty_demo", scopes: ["payments.read", "payments.initiate"], state: "connected_demo", ownerUserId: owner },
+      { id: F("connection_rayo_lab_demo"), tenantId: RAYO, provider: "demo_bank", category: "payments", mode: "simulated", accountAlias: "rayo_lab_demo", scopes: ["payments.read", "payments.initiate"], state: "connected_demo", ownerUserId: owner },
+      { id: F("connection_rayo_lab_empty_demo"), tenantId: RAYO, provider: "demo_bank", category: "payments", mode: "simulated", accountAlias: "rayo_lab_empty_demo", scopes: ["payments.read", "payments.initiate"], state: "connected_demo", ownerUserId: owner },
     ])
     .returning({ id: s.connection.id })
   const connOf = async (tenant: string, alias: string) => {
@@ -185,7 +185,8 @@ export async function seedCore3(tx: SeedTx, ids: SeedIds): Promise<void> {
       fixtureKey: d.key,
       logicalId: id,
       version: 1,
-      jobId: F(d.job),
+      // from_intake: the Aurora job does not exist yet; linking the file is a user step.
+      jobId: ids.mode === "from_intake" && d.job === "job_demo_aurora" ? null : F(d.job),
       originalName: d.name,
       format: "pdf",
       mimeType: "application/pdf",

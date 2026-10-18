@@ -30,11 +30,30 @@ export type ParamSource =
   /** Produced by an earlier step of the same run (draftId, runId, changeId…). */
   | { readonly runtime: RuntimeParam }
 
-export type RuntimeParam = "draftId" | "runId" | "agencyId" | "agencySlug" | "changeId" | "approvalId" | "fileId" | "connectionId"
+export type RuntimeParam =
+  | "draftId"
+  | "runId"
+  | "agencyId"
+  | "agencySlug"
+  | "changeId"
+  | "approvalId"
+  | "fileId"
+  | "connectionId"
+  | "clientId"
+  | "jobId"
+  /** A value an earlier step captured from its output (see JourneyStep.captures). */
+  | `capture:${string}`
 
 export type JourneySurface =
   | { readonly kind: "route"; readonly routeId: string; readonly path: string; readonly params?: Readonly<Record<string, ParamSource>> }
   | { readonly kind: "assistant"; readonly presetId: string; readonly path: string; readonly params?: Readonly<Record<string, ParamSource>> }
+
+/**
+ * Expected class of a server outcome: persisted without an approval, persisted
+ * awaiting an approval, or blocked by the named rule (details.rule or code).
+ * Omitted on a workbench step = persisted (with or without an approval).
+ */
+export type JourneyOutcome = "succeeded" | "pending_approval" | { readonly blocked: string }
 
 export type JourneyStep = {
   readonly id: string
@@ -44,6 +63,18 @@ export type JourneyStep = {
   /** Server service/command (or capability skill id) that performs the step. */
   readonly performs: string
   readonly expected: Localized
+  /**
+   * Workbench inputs keyed by the skill's field keys (lib/capabilities/input-fields.ts).
+   * Sent as `f.<field>` query params; fixture keys stay keys and resolve on the
+   * server inside the tenant. Values come from demo-fixtures.json / the seed
+   * (Aurora) or the skill's positive fixture (demo-lab). Record commands,
+   * presenter controls and previews use the same map for their form fields.
+   * A literal "" clears an editable example.
+   */
+  readonly inputs?: Readonly<Record<string, ParamSource>>
+  readonly outcome?: JourneyOutcome
+  /** Runtime values this step's persisted output provides to later steps: capture key → output path (`a.b`, `items[category=media].paymentId`). */
+  readonly captures?: Readonly<Record<`capture:${string}`, string>>
 }
 
 export type Journey = {
@@ -77,7 +108,106 @@ function wb(skillId: string): JourneySurface {
 const route = (routeId: string, path: string, params?: Record<string, ParamSource>): JourneySurface => ({ kind: "route", routeId, path, params })
 const preset = (presetId: string, path = "/a/:agencySlug/assistant", params: Record<string, ParamSource> = RAYO): JourneySurface => ({ kind: "assistant", presetId, path, params })
 
-const step = (id: string, actor: JourneyActor, surface: JourneySurface, performs: string, label: Localized, expected: Localized): JourneyStep => ({ id, actor, surface, performs, label, expected })
+type StepExtra = { inputs?: Record<string, ParamSource>; outcome?: JourneyOutcome; captures?: Record<`capture:${string}`, string> }
+const step = (id: string, actor: JourneyActor, surface: JourneySurface, performs: string, label: Localized, expected: Localized, extra: StepExtra = {}): JourneyStep => ({ id, actor, surface, performs, label, expected, ...extra })
+
+// Input helpers: plain strings are literals (money as decimal strings).
+const fx = (fixture: string): ParamSource => ({ fixture })
+const rt = (runtime: RuntimeParam): ParamSource => ({ runtime })
+const I = (o: Record<string, string | ParamSource>): Record<string, ParamSource> =>
+  Object.fromEntries(Object.entries(o).map(([k, v]) => [k, typeof v === "string" ? { literal: v } : v]))
+const pending = { outcome: "pending_approval" } as const
+const blocked = (rule: string) => ({ outcome: { blocked: rule } }) as const
+
+const AURORA = fx("job_demo_aurora")
+const LAB = fx("job_demo_lab")
+const LAB_OPS = fx("job_demo_lab_ops")
+// Aurora demo connections carry the same key convention as the demo-lab ones
+// (connection_<accountAlias>); the workbench drops a key whose id is not an
+// authorized connection of the tenant.
+const AURORA_META = fx("connection_demo_meta_aurora")
+const RAYO_BANK = fx("connection_rayo_operating_demo")
+
+// Screens other than the workbench that perform steps.
+const record = (recordType: string, recordId: ParamSource) => route("business-record", "/a/:agencySlug/records/:recordType/:recordId", { ...RAYO, recordType: { literal: recordType }, recordId })
+const desk = (moduleKey: string) => route("module-desk", "/a/:agencySlug/modules/:moduleKey", { ...RAYO, moduleKey: { literal: moduleKey } })
+const approvalDetail = () => route("approval-detail", "/a/:agencySlug/approvals/:approvalId", { ...RAYO, approvalId: { runtime: "approvalId" } })
+const presenterControls = () => route("presenter-controls", "/demo/presenter")
+const connectionDetail = (connectionId: ParamSource) => route("connection-detail", "/a/:agencySlug/connections/:connectionId", { ...RAYO, connectionId })
+const fileDetail = (fileKey: string) => route("file-detail", "/a/:agencySlug/library/:fileId", { ...RAYO, fileId: fx(fileKey) })
+const L = (en: string, es: string): Localized => ({ en, es })
+
+// J03: the six Aurora media orders after reallocation r2 (demo-fixtures media_plan_lines.after_reallocation_minor).
+const MEDIA_ORDERS = [
+  { channel: "meta", supplier: "supplier_demo_meta_ads", connection: "connection_demo_meta_aurora", amount: "9000.00", label: "9,000" },
+  { channel: "google", supplier: "supplier_demo_google_ads", connection: "connection_demo_google_aurora", amount: "9000.00", label: "9,000" },
+  { channel: "tiktok", supplier: "supplier_demo_tiktok_ads", connection: "connection_demo_tiktok_aurora", amount: "4000.00", label: "4,000" },
+  { channel: "ctv", supplier: "supplier_demo_dv360", connection: "connection_demo_dv360_aurora", amount: "4000.00", label: "4,000" },
+  { channel: "radio", supplier: "supplier_demo_city_radio", connection: null, amount: "2000.00", label: "2,000" },
+  { channel: "ooh", supplier: "supplier_demo_ooh_operator", connection: null, amount: "2000.00", label: "2,000" },
+] as const
+
+// J05: the USD 43,000 batch (payment_funding_policy) on the Rayo operating account; supplier invoices are due 2027-04-21.
+const PAYMENT_BATCH = I({ connection: RAYO_BANK, paymentDate: "2027-03-24", dueThrough: "2027-04-30", paymentMethod: "bank_transfer", batchAmount: "43000.00" })
+
+// J06: demo-lab jobs whose March items the close checklist lists as unrecognized.
+const LAB_RECOGNITION: readonly string[] = []
+
+/**
+ * J10 inputs: the values of each skill's positive fixture
+ * (server/capabilities/handlers/*.ts) that exist on a fresh seed. Fixtures
+ * that create their own preconditions (fresh jobs, recognized liabilities,
+ * statements) point at the seeded demo-lab records instead.
+ */
+const J10_INPUTS: Record<string, Record<string, ParamSource>> = {
+  "agency-orchestrator": I({ job: LAB }),
+  "agency-integrations": I({ action: "connect", provider: "google_ads", accountAlias: "demo_lab_google" }),
+  "agency-access-governance": I({ member: fx("user_demo_lab_member"), proposedRole: "producer", effectiveScope: "assigned_jobs", expenseApprovalCap: "500.00", reason: "Lab member joins production for the demo-lab exercise." }),
+  "agency-master-data": I({ recordType: "supplier", code: "LUM", legalName: "Lumen Production Demo", country: "US", externalMapping: "demo_ledger:LUM" }),
+  "agency-onboarding": I({ clientName: "Feature Lab (demo-lab)", clientCode: "LAB", productCode: "XX", billingCurrency: "USD", country: "US", briefTitle: "Lab intake brief", briefSummary: "Secondary intake exercise for the demo-lab client." }),
+  "agency-job-lifecycle": I({ action: "open", client: fx("client_demo_lab"), jobName: "Lab job lifecycle exercise", jobType: "A", billingCode: "F", period: "2027-03" }),
+  "agency-contract-po": I({ job: LAB, reference: "PO-LAB-2027-02", amount: "1000.00", validFrom: "2027-03-01", validTo: "2027-12-31", billingRoute: "holder_client", evidenceId: fx("ev:evidence_demo_c1_lab_po") }),
+  "agency-budget-control": I({ job: LAB, budgetScope: "client_commercial_authority", amount: "700.00", purpose: "Fixture reservation" }),
+  "agency-fee-contracts": I({ job: fx("job_demo_lab_fee"), newAgencyFee: "1200.00", reason: "Lab scope adds approved hours." }),
+  "agency-billing-requirements": I({ job: fx("job_demo_lab_billing"), deliverableAccepted: "true", poNumber: "PO-LAB-BILL-01", acceptanceEvidence: fx("ev:evidence_demo_c1_lab_acceptance") }),
+  "agency-tasks-timesheets": I({ job: LAB_OPS, taskTitle: "Lab creative rework", member: fx("user_demo_producer"), workDate: "2027-03-18", minutes: "8400", hourlyCost: "50.00", notes: "demo-lab hours" }),
+  "agency-production-estimating": I({ job: LAB_OPS, laborMinutes: "6000", hourlyCost: "50.00", productionVendorAmount: "5500.00", expenseAmount: "500.00", reason: "demo-lab estimate: 100h, vendor quote and expenses" }),
+  "agency-production": I({ job: LAB_OPS, deliverable: "Lab hero proof", deliveryDate: "2027-03-22", assetFile: fx("file_demo_lab_asset"), rightsCleared: "true", qualityResult: "passed", qcNotes: "Specs and legal lines checked (demo-lab)." }),
+  "agency-media-ranking": I({ job: LAB_OPS, objective: "reach", market: "US", targetAudience: "Adults 25-44, urban", flightStart: "2027-03-16", flightEnd: "2027-03-31", reachWeightBps: "6000" }),
+  "agency-media-planning": I({ job: LAB_OPS, channel: "ooh", placement: "Fictional Station Faces A/B", plannedAmount: "2500.00", flightStart: "2027-03-16", flightEnd: "2027-03-31", audience: "Adults 25-44, urban" }),
+  "agency-tv-radio-planning": I({ job: LAB_OPS, medium: "radio", station: "Fictional City Radio", spotCount: "20", spotDurationSeconds: "30", unitCost: "100.00", flightStart: "2027-03-16", flightEnd: "2027-03-31" }),
+  "agency-ooh-planning": I({ job: LAB_OPS, site: "Fictional Station Faces A/B", faces: "2", unitRate: "1000.00", flightStart: "2027-03-10", flightEnd: "2027-03-24", evidenceType: "photo" }),
+  "agency-digital-planning": I({ job: LAB_OPS, connection: fx("connection_demo_meta_labops"), objective: "conversions", budget: "5000.00", placement: "Demo Feed", conversionEvent: "purchase_demo", creativeFile: fx("file_demo_lab_creative") }),
+  "agency-plan-changes": I({ job: LAB_OPS, baseRevision: "1", channel: "meta", newAmount: "4000.00", offsetChannel: "google", reasonCategory: "market_change", reason: "Move 1,000 from Meta to Google search (demo-lab)." }),
+  "agency-rate-cards-contracts": I({ supplier: fx("supplier_demo_digital_network"), medium: "digital", validFrom: "2027-03-01", validTo: "2027-12-31", grossRate: "1000.00", firstDiscountBps: "1000", secondDiscountBps: "500" }),
+  "agency-media-buying": I({ job: LAB_OPS, supplier: fx("supplier_demo_meta_ads"), channel: "meta", planRevision: "1", orderAmount: "10.00", poNumber: "PO-LAB-OPS-2027-01", connection: fx("connection_demo_meta_labops") }),
+  "agency-campaign-activation": I({ job: LAB_OPS, connection: fx("connection_demo_meta_labops"), planRevision: "1", creativeFile: fx("file_demo_lab_creative"), rightsCleared: "true", landingUrl: "https://lab.example/spring", conversionEvent: "purchase_demo" }),
+  "agency-campaign-optimization": I({ job: LAB_OPS, objective: "conversions", metricsFile: fx("file_demo_lab_metrics_csv"), metricsAsOf: "2027-03-15", maxShiftBps: "2000" }),
+  "agency-transmission-control": I({ job: LAB_OPS, station: "Fictional City Radio", orderedSpots: "20", monitoringFile: fx("file_demo_lab_emissions_csv"), toleranceSpots: "0", requestMakeGood: "true" }),
+  // First free week of face_demo_c from 2027-06-01 on a fresh seed (the fixture's freeWindow).
+  "agency-ooh-inventory": I({ job: LAB_OPS, action: "reserve", face: "face_demo_c", startDate: "2027-06-01", endDate: "2027-06-07", operator: fx("supplier_demo_ooh_operator") }),
+  "agency-delivery-reconciliation": I({ job: LAB, supplier: fx("supplier_demo_lab_vendor"), invoiceNumber: "LAB-SUP-RECON", invoiceAmount: "1000.00", tolerance: "0.00" }),
+  "agency-payables": I({ supplier: fx("supplier_demo_lab_vendor"), job: LAB, invoiceNumber: "LAB-SUP-RECON", invoiceDate: "2027-03-12", dueDate: "2027-04-11", invoiceAmount: "1000.00", period: "2027-03" }),
+  // The fixture batches the recognized lab liabilities it prepares itself; on a
+  // fresh seed nothing is due yet, so no batch amount is prefilled.
+  "agency-payment-run": I({ connection: fx("connection_rayo_lab_demo"), paymentDate: "2027-03-20", dueThrough: "2027-03-31", paymentMethod: "bank_transfer" }),
+  // Statement exported in J10.29a; closing balance = the lab account's confirmed opening USD 5,000 (seed).
+  "agency-cash-settlement": I({ connection: fx("connection_rayo_lab_demo"), statementFile: rt("capture:statement.lab"), statementDate: "2027-03-31", closingBalance: "5000.00" }),
+  "agency-expenses": I({ job: LAB, claimant: fx("user_demo_producer"), receipt: fx("file_demo_lab_expense_receipt"), expenseDate: "2027-03-12", amount: "25.00", category: "travel", description: "Lab taxi" }),
+  "agency-client-billing": I({ job: LAB, invoiceDate: "2027-03-20", feeAmount: "1.00", mediaRecoveryAmount: "0.00", notes: "Lab billing exercise" }),
+  "agency-collections": I({ job: LAB, receiptAmount: "1.00", receiptDate: "2027-03-21" }),
+  "agency-rebates": I({ job: LAB, supplier: fx("supplier_demo_lab_vendor"), period: "2027-03", eligibleBase: "10000.00", rebateRateBps: "200", clientShareBps: "5000" }),
+  "agency-tax-compliance": I({ job: LAB, country: "US", taxProfile: "DEMO_SYNTHETIC_5_PERCENT", taxableBase: "100.00" }),
+  "agency-general-ledger": I({ job: LAB, period: "2027-03", businessDate: "2027-03-20", debitAccount: "production_expense", debitAmount: "10.00", creditAccount: "accrued_production", creditAmount: "10.00", memo: "Lab manual accrual" }),
+  "agency-accruals-revaluation": I({ adjustmentType: "fx_revaluation", job: LAB, period: "2027-03", amount: "1000.00", foreignCurrency: "CAD", balanceSide: "payable" }),
+  "agency-fixed-assets": I({ assetName: "Lab camera kit", cost: "1200.00", residualValue: "0.00", usefulLifeMonths: "12", startDate: "2027-03-01", method: "straight_line", job: LAB }),
+  "agency-period-close": I({ period: "2027-01", action: "close", reason: "January has no open items" }),
+  "agency-profitability": I({ job: AURORA, basis: "forecast" }),
+  "agency-revenue-budget": I({ scenarioName: "Lab upside", client: fx("client_demo_lab"), periodFrom: "2027-01", periodTo: "2027-12", scenarioAmount: "25000.00", allocationDriver: "even_monthly" }),
+  // Opening cash = confirmed primary bank cash on 2027-03-15 (demo-fixtures cash_timeline opening 10,000).
+  "agency-cash-forecast": I({ openingCash: "10000.00", currency: "USD", asOfDate: "2027-03-15", horizonDays: "90", scenario: "downside", collectionDelayDays: "15" }),
+  "agency-management-reporting": I({ period: "2027-03", basis: "incurred", reportTitle: "March 2027 management pack", includeManagedMedia: "true" }),
+}
 
 export const JOURNEYS: readonly Journey[] = [
   {
@@ -137,34 +267,63 @@ export const JOURNEYS: readonly Journey[] = [
     actor: "user_demo_operator",
     source: "demo-scenarios-v1.json#/journeys/J02",
     expectedResult: {
-      en: "The job keeps its identity and revisions; hours change cost and margin.",
-      es: "El trabajo conserva identidad y revisiones; las horas cambian costo y margen.",
+      en: "The job keeps its identity and revisions; it ends where ready_for_scope_review starts: approved authority 50,000, budget fee 20,000 / media 30,000, 100 h forecast, margin 45.0%.",
+      es: "El trabajo conserva identidad y revisiones; termina donde empieza ready_for_scope_review: autoridad aprobada 50,000, presupuesto fee 20,000 / medios 30,000, 100 h proyectadas, margen 45.0%.",
     },
     steps: [
       step("J02.1", "user_demo_operator", wb("agency-onboarding"), "agency-onboarding",
-        { en: "Intake the brief and create the client", es: "Recibir el brief y crear el cliente" },
-        { en: "Aurora Beverages and its brief exist once, linked to the brief document.", es: "Aurora Beverages y su brief existen una vez, vinculados al documento." }),
-      step("J02.2", "user_demo_operator", wb("agency-contract-po"), "agency-contract-po",
-        { en: "Record the client contract / PO with its evidence", es: "Registrar contrato / PO del cliente con su evidencia" },
-        { en: "Client authority USD 50,000 recorded with reviewed evidence; owner approval separate.", es: "Autoridad del cliente USD 50,000 registrada con evidencia revisada; aprobación del owner separada." }),
-      step("J02.3", "user_demo_operator", wb("agency-job-lifecycle"), "agency-job-lifecycle",
-        { en: "Open the job", es: "Abrir el trabajo" },
-        { en: "JobNumber AURSL7AF0001 assigned once; retry does not duplicate.", es: "JobNumber AURSL7AF0001 asignado una vez; reintentar no duplica." }),
-      step("J02.4", "user_demo_operator", wb("agency-budget-control"), "agency-budget-control",
-        { en: "Set and approve the budget", es: "Definir y aprobar el presupuesto" },
-        { en: "Fee USD 20,000 and managed media USD 30,000 kept separate.", es: "Fee USD 20,000 y medios administrados USD 30,000 separados." }),
-      step("J02.5", "user_demo_producer", wb("agency-tasks-timesheets"), "agency-tasks-timesheets",
-        { en: "Plan tasks and log hours", es: "Planificar tareas y registrar horas" },
-        { en: "Approved hours change labor cost and the margin forecast.", es: "Las horas aprobadas cambian el costo laboral y el margen proyectado." }),
-      step("J02.6", "user_demo_operator", wb("agency-production-estimating"), "agency-production-estimating",
-        { en: "Estimate production", es: "Estimar producción" },
-        { en: "Production vendor estimate linked to the job revision.", es: "Estimación del proveedor de producción vinculada a la revisión del trabajo." }),
-      step("J02.7", "user_demo_producer", wb("agency-production"), "agency-production",
-        { en: "Track production and attach the deliverable evidence", es: "Seguir producción y adjuntar la evidencia del entregable" },
-        { en: "Deliverable and evidence visible in the job dossier.", es: "Entregable y evidencia visibles en el expediente." }),
-      step("J02.8", "user_demo_operator", route("job-dossier", "/a/:agencySlug/jobs/:jobId", AURORA_JOB), "getJobDossier",
-        { en: "Review the job dossier", es: "Revisar el expediente del trabajo" },
-        { en: "Contract, budget, hours, production and margin connected on one record.", es: "Contrato, presupuesto, horas, producción y margen conectados en un registro." }),
+        L("Intake the brief and create the client", "Recibir el brief y crear el cliente"),
+        L("Aurora Beverages and its brief exist once, linked to the brief document.", "Aurora Beverages y su brief existen una vez, vinculados al documento."),
+        { inputs: I({ clientName: "Aurora Beverages", clientCode: "AUR", productCode: "SL", billingCurrency: "USD", country: "US", creditLimit: "60000.00", briefTitle: "Aurora Spring Launch brief", briefSummary: "Launch the fictional Aurora sparkling line in spring 2027 across digital, CTV, radio and OOH." }) }),
+      step("J02.2", "user_demo_operator", wb("agency-job-lifecycle"), "agency-job-lifecycle",
+        L("Open the job", "Abrir el trabajo"),
+        L("JobNumber AURSL7AF0001 assigned once; retry does not duplicate.", "JobNumber AURSL7AF0001 asignado una vez; reintentar no duplica."),
+        { inputs: I({ action: "open", client: rt("clientId"), jobName: "Aurora Spring Launch", jobType: "A", billingCode: "F", period: "2027-03" }) }),
+      // The PO is recorded on the job (contract-po requires it), so the job opens first
+      // and the library documents are linked to it.
+      step("J02.3", "user_demo_operator", fileDetail("evidence_demo_po_r1"), "linkFileToJob",
+        L("Link the client PO revision 1 document to the job", "Vincular el documento de la PO revisión 1 al trabajo"),
+        L("The reviewed PO evidence now belongs to Aurora Beverages and its job.", "La evidencia revisada de la PO pertenece ahora a Aurora Beverages y su trabajo."),
+        { inputs: I({ job: rt("jobId") }) }),
+      step("J02.4", "user_demo_operator", wb("agency-contract-po"), "agency-contract-po",
+        L("Record the client contract / PO with its evidence", "Registrar contrato / PO del cliente con su evidencia"),
+        L("Client authority USD 50,000 recorded with reviewed evidence; owner approval separate.", "Autoridad del cliente USD 50,000 registrada con evidencia revisada; aprobación del owner separada."),
+        { inputs: I({ job: rt("jobId"), reference: "PO-AUR-2027-01", amount: "50000.00", validFrom: "2027-03-01", validTo: "2027-06-30", billingRoute: "holder_client", evidenceId: fx("ev:evidence_demo_po_r1") }), ...pending }),
+      step("J02.5", "user_demo_owner", approvalDetail(), "decideApprovalCommand",
+        L("Owner approves the initial client authority", "El owner aprueba la autoridad inicial del cliente"),
+        L("Authority USD 50,000 approved by someone other than the requester.", "Autoridad USD 50,000 aprobada por alguien distinto del solicitante.")),
+      // Initial budget (Core-1 budget.initial, policy initial-budget-v1): fee 20,000 inside the
+      // approved PO 50,000 leaves managed media 30,000; finance approves (not the proposer, not the owner).
+      step("J02.6", "user_demo_operator", wb("agency-fee-contracts"), "agency-fee-contracts",
+        L("Propose the initial budget", "Proponer el presupuesto inicial"),
+        L("Fee USD 20,000 and managed media USD 30,000 from the USD 50,000 authority; awaiting finance.", "Fee USD 20,000 y medios administrados USD 30,000 desde la autoridad de USD 50,000; en espera de finanzas."),
+        { inputs: I({ job: rt("jobId"), newAgencyFee: "20000.00", reason: "Initial approved scope" }), ...pending }),
+      step("J02.7", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance approves the initial budget", "Finanzas aprueba el presupuesto inicial"),
+        L("Budget revision 1 approved: fee USD 20,000, managed media USD 30,000 kept separate.", "Revisión 1 del presupuesto aprobada: fee USD 20,000, medios administrados USD 30,000 separados.")),
+      step("J02.8", "user_demo_operator", wb("agency-budget-control"), "agency-budget-control",
+        L("Reserve the managed media budget", "Reservar el presupuesto de medios administrados"),
+        L("USD 30,000 reserved against the managed media authority.", "USD 30,000 reservados contra la autoridad de medios administrados."),
+        { inputs: I({ job: rt("jobId"), budgetScope: "managed_media_authority", amount: "30000.00", purpose: "Reserve managed media for the spring launch" }) }),
+      step("J02.9", "user_demo_operator", wb("agency-production-estimating"), "agency-production-estimating",
+        L("Estimate production", "Estimar producción"),
+        L("100 h at USD 50, vendor USD 5,500 and expenses USD 500: cost USD 11,000 on the job revision.", "100 h a USD 50, proveedor USD 5,500 y gastos USD 500: costo USD 11,000 en la revisión del trabajo."),
+        { inputs: I({ job: rt("jobId"), laborMinutes: "6000", hourlyCost: "50.00", productionVendorAmount: "5500.00", expenseAmount: "500.00", reason: "Initial plan: 100h labor" }) }),
+      step("J02.10", "user_demo_producer", wb("agency-tasks-timesheets"), "agency-tasks-timesheets",
+        L("Plan tasks and log hours", "Planificar tareas y registrar horas"),
+        L("Hours submitted for a manager's approval; only approved hours change labor cost.", "Horas enviadas a aprobación del responsable; solo las horas aprobadas cambian el costo laboral."),
+        { inputs: I({ job: rt("jobId"), taskTitle: "Base scope 100h", member: fx("user_demo_producer"), workDate: "2027-03-12", minutes: "6000", hourlyCost: "50.00" }) }),
+      step("J02.11", "user_demo_operator", fileDetail("file_demo_aurora_hero_asset"), "linkFileToJob",
+        L("Link the hero film proof to the job", "Vincular la prueba del film principal al trabajo"),
+        L("The deliverable file is visible from the job dossier.", "El archivo del entregable es visible desde el expediente."),
+        { inputs: I({ job: rt("jobId") }) }),
+      step("J02.12", "user_demo_producer", wb("agency-production"), "agency-production",
+        L("Track production and attach the deliverable evidence", "Seguir producción y adjuntar la evidencia del entregable"),
+        L("Deliverable and evidence visible in the job dossier.", "Entregable y evidencia visibles en el expediente."),
+        { inputs: I({ job: rt("jobId"), deliverable: "Aurora spring hero film", deliveryDate: "2027-03-22", assetFile: fx("file_demo_aurora_hero_asset"), rightsCleared: "true", qualityResult: "passed" }) }),
+      step("J02.13", "user_demo_operator", route("job-dossier", "/a/:agencySlug/jobs/:jobId", { ...RAYO, jobId: rt("jobId") }), "getJobDossier",
+        L("Review the job dossier", "Revisar el expediente del trabajo"),
+        L("Contract, budget, hours, production and margin connected on one record.", "Contrato, presupuesto, horas, producción y margen conectados en un registro.")),
     ],
   },
   {
@@ -172,7 +331,8 @@ export const JOURNEYS: readonly Journey[] = [
     name: { en: "Media plan to campaign", es: "Plan de medios a campaña" },
     moduleKeys: ["media-planning", "media-buying"],
     entryCheckpoint: "ready_for_scope_review",
-    continues: [],
+    // demo-fixtures scenario.steps: reallocate media after the approved amendment (J04).
+    continues: ["J04"],
     actor: "user_demo_operator",
     source: "demo-scenarios-v1.json#/journeys/J03",
     expectedResult: {
@@ -181,35 +341,61 @@ export const JOURNEYS: readonly Journey[] = [
     },
     steps: [
       step("J03.1", "user_demo_operator", wb("agency-media-ranking"), "agency-media-ranking",
-        { en: "Rank channels with synthetic audiences", es: "Priorizar canales con audiencias sintéticas" },
-        { en: "Ranking from labelled synthetic audience data.", es: "Priorización con datos de audiencia sintéticos rotulados." }),
+        L("Rank channels with synthetic audiences", "Priorizar canales con audiencias sintéticas"),
+        L("Ranking from labelled synthetic audience data.", "Priorización con datos de audiencia sintéticos rotulados."),
+        { inputs: I({ job: AURORA, objective: "reach", market: "US", targetAudience: "Adults 25-44, urban", flightStart: "2027-03-16", flightEnd: "2027-03-31", reachWeightBps: "6000" }) }),
       step("J03.2", "user_demo_operator", wb("agency-digital-planning"), "agency-digital-planning",
-        { en: "Plan digital lines and specs", es: "Planificar líneas digitales y specs" },
-        { en: "Digital lines with complete specs.", es: "Líneas digitales con specs completas." }),
+        L("Plan digital lines and specs", "Planificar líneas digitales y specs"),
+        L("Digital lines with complete specs.", "Líneas digitales con specs completas."),
+        { inputs: I({ job: AURORA, connection: AURORA_META, objective: "conversions", budget: "10000.00", placement: "Demo Feed", conversionEvent: "purchase_demo", creativeFile: fx("file_demo_aurora_creative_feed") }) }),
       step("J03.3", "user_demo_operator", wb("agency-tv-radio-planning"), "agency-tv-radio-planning",
-        { en: "Plan TV/radio spots", es: "Planificar spots de TV/radio" },
-        { en: "Radio line 20 × USD 100 on the plan.", es: "Línea de radio 20 × USD 100 en el plan." }),
+        L("Plan TV/radio spots", "Planificar spots de TV/radio"),
+        L("Radio line 20 × USD 100 on the plan.", "Línea de radio 20 × USD 100 en el plan."),
+        { inputs: I({ job: AURORA, medium: "radio", station: "Fictional City Radio", spotCount: "20", spotDurationSeconds: "30", unitCost: "100.00", flightStart: "2027-03-16", flightEnd: "2027-03-31" }) }),
       step("J03.4", "user_demo_operator", wb("agency-ooh-planning"), "agency-ooh-planning",
-        { en: "Plan OOH faces", es: "Planificar caras OOH" },
-        { en: "OOH line 2 × USD 1,000 on the plan.", es: "Línea OOH 2 × USD 1,000 en el plan." }),
-      step("J03.5", "user_demo_operator", wb("agency-media-planning"), "agency-media-planning",
-        { en: "Review the media plan revision", es: "Revisar la revisión del plan de medios" },
-        { en: "Plan total USD 30,000 across six channels.", es: "Total del plan USD 30,000 en seis canales." }),
-      step("J03.6", "user_demo_operator", wb("agency-media-buying"), "agency-media-buying",
-        { en: "Create media orders from the approved revision", es: "Crear órdenes de medios desde la revisión aprobada" },
-        { en: "Orders bound to the approved plan revision.", es: "Órdenes vinculadas a la revisión aprobada del plan." }),
-      step("J03.7", "user_demo_operator", wb("agency-campaign-activation"), "agency-campaign-activation",
-        { en: "Activate the demo campaign", es: "Activar la campaña demo" },
-        { en: "Simulated activation with sim_* receipt on the demo account; no real spend.", es: "Activación simulada con recibo sim_* en la cuenta demo; sin gasto real." }),
-      step("J03.8", "user_demo_operator", wb("agency-transmission-control"), "agency-transmission-control",
-        { en: "Check delivery / transmission", es: "Revisar entrega / emisión" },
-        { en: "Delivery recorded against the orders.", es: "Entrega registrada contra las órdenes." }),
-      step("J03.9", "user_demo_operator", wb("agency-campaign-optimization"), "agency-campaign-optimization",
-        { en: "Optimize from simulated metrics", es: "Optimizar con métricas simuladas" },
-        { en: "Recommendation proposed, not applied automatically.", es: "Recomendación propuesta, no aplicada automáticamente." }),
-      step("J03.10", "user_demo_operator", wb("agency-plan-changes"), "agency-plan-changes",
-        { en: "Revise the plan", es: "Revisar el plan" },
-        { en: "New plan revision; prior approvals of the old payload become stale.", es: "Nueva revisión del plan; las aprobaciones del payload anterior quedan obsoletas." }),
+        L("Plan OOH faces", "Planificar caras OOH"),
+        L("OOH line 2 × USD 1,000 on the plan.", "Línea OOH 2 × USD 1,000 en el plan."),
+        { inputs: I({ job: AURORA, site: "Fictional Station Faces A/B", faces: "2", unitRate: "1000.00", flightStart: "2027-03-16", flightEnd: "2027-03-31", evidenceType: "photo" }) }),
+      step("J03.5", "user_demo_operator", record("media-plan", fx("plan_aurora_r1")), "getRecordDetail",
+        L("Review the media plan revision", "Revisar la revisión del plan de medios"),
+        L("Plan total USD 30,000 across six channels.", "Total del plan USD 30,000 en seis canales.")),
+      step("J03.6", "user_demo_operator", wb("agency-plan-changes"), "agency-plan-changes",
+        L("Reallocate media: revise the plan", "Reasignar medios: revisar el plan"),
+        L("Revision 2 moves USD 1,000 from Meta to Google; total stays USD 30,000.", "La revisión 2 mueve USD 1,000 de Meta a Google; el total sigue en USD 30,000."),
+        { inputs: I({ job: AURORA, baseRevision: "1", channel: "meta", newAmount: "9000.00", offsetChannel: "google", reasonCategory: "market_change", reason: "Move 1,000 from Meta to Google search based on early results." }), ...pending }),
+      step("J03.7", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance approves plan revision 2", "Finanzas aprueba la revisión 2 del plan"),
+        L("Revision 2 approved; revision 1 superseded; approvals of the old payload become stale.", "Revisión 2 aprobada; la revisión 1 queda reemplazada; las aprobaciones del payload anterior quedan obsoletas.")),
+      ...MEDIA_ORDERS.map((o, i) =>
+        step(`J03.${8 + i}`, "user_demo_operator", wb("agency-media-buying"), "agency-media-buying",
+          L(`Order the ${o.channel} line from revision 2 (USD ${o.label})`, `Ordenar la línea ${o.channel} desde la revisión 2 (USD ${o.label})`),
+          L("Order bound to the approved plan revision; awaiting finance.", "Orden vinculada a la revisión aprobada del plan; en espera de finanzas."),
+          { inputs: I({ job: AURORA, supplier: fx(o.supplier), channel: o.channel, planRevision: "2", orderAmount: o.amount, poNumber: "PO-AUR-2027-01", ...(o.connection ? { connection: fx(o.connection) } : {}) }), ...pending, captures: { [`capture:order.${o.channel}`]: "orderId" } })
+      ),
+      step("J03.14", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance approves the six media orders", "Finanzas aprueba las seis órdenes de medios"),
+        L("Each order executes once through the simulated adapter (sim_* receipt or offline send pack).", "Cada orden se ejecuta una vez por el adaptador simulado (recibo sim_* o paquete de envío offline).")),
+      step("J03.15", "user_demo_operator", wb("agency-campaign-activation"), "agency-campaign-activation",
+        L("Activate the demo campaign", "Activar la campaña demo"),
+        L("Simulated activation on revision 2 and the demo Meta account; awaiting finance.", "Activación simulada sobre la revisión 2 y la cuenta demo de Meta; en espera de finanzas."),
+        { inputs: I({ job: AURORA, connection: AURORA_META, planRevision: "2", creativeFile: fx("file_demo_aurora_creative_feed"), rightsCleared: "true", landingUrl: "https://aurora.example/spring", conversionEvent: "purchase_demo" }), ...pending }),
+      step("J03.16", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance approves the activation", "Finanzas aprueba la activación"),
+        L("Simulated campaign with a sim_* receipt; no real spend.", "Campaña simulada con recibo sim_*; sin gasto real.")),
+      step("J03.17", "user_demo_operator", wb("agency-transmission-control"), "agency-transmission-control",
+        L("Check delivery / transmission", "Revisar entrega / emisión"),
+        L("20 of 20 radio spots confirmed against the schedule; ready to close.", "20 de 20 spots de radio confirmados contra la pauta; listo para cerrar."),
+        { inputs: I({ job: AURORA, station: "Fictional City Radio", orderedSpots: "20", monitoringFile: fx("file_demo_aurora_monitoring_csv"), toleranceSpots: "0", requestMakeGood: "true" }) }),
+      ...MEDIA_ORDERS.map((o, i) =>
+        step(`J03.${18 + i}`, "user_demo_operator", record("media-order", rt(`capture:order.${o.channel}`)), "media.acceptDelivery",
+          L(`Accept the ${o.channel} delivery (USD ${o.label})`, `Aceptar la entrega ${o.channel} (USD ${o.label})`),
+          L("Accepted delivery consumes the order commitment once (order → delivery is one cost).", "La entrega aceptada consume el compromiso de la orden una sola vez (orden → entrega es un costo)."),
+          { inputs: I({ acceptedAmount: o.amount, businessDate: "2027-03-22" }) })
+      ),
+      step("J03.24", "user_demo_operator", wb("agency-campaign-optimization"), "agency-campaign-optimization",
+        L("Optimize from simulated metrics", "Optimizar con métricas simuladas"),
+        L("USD 1,000 Meta → Google recommended, pending approval; not applied automatically.", "USD 1,000 de Meta → Google recomendado, pendiente de aprobación; no se aplica automáticamente."),
+        { inputs: I({ job: AURORA, objective: "conversions", metricsFile: fx("file_demo_aurora_metrics_csv"), metricsAsOf: "2027-03-15", maxShiftBps: "1000" }), ...pending }),
     ],
   },
   {
@@ -230,20 +416,26 @@ export const JOURNEYS: readonly Journey[] = [
         { en: "Fee USD 20,000, cost USD 11,000, margin 45.0%.", es: "Fee USD 20,000, costo USD 11,000, margen 45.0%." }),
       step("J04.2", "user_demo_operator", wb("agency-production-estimating"), "recordCostEstimate",
         { en: "Record the 40 additional hours", es: "Registrar las 40 horas adicionales" },
-        { en: "Cost USD 13,000; margin 35.0% below the 40% floor.", es: "Costo USD 13,000; margen 35.0% bajo el piso de 40%." }),
+        { en: "Cost USD 13,000; margin 35.0% below the 40% floor.", es: "Costo USD 13,000; margen 35.0% bajo el piso de 40%." },
+        { inputs: I({ job: AURORA, laborMinutes: "8400", hourlyCost: "50.00", productionVendorAmount: "5500.00", expenseAmount: "500.00", reason: "Scope change adds 40 hours" }) }),
       step("J04.3", "user_demo_operator", preset("preset.margin.aurora", "/a/:agencySlug/jobs/:jobId", AURORA_JOB), "preset.margin.aurora",
         { en: "Ask the assistant why the margin fell", es: "Preguntar al asistente por qué bajó el margen" },
         { en: "Scripted answer cites the persisted records; labelled scripted demo.", es: "Respuesta guionada que cita los registros persistidos; rotulada como demo guionada." }),
       step("J04.4", "user_demo_operator", wb("agency-fee-contracts"), "proposeFeeAmendment",
         { en: "Propose the USD 3,000 fee amendment", es: "Proponer la enmienda de fee de USD 3,000" },
-        { en: "Proposal awaiting finance approval; no financial effect yet.", es: "Propuesta en espera de aprobación de finanzas; sin efecto financiero aún." }),
-      step("J04.5", "user_demo_operator", wb("agency-contract-po"), "recordClientAuthority",
+        { en: "Proposal awaiting finance approval; no financial effect yet.", es: "Propuesta en espera de aprobación de finanzas; sin efecto financiero aún." },
+        { inputs: I({ job: AURORA, newAgencyFee: "23000.00", reason: "Scope change adds 40 hours of creative rework." }), ...pending }),
+      step("J04.5", "user_demo_owner", route("business-record", "/a/:agencySlug/records/:recordType/:recordId", { ...RAYO, recordType: { literal: "evidence" }, recordId: { fixture: "ev:evidence_demo_po_r2" } }), "reviewEvidence",
+        { en: "Owner reviews the client PO revision 2 evidence", es: "El owner revisa la evidencia de la PO revisión 2 del cliente" },
+        { en: "Reviewed by someone other than its submitter; the review pins the exact file version and hash.", es: "Revisada por alguien distinto de quien la aportó; la revisión fija la versión y el hash exactos del archivo." }),
+      step("J04.6", "user_demo_operator", wb("agency-contract-po"), "recordClientAuthority",
         { en: "Record client PO revision 2 (USD 53,000) with its evidence", es: "Registrar la PO revisión 2 del cliente (USD 53,000) con su evidencia" },
-        { en: "Client authority is a separate fact from internal approval.", es: "La autoridad del cliente es un hecho distinto de la aprobación interna." }),
-      step("J04.6", "user_demo_finance", route("approval-detail", "/a/:agencySlug/approvals/:approvalId", { ...RAYO, approvalId: { runtime: "approvalId" } }), "decideApprovalCommand",
+        { en: "Client authority is a separate fact from internal approval.", es: "La autoridad del cliente es un hecho distinto de la aprobación interna." },
+        { inputs: I({ job: AURORA, reference: "PO-AUR-2027-01", amount: "53000.00", validFrom: "2027-03-01", validTo: "2027-06-30", billingRoute: "holder_client", evidenceId: fx("ev:evidence_demo_po_r2") }), ...pending }),
+      step("J04.7", "user_demo_finance", route("approval-detail", "/a/:agencySlug/approvals/:approvalId", { ...RAYO, approvalId: { runtime: "approvalId" } }), "decideApprovalCommand",
         { en: "Finance approves the exact payload", es: "Finanzas aprueba el payload exacto" },
         { en: "Requester cannot self-approve; approval bound to the digest and revision.", es: "El solicitante no puede autoaprobar; aprobación ligada a digest y revisión." }),
-      step("J04.7", "user_demo_operator", route("job-dossier", "/a/:agencySlug/jobs/:jobId", AURORA_JOB), "getJobDossier",
+      step("J04.8", "user_demo_operator", route("job-dossier", "/a/:agencySlug/jobs/:jobId", AURORA_JOB), "getJobDossier",
         { en: "Return to the job", es: "Volver al trabajo" },
         { en: "Fee USD 23,000, cost USD 13,000, margin USD 10,000 · 43.5%; media USD 30,000 separate.", es: "Fee USD 23,000, costo USD 13,000, margen USD 10,000 · 43.5%; medios USD 30,000 separados." }),
     ],
@@ -253,7 +445,7 @@ export const JOURNEYS: readonly Journey[] = [
     name: { en: "Supplier reconciliation and payment", es: "Conciliación de proveedor y pago" },
     moduleKeys: ["suppliers-payments", "billing-collections"],
     entryCheckpoint: "ready_for_scope_review",
-    continues: ["J04"],
+    continues: ["J03"],
     actor: "user_demo_finance",
     source: "demo-scenarios-v1.json#/journeys/J05",
     expectedResult: {
@@ -261,30 +453,130 @@ export const JOURNEYS: readonly Journey[] = [
       es: "Sin sobregiro: caja 10k + 53k − 43k = 20k. Orden/entrega/factura/pago no duplican costos.",
     },
     steps: [
-      step("J05.1", "user_demo_finance", wb("agency-delivery-reconciliation"), "agency-delivery-reconciliation",
-        { en: "Match supplier invoice USD 6,000 against delivery USD 5,500", es: "Conciliar factura de proveedor USD 6,000 contra entrega USD 5,500" },
-        { en: "Invoice held: amount differs from the accepted delivery.", es: "Factura retenida: el importe difiere de la entrega aceptada." }),
-      step("J05.2", "user_demo_finance", wb("agency-payables"), "agency-payables",
-        { en: "Correct the invoice and make it payable", es: "Corregir la factura y dejarla pagable" },
-        { en: "One payable of USD 5,500; no duplicate cost.", es: "Una cuenta por pagar de USD 5,500; sin costo duplicado." }),
-      step("J05.3", "user_demo_finance", wb("agency-client-billing"), "agency-client-billing",
-        { en: "Issue the demo client invoice USD 53,000", es: "Emitir la factura demo al cliente USD 53,000" },
-        { en: "Billing requirements checked; demo issuance, no tax filing.", es: "Requisitos de facturación verificados; emisión demo, sin timbrado fiscal." }),
-      step("J05.4", "user_demo_finance", wb("agency-payment-run"), "agency-payment-run",
-        { en: "Try to pay USD 43,000 before collecting", es: "Intentar pagar USD 43,000 antes de cobrar" },
-        { en: "Blocked: insufficient funds (cash USD 10,000).", es: "Bloqueado: fondos insuficientes (caja USD 10,000)." }),
-      step("J05.5", "user_demo_finance", wb("agency-collections"), "agency-collections",
-        { en: "Collect USD 40,000", es: "Cobrar USD 40,000" },
-        { en: "Cash USD 50,000; receivable USD 13,000.", es: "Caja USD 50,000; cartera USD 13,000." }),
-      step("J05.6", "user_demo_finance", wb("agency-payment-run"), "agency-payment-run",
-        { en: "Release the approved payments", es: "Liberar los pagos aprobados" },
-        { en: "USD 43,000 paid with sim_* receipts; cash USD 7,000.", es: "USD 43,000 pagados con recibos sim_*; caja USD 7,000." }),
-      step("J05.7", "user_demo_finance", wb("agency-cash-settlement"), "agency-cash-settlement",
-        { en: "Settle cash and reconcile", es: "Liquidar caja y conciliar" },
-        { en: "Cash settlement distinct from expense recognition.", es: "Liquidación de caja distinta del reconocimiento de gasto." }),
-      step("J05.8", "user_demo_finance", wb("agency-collections"), "agency-collections",
-        { en: "Collect the remaining USD 13,000", es: "Cobrar los USD 13,000 restantes" },
-        { en: "Cash USD 20,000; receivable zero.", es: "Caja USD 20,000; cartera cero." }),
+      step("J05.1", "user_demo_operator", desk("work-production"), "production.issueProductionOrder",
+        L("Issue the Lumen production order USD 5,500", "Emitir la orden de producción a Lumen USD 5,500"),
+        L("Order against the agency cost authority, linked to the estimate.", "Orden contra la autoridad de costo de la agencia, vinculada a la estimación."),
+        { inputs: I({ job: AURORA, supplier: fx("supplier_demo_lumen"), amount: "5500.00", deliverable: "Aurora spring hero film" }) }),
+      step("J05.2", "user_demo_operator", wb("agency-production"), "agency-production",
+        L("Accept the production delivery", "Aceptar la entrega de producción"),
+        L("Delivery USD 5,500 accepted against the order; rights and QA recorded.", "Entrega USD 5,500 aceptada contra la orden; derechos y QA registrados."),
+        { inputs: I({ job: AURORA, deliverable: "Aurora spring hero film", deliveryDate: "2027-03-22", assetFile: fx("file_demo_aurora_hero_asset"), rightsCleared: "true", qualityResult: "passed" }) }),
+      step("J05.3", "user_demo_producer", wb("agency-tasks-timesheets"), "agency-tasks-timesheets",
+        L("Log the base 100 hours", "Registrar las 100 horas base"),
+        L("Timesheet submitted for a manager's approval.", "Hoja de horas enviada a aprobación del responsable."),
+        { inputs: I({ job: AURORA, taskTitle: "Base scope 100h", member: fx("user_demo_producer"), workDate: "2027-03-12", minutes: "6000", hourlyCost: "50.00" }), captures: { "capture:timesheet.base": "timesheetId" } }),
+      step("J05.4", "user_demo_producer", wb("agency-tasks-timesheets"), "agency-tasks-timesheets",
+        L("Log the 40 scope-change hours", "Registrar las 40 horas del cambio de alcance"),
+        L("Timesheet submitted for a manager's approval.", "Hoja de horas enviada a aprobación del responsable."),
+        { inputs: I({ job: AURORA, taskTitle: "Scope change 40h", member: fx("user_demo_producer"), workDate: "2027-03-19", minutes: "2400", hourlyCost: "50.00" }), captures: { "capture:timesheet.scope": "timesheetId" } }),
+      step("J05.5", "user_demo_operator", record("timesheet", rt("capture:timesheet.base")), "time.decideTimesheet",
+        L("Approve the base hours", "Aprobar las horas base"),
+        L("100 h approved by a manager other than the worker.", "100 h aprobadas por un responsable distinto de quien trabajó.")),
+      step("J05.6", "user_demo_operator", record("timesheet", rt("capture:timesheet.scope")), "time.decideTimesheet",
+        L("Approve the scope-change hours", "Aprobar las horas del cambio de alcance"),
+        L("140 h approved at USD 50 = USD 7,000, valued once.", "140 h aprobadas a USD 50 = USD 7,000, valoradas una vez.")),
+      step("J05.7", "user_demo_producer", wb("agency-expenses"), "agency-expenses",
+        L("Submit the USD 500 production expense", "Enviar el gasto de producción de USD 500"),
+        L("Receipt verified; awaiting finance.", "Recibo verificado; en espera de finanzas."),
+        { inputs: I({ job: AURORA, claimant: fx("user_demo_producer"), receipt: fx("file_demo_aurora_expense_receipt"), expenseDate: "2027-03-18", amount: "500.00", category: "production_supplies", description: "Props for the hero film shoot" }), ...pending }),
+      step("J05.8", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance approves the expense", "Finanzas aprueba el gasto"),
+        L("Approved by someone other than the submitter.", "Aprobado por alguien distinto de quien lo envió.")),
+      step("J05.9", "user_demo_owner", wb("agency-delivery-reconciliation"), "agency-delivery-reconciliation",
+        L("Match supplier invoice USD 6,000 against delivery USD 5,500", "Conciliar factura de proveedor USD 6,000 contra entrega USD 5,500"),
+        L("Invoice held: amount differs from the accepted delivery.", "Factura retenida: el importe difiere de la entrega aceptada."),
+        { inputs: I({ job: AURORA, supplier: fx("supplier_demo_lumen"), invoiceNumber: "DEMO-LUM-031", invoiceAmount: "6000.00", tolerance: "0.00" }) }),
+      step("J05.10", "user_demo_owner", wb("agency-delivery-reconciliation"), "agency-delivery-reconciliation",
+        L("Record the corrected supplier invoice USD 5,500", "Registrar la factura corregida del proveedor USD 5,500"),
+        L("Same invoice corrected and matched to the accepted delivery; no new cost.", "La misma factura corregida y conciliada con la entrega aceptada; sin costo nuevo."),
+        { inputs: I({ job: AURORA, supplier: fx("supplier_demo_lumen"), invoiceNumber: "DEMO-LUM-031", invoiceAmount: "5500.00", tolerance: "0.00" }) }),
+      step("J05.11", "user_demo_owner", wb("agency-payables"), "agency-payables",
+        L("Make the corrected invoice payable", "Dejar pagable la factura corregida"),
+        L("One payable of USD 5,500; no duplicate cost; awaiting finance.", "Una cuenta por pagar de USD 5,500; sin costo duplicado; en espera de finanzas."),
+        { inputs: I({ supplier: fx("supplier_demo_lumen"), job: AURORA, invoiceNumber: "DEMO-LUM-031", invoiceDate: "2027-03-22", dueDate: "2027-04-21", invoiceAmount: "5500.00", period: "2027-03" }), ...pending }),
+      step("J05.12", "user_demo_owner", wb("agency-payables"), "agency-payables",
+        L("Register the managed media invoice USD 30,000", "Registrar la factura de medios administrados USD 30,000"),
+        L("Matched to the accepted media deliveries; awaiting finance.", "Conciliada con las entregas de medios aceptadas; en espera de finanzas."),
+        { inputs: I({ supplier: fx("supplier_demo_media_network"), job: AURORA, invoiceNumber: "DEMO-MEDIA-AUR-03", invoiceDate: "2027-03-22", dueDate: "2027-04-21", invoiceAmount: "30000.00", period: "2027-03" }), ...pending }),
+      step("J05.13", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance approves both supplier invoices", "Finanzas aprueba las dos facturas de proveedor"),
+        L("Payables USD 5,500 and USD 30,000; the preparer cannot approve.", "Cuentas por pagar USD 5,500 y USD 30,000; quien prepara no aprueba.")),
+      step("J05.14", "user_demo_owner", record("evidence", fx("ev:evidence_demo_aurora_acceptance")), "reviewEvidence",
+        L("Owner reviews the client acceptance evidence", "El owner revisa la evidencia de aceptación del cliente"),
+        L("Accepted delivery reviewed; fee recognition may proceed.", "Entrega aceptada revisada; el reconocimiento del fee puede proceder.")),
+      step("J05.15", "user_demo_owner", wb("agency-accruals-revaluation"), "agency-accruals-revaluation",
+        L("Recognize the accepted fee and costs", "Reconocer el fee aceptado y los costos"),
+        L("Recognition run prepared by the owner; awaiting finance.", "Corrida de reconocimiento preparada por el owner; en espera de finanzas."),
+        { inputs: I({ adjustmentType: "accrual", job: AURORA, period: "2027-03", amount: "", foreignCurrency: "", balanceSide: "", previousRate: "", closingRate: "" }), ...pending }),
+      step("J05.16", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance posts the recognition run", "Finanzas contabiliza la corrida de reconocimiento"),
+        L("Labor, production, expense, media and fee journals posted once; incurred margin 43.5%.", "Asientos de mano de obra, producción, gasto, medios y fee contabilizados una vez; margen incurrido 43.5%.")),
+      step("J05.17", "user_demo_operator", wb("agency-billing-requirements"), "agency-billing-requirements",
+        L("Check the billing requirements", "Verificar los requisitos de facturación"),
+        L("PO revision 2 and the reviewed acceptance evidence linked; issuance ready.", "PO revisión 2 y la evidencia de aceptación revisada vinculadas; emisión lista."),
+        { inputs: I({ job: AURORA, deliverableAccepted: "true", poNumber: "PO-AUR-2027-01", acceptanceEvidence: fx("ev:evidence_demo_aurora_acceptance") }) }),
+      step("J05.18", "user_demo_operator", wb("agency-client-billing"), "agency-client-billing",
+        L("Issue the demo client invoice USD 53,000", "Emitir la factura demo al cliente USD 53,000"),
+        L("Fee USD 23,000 + media recovery USD 30,000; demo issuance, no tax filing; awaiting finance.", "Fee USD 23,000 + recuperación de medios USD 30,000; emisión demo, sin timbrado fiscal; en espera de finanzas."),
+        { inputs: I({ job: AURORA, invoiceDate: "2027-03-22", feeAmount: "23000.00", mediaRecoveryAmount: "30000.00", poNumber: "PO-AUR-2027-01" }), ...pending }),
+      step("J05.19", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance approves the client invoice", "Finanzas aprueba la factura al cliente"),
+        L("DEMO-INV-0001 issued; cash USD 10,000, receivable USD 53,000.", "DEMO-INV-0001 emitida; caja USD 10,000, cartera USD 53,000.")),
+      step("J05.20", "user_demo_owner", wb("agency-payment-run"), "agency-payment-run",
+        L("Try to pay USD 43,000 before collecting", "Intentar pagar USD 43,000 antes de cobrar"),
+        L("Blocked: insufficient funds (cash USD 10,000).", "Bloqueado: fondos insuficientes (caja USD 10,000)."),
+        { inputs: PAYMENT_BATCH, ...blocked("insufficient_funds") }),
+      step("J05.21", "user_demo_finance", wb("agency-collections"), "agency-collections",
+        L("Collect USD 40,000", "Cobrar USD 40,000"),
+        L("Cash USD 50,000; receivable USD 13,000.", "Caja USD 50,000; cartera USD 13,000."),
+        { inputs: I({ job: AURORA, invoiceNumber: "DEMO-INV-0001", receiptAmount: "40000.00", receiptDate: "2027-03-23", receiptReference: "sim_receipt_collection_demo_first" }) }),
+      step("J05.22", "user_demo_owner", desk("suppliers-payments"), "previewPaymentRun",
+        L("Preview the funds for USD 43,000 of payments", "Previsualizar fondos para USD 43,000 en pagos"),
+        L("Media 30,000, production 5,500, expense 500, payroll 7,000 = USD 43,000 against confirmed cash USD 50,000.", "Medios 30,000, producción 5,500, gasto 500, nómina 7,000 = USD 43,000 frente a caja confirmada USD 50,000."),
+        { inputs: I({ connection: RAYO_BANK, dueThrough: "2027-04-30" }) }),
+      step("J05.23", "user_demo_owner", wb("agency-payment-run"), "agency-payment-run",
+        L("Prepare the payment batch", "Preparar el lote de pagos"),
+        L("Batch USD 43,000 prepared by the owner; awaiting finance.", "Lote USD 43,000 preparado por el owner; en espera de finanzas."),
+        { inputs: PAYMENT_BATCH, ...pending, captures: { "capture:batch": "batchId", ...Object.fromEntries(["media", "production", "expense", "payroll"].map((c) => [`capture:payment.${c}`, `payment_list_proposal.items[category=${c}].paymentId`])) } }),
+      step("J05.24", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance approves the batch", "Finanzas aprueba el lote"),
+        L("Funds reserved atomically; available cash USD 7,000.", "Fondos reservados de forma atómica; caja disponible USD 7,000.")),
+      step("J05.25", "user_demo_finance", record("payment-run", rt("capture:batch")), "payments.executePayment",
+        L("Pay the media invoice USD 30,000", "Pagar la factura de medios USD 30,000"),
+        L("Paid once with a sim_* receipt; cash USD 20,000.", "Pagada una vez con recibo sim_*; caja USD 20,000."),
+        { inputs: I({ paymentId: rt("capture:payment.media") }) }),
+      step("J05.26", "user_demo_owner", presenterControls(), "queueSimulationOutcome",
+        L("Presenter: the next demo-bank payment times out after its effect", "Presentador: el próximo pago del banco demo vence tras su efecto"),
+        L("Outcome queued for the next simulated payment.", "Resultado en cola para el próximo pago simulado."),
+        { inputs: I({ provider: "demo_bank", operationType: "payment.execute", failureMode: "timeout_after_effect" }) }),
+      step("J05.27", "user_demo_finance", record("payment-run", rt("capture:batch")), "payments.executePayment",
+        L("Pay the production invoice USD 5,500", "Pagar la factura de producción USD 5,500"),
+        L("Outcome unknown: the hold stays until reconciliation; no second effect.", "Resultado incierto: la reserva se mantiene hasta conciliar; sin segundo efecto."),
+        { inputs: I({ paymentId: rt("capture:payment.production") }) }),
+      step("J05.28", "user_demo_finance", record("payment-run", rt("capture:batch")), "payments.reconcilePayment",
+        L("Reconcile the production payment with the provider", "Conciliar el pago de producción con el proveedor"),
+        L("Existing receipt found: one provider effect; cash USD 14,500.", "Recibo existente encontrado: un efecto del proveedor; caja USD 14,500."),
+        { inputs: I({ paymentId: rt("capture:payment.production") }) }),
+      step("J05.29", "user_demo_finance", record("payment-run", rt("capture:batch")), "payments.executePayment",
+        L("Reimburse the USD 500 expense", "Reembolsar el gasto de USD 500"),
+        L("Settles the expense already recognized; cash USD 14,000.", "Liquida el gasto ya reconocido; caja USD 14,000."),
+        { inputs: I({ paymentId: rt("capture:payment.expense") }) }),
+      step("J05.30", "user_demo_finance", record("payment-run", rt("capture:batch")), "payments.executePayment",
+        L("Settle payroll USD 7,000", "Liquidar la nómina USD 7,000"),
+        L("Settles labor already recognized; cash USD 7,000.", "Liquida la mano de obra ya reconocida; caja USD 7,000."),
+        { inputs: I({ paymentId: rt("capture:payment.payroll") }) }),
+      step("J05.31", "user_demo_finance", wb("agency-collections"), "agency-collections",
+        L("Collect the remaining USD 13,000", "Cobrar los USD 13,000 restantes"),
+        L("Cash USD 20,000; receivable zero.", "Caja USD 20,000; cartera cero."),
+        { inputs: I({ job: AURORA, invoiceNumber: "DEMO-INV-0001", receiptAmount: "13000.00", receiptDate: "2027-03-27", receiptReference: "sim_receipt_collection_demo_final" }) }),
+      step("J05.32", "user_demo_owner", connectionDetail(RAYO_BANK), "cash.exportDemoBankStatement",
+        L("Export the demo bank statement", "Exportar el extracto del banco demo"),
+        L("Synthetic statement file of the operating account.", "Archivo de extracto sintético de la cuenta operativa."),
+        { inputs: I({ statementDate: "2027-03-31" }), captures: { "capture:statement.file": "fileId" } }),
+      step("J05.33", "user_demo_owner", wb("agency-cash-settlement"), "agency-cash-settlement",
+        L("Settle cash and reconcile", "Liquidar caja y conciliar"),
+        L("Statement and book balance agree at USD 20,000; cash settlement distinct from expense recognition.", "Extracto y saldo en libros coinciden en USD 20,000; liquidación de caja distinta del reconocimiento de gasto."),
+        { inputs: I({ connection: RAYO_BANK, statementFile: rt("capture:statement.file"), statementDate: "2027-03-31", closingBalance: "20000.00" }) }),
     ],
   },
   {
@@ -292,7 +584,7 @@ export const JOURNEYS: readonly Journey[] = [
     name: { en: "Accounting close and reporting", es: "Cierre contable y reportes" },
     moduleKeys: ["accounting-close", "profitability", "billing-collections"],
     entryCheckpoint: "ready_for_scope_review",
-    continues: ["J04", "J05"],
+    continues: ["J05"],
     actor: "user_demo_finance",
     source: "demo-scenarios-v1.json#/journeys/J06",
     expectedResult: {
@@ -300,21 +592,45 @@ export const JOURNEYS: readonly Journey[] = [
       es: "15 asientos principales equilibrados y saldo final exacto; jurisdicción y tipos fiscales son demo.",
     },
     steps: [
-      step("J06.1", "user_demo_finance", wb("agency-general-ledger"), "agency-general-ledger",
-        { en: "Recognize and reconcile journals", es: "Reconocer y conciliar asientos" },
-        { en: "Every journal balances; prepared by one actor, posted by another.", es: "Cada asiento cuadra; preparado por un actor y contabilizado por otro." }),
-      step("J06.2", "user_demo_finance", wb("agency-accruals-revaluation"), "agency-accruals-revaluation",
-        { en: "Accruals and FX revaluation (demo-lab)", es: "Provisiones y revaluación cambiaria (demo-lab)" },
-        { en: "Secondary cases stay out of Aurora KPIs.", es: "Los casos secundarios no afectan los KPIs de Aurora." }),
-      step("J06.3", "user_demo_finance", wb("agency-fixed-assets"), "agency-fixed-assets",
-        { en: "Fixed asset depreciation (demo-lab)", es: "Depreciación de activo fijo (demo-lab)" },
-        { en: "Depreciation entry on the demo-lab asset.", es: "Asiento de depreciación del activo demo-lab." }),
-      step("J06.4", "user_demo_finance", wb("agency-period-close"), "agency-period-close",
-        { en: "Run the close checklist and close March 2027", es: "Ejecutar el checklist y cerrar marzo 2027" },
-        { en: "A difference blocks the close; once corrected the internal demo ledger closes.", es: "Una diferencia bloquea el cierre; corregida, se cierra el libro interno demo." }),
-      step("J06.5", "user_demo_finance", wb("agency-management-reporting"), "agency-management-reporting",
-        { en: "P&L, aging, cash and management report", es: "P&L, antigüedad, caja y reporte gerencial" },
-        { en: "Reports from persisted records; exports are real files.", es: "Reportes desde registros persistidos; las exportaciones son archivos reales." }),
+      step("J06.1", "user_demo_owner", wb("agency-general-ledger"), "agency-general-ledger",
+        L("Prepare a balanced journal (demo-lab)", "Preparar un asiento cuadrado (demo-lab)"),
+        L("Debit equals credit; prepared by one actor, posted by another.", "Debe igual a haber; preparado por un actor y contabilizado por otro."),
+        { inputs: J10_INPUTS["agency-general-ledger"], ...pending }),
+      step("J06.2", "user_demo_owner", wb("agency-accruals-revaluation"), "agency-accruals-revaluation",
+        L("Accruals and FX revaluation (demo-lab)", "Provisiones y revaluación cambiaria (demo-lab)"),
+        L("Secondary cases stay out of Aurora KPIs.", "Los casos secundarios no afectan los KPIs de Aurora."),
+        { inputs: J10_INPUTS["agency-accruals-revaluation"], ...pending }),
+      step("J06.3", "user_demo_owner", wb("agency-fixed-assets"), "agency-fixed-assets",
+        L("Fixed asset depreciation (demo-lab)", "Depreciación de activo fijo (demo-lab)"),
+        L("Depreciation schedule on the demo-lab asset.", "Calendario de depreciación del activo demo-lab."),
+        { inputs: J10_INPUTS["agency-fixed-assets"], ...pending }),
+      step("J06.4", "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance posts the demo-lab entries", "Finanzas contabiliza los asientos demo-lab"),
+        L("Every journal balances; the preparer cannot post.", "Cada asiento cuadra; quien prepara no contabiliza.")),
+      step("J06.5", "user_demo_finance", wb("agency-period-close"), "agency-period-close",
+        L("Run the close checklist for March 2027", "Ejecutar el checklist de cierre de marzo 2027"),
+        L("Open items are listed with their records; nothing closes yet.", "Las partidas abiertas se listan con sus registros; aún no se cierra nada."),
+        { inputs: I({ period: "2027-03", action: "check_readiness" }) }),
+      ...LAB_RECOGNITION.map((jobKey, i) =>
+        step(`J06.${6 + i}`, "user_demo_owner", wb("agency-accruals-revaluation"), "agency-accruals-revaluation",
+          L(`Recognize the pending demo-lab items (${jobKey})`, `Reconocer las partidas demo-lab pendientes (${jobKey})`),
+          L("Recognition run for the secondary job; awaiting finance.", "Corrida de reconocimiento del trabajo secundario; en espera de finanzas."),
+          { inputs: I({ adjustmentType: "accrual", job: fx(jobKey), period: "2027-03", amount: "", foreignCurrency: "", balanceSide: "", previousRate: "", closingRate: "" }), ...pending })
+      ),
+      step(`J06.${6 + LAB_RECOGNITION.length}`, "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance posts the demo-lab recognitions", "Finanzas contabiliza los reconocimientos demo-lab"),
+        L("No unrecognized item remains in March 2027.", "No queda ninguna partida sin reconocer en marzo 2027.")),
+      step(`J06.${7 + LAB_RECOGNITION.length}`, "user_demo_finance", wb("agency-management-reporting"), "agency-management-reporting",
+        L("P&L, aging, cash and management report", "P&L, antigüedad, caja y reporte gerencial"),
+        L("Reports from persisted records; exports are real files.", "Reportes desde registros persistidos; las exportaciones son archivos reales."),
+        { inputs: J10_INPUTS["agency-management-reporting"] }),
+      step(`J06.${8 + LAB_RECOGNITION.length}`, "user_demo_owner", wb("agency-period-close"), "agency-period-close",
+        L("Propose closing March 2027", "Proponer el cierre de marzo 2027"),
+        L("Close proposal with its reason; awaiting an approver other than the proposer.", "Propuesta de cierre con su motivo; en espera de un aprobador distinto de quien la propone."),
+        { inputs: I({ period: "2027-03", action: "close", reason: "March demo ledger reconciled and complete" }), ...pending }),
+      step(`J06.${9 + LAB_RECOGNITION.length}`, "user_demo_finance", approvalDetail(), "decideApprovalCommand",
+        L("Finance approves the close", "Finanzas aprueba el cierre"),
+        L("March 2027 closed in the internal demo ledger; later writes are blocked.", "Marzo 2027 cerrado en el libro interno demo; las escrituras posteriores se bloquean.")),
     ],
   },
   {
@@ -371,7 +687,9 @@ export const JOURNEYS: readonly Journey[] = [
         { en: "Dependent actions blocked; others keep working; event recorded.", es: "Acciones dependientes bloqueadas; las demás siguen; evento registrado." }),
       step("J08.4", "user_demo_operator", wb("agency-campaign-activation"), "agency-campaign-activation",
         { en: "Try the dependent action", es: "Intentar la acción dependiente" },
-        { en: "Blocked with connection_revoked.", es: "Bloqueada con connection_revoked." }),
+        { en: "Blocked with connection_revoked.", es: "Bloqueada con connection_revoked." },
+        // The connection revoked in J08.3 (runtime id); plan r1 is the approved Aurora plan.
+        { inputs: I({ job: AURORA, connection: rt("connectionId"), planRevision: "1", creativeFile: fx("file_demo_aurora_creative_feed"), rightsCleared: "true", landingUrl: "https://aurora.example/spring", conversionEvent: "purchase_demo" }), ...blocked("connection_revoked") }),
       step("J08.5", "user_demo_norte_owner", route("workspace-home", "/a/:agencySlug", { agencySlug: { literal: "norte-studio" } }), "switchPersona",
         { en: "Switch to the Norte Studio owner", es: "Cambiar al owner de Norte Studio" },
         { en: "Only Norte records are visible.", es: "Solo se ven registros de Norte." }),
@@ -432,12 +750,21 @@ export const JOURNEYS: readonly Journey[] = [
       step("J10.0", "user_demo_owner", route("capabilities", "/a/:agencySlug/capabilities", RAYO), "listCapabilities",
         { en: "Open the catalog of 42 capabilities", es: "Abrir el catálogo de 42 capacidades" },
         { en: "Nine groups, 42 unique skills, each linking to its workbench.", es: "Nueve grupos, 42 skills únicas, cada una enlaza a su workbench." }),
-      ...CAPABILITY_CONTRACTS.map((c, i) =>
+      ...CAPABILITY_CONTRACTS.flatMap((c, i) => [
+        // The settlement imports a statement exported from the lab demo bank first.
+        ...(c.skillId === "agency-cash-settlement"
+          ? [
+              step(`J10.${i + 1}a`, "user_demo_owner", connectionDetail(fx("connection_rayo_lab_demo")), "cash.exportDemoBankStatement",
+                L("Export the lab demo bank statement", "Exportar el extracto del banco demo del laboratorio"),
+                L("Synthetic statement file of the lab account.", "Archivo de extracto sintético de la cuenta del laboratorio."),
+                { inputs: I({ statementDate: "2027-03-31" }), captures: { "capture:statement.lab": "fileId" } }),
+            ]
+          : []),
         step(`J10.${i + 1}`, "user_demo_owner", wb(c.skillId), c.skillId, c.label, {
           en: `ERP-${String(i + 1).padStart(2, "0")}: positive case persists; negative case is blocked by its rule with no side effect.`,
           es: `ERP-${String(i + 1).padStart(2, "0")}: el caso positivo persiste; el negativo se bloquea por su regla sin efecto lateral.`,
-        })
-      ),
+        }, { inputs: J10_INPUTS[c.skillId] }),
+      ]),
     ],
   },
 ]
@@ -447,9 +774,57 @@ export function journeyById(id: string): Journey | null {
 }
 
 /**
+ * Execution order: a journey runs right after the journeys it continues (one
+ * demo run, no reset in between), otherwise in catalog order. Catalog
+ * J01…J10 → J01, J02, J04, J03, J05, J06, J07, J08, J09, J10.
+ */
+export function journeyRunOrder(): Journey[] {
+  const out: Journey[] = []
+  const visit = (j: Journey) => {
+    if (out.includes(j)) return
+    for (const c of j.continues) visit(journeyById(c)!)
+    out.push(j)
+  }
+  for (const j of JOURNEYS) visit(j)
+  return out
+}
+
+/** Value at `path` of a step output: dot segments, numeric indexes and `[key=value]` filters. */
+export function journeyOutputValue(output: unknown, path: string): unknown {
+  let cur: unknown = output
+  for (const seg of path.split(".")) {
+    const m = /^([^[\]]+)(?:\[([^=\]]+)=([^\]]+)\])?$/.exec(seg)
+    if (!m || cur === null || typeof cur !== "object") return undefined
+    cur = (cur as Record<string, unknown>)[m[1]!]
+    if (m[2] !== undefined) cur = Array.isArray(cur) ? cur.find((x) => x && typeof x === "object" && String((x as Record<string, unknown>)[m[2]!]) === m[3]) : undefined
+  }
+  return cur
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+
+/** Every approval a step output requested (top level, nested proposals, request lists). */
+export function journeyApprovalIds(output: unknown, out = new Set<string>()): Set<string> {
+  if (Array.isArray(output)) for (const v of output) journeyApprovalIds(v, out)
+  else if (output && typeof output === "object") {
+    for (const [k, v] of Object.entries(output)) {
+      if (k === "approvalId" && typeof v === "string" && UUID_RE.test(v)) out.add(v)
+      else journeyApprovalIds(v, out)
+    }
+  }
+  return out
+}
+
+/** Query value of a fixture-key input (`f.job=fixture:job_demo_aurora`); resolved on the server. */
+export const FIXTURE_INPUT_PREFIX = "fixture:"
+
+/**
  * Builds the link of a step. Fixture params resolve through `fixtureId`
  * (server: fixtureUuid); runtime params come from the current run. Returns
  * null while a runtime param is still unknown (the step is not reachable yet).
+ * Workbench inputs become `f.<field>` query params: literals as-is, fixture
+ * keys as `fixture:<key>` (resolved by the workbench inside the tenant),
+ * runtime values when known (an unknown one is left for the user to choose).
  */
 export function journeyStepHref(
   s: JourneyStep,
@@ -462,5 +837,11 @@ export function journeyStepHref(
     path = path.replace(`:${name}`, encodeURIComponent(value))
   }
   if (path.includes("/:")) return null
-  return s.surface.kind === "assistant" ? `${path}${path.includes("?") ? "&" : "?"}preset=${encodeURIComponent(s.surface.presetId)}` : path
+  if (s.surface.kind === "assistant") return `${path}${path.includes("?") ? "&" : "?"}preset=${encodeURIComponent(s.surface.presetId)}`
+  const query = new URLSearchParams()
+  for (const [field, src] of Object.entries(s.inputs ?? {})) {
+    const value = "literal" in src ? src.literal : "fixture" in src ? `${FIXTURE_INPUT_PREFIX}${src.fixture}` : resolve.runtime?.[src.runtime]
+    if (value !== undefined && (value !== "" || "literal" in src)) query.set(`f.${field}`, value)
+  }
+  return query.size ? `${path}?${query}` : path
 }

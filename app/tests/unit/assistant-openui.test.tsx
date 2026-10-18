@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react"
 import { I18nProvider } from "@/components/i18n/i18n-provider"
 import { openuiLibrary, validateOpenUISource } from "@/components/openui/library"
 import { OpenUIMessage } from "@/components/openui/openui-view"
-import { capabilityResultView, marginDashboardView, plotOf, plotRange } from "@/lib/assistant/openui-compose"
+import { capabilityResultView, marginChangeView, marginDashboardView, plotOf, plotRange } from "@/lib/assistant/openui-compose"
 import { OPENUI_LIMITS } from "@/lib/assistant/openui-schema"
 import type { OpenUIViewPart } from "@/lib/assistant/types"
 
@@ -96,6 +96,27 @@ describe("OpenUI composition (server templates)", () => {
     expect(part!.source).toContain("LineChart(")
     expect(part!.source).toContain("RecordTable(")
     expect(part!.fallback[0]).toEqual({ label: { en: "Closing cash", es: "Closing cash" }, value: { kind: "money", minor: "1200000", currency: "USD" } })
+  })
+
+  it("composes the margin-change view (Forecast basis) that validates and renders exact figures", () => {
+    const part = marginChangeView({
+      skillId: "agency-profitability",
+      job: { name: "Aurora Spring Launch", revision: 4 },
+      asOf: "2027-03-15",
+      currency: "USD",
+      before: { estimateNumber: 1, laborMinutes: 6000, costMinor: "1100000", marginMinor: "900000", marginBps: 4500 },
+      after: { estimateNumber: 2, laborMinutes: 8400, costMinor: "1300000", marginMinor: "700000", marginBps: 3500 },
+      floorBps: 4000,
+      sources: AURORA.sources,
+    })
+    expect(part.template).toBe("margin_change")
+    expect(validateOpenUISource(part.source).ok).toBe(true)
+    renderPart(part)
+    expect(screen.getByText("45.0%")).toBeInTheDocument()
+    expect(screen.getByText("35.0%")).toBeInTheDocument()
+    expect(screen.getByText("USD 2,000.00")).toBeInTheDocument()
+    expect(screen.getByText("40 h")).toBeInTheDocument()
+    expect(screen.getByText("Forecast")).toBeInTheDocument()
   })
 
   it("negative margins and counts survive as signed strings (no unary expressions)", () => {

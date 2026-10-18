@@ -95,7 +95,8 @@ app/IMPLEMENTATION_STATUS.md once published.
 
 ## License
 
-Proprietary, all rights reserved. See [LICENSE](LICENSE) and
+Copyright (c) 2026 Andrés Felipe Gutiérrez Henao. Proprietary, all rights
+reserved. See [LICENSE](LICENSE) and
 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
 
 ## Confidentiality

@@ -8,8 +8,8 @@
 //   OOH operators) and their synthetic rate cards;
 // - synthetic, versioned audience sources/estimates, ad placement specs,
 //   broadcast stations and OOH faces (all labelled synthetic);
-// - Aurora input assets (hero film proof, feed creative) with usage rights —
-//   no Aurora orders, deliveries, campaigns or timesheets;
+// - Aurora input assets (hero film proof, feed creative) with usage rights and
+//   synthetic monitoring/metrics CSVs — no Aurora orders, deliveries, campaigns or timesheets;
 // - demo-lab job `job_demo_lab_ops` (reporting group demo-lab) with its own
 //   PO/budget/approved plan, a committed radio order + 20-spot schedule, the
 //   synthetic emission and metrics CSVs and lab creatives/assets.
@@ -200,11 +200,29 @@ export async function seedCore2(tx: SeedTx, ids: SeedIds): Promise<void> {
     metricRows.push(`${date},line_google,USD,20000,25000,800,4`)
   }
   const metricsCsv = ["date,line_key,currency,spend_minor,impressions,clicks,conversions", ...metricRows].join("\n") + "\n"
+  // Aurora versions (synthetic): the full 20-spot FCR schedule aired once each, and early
+  // digital metrics where Meta has the highest cost per conversion and Google the lowest.
+  const auroraEmissionRows = fcrSchedule.map((spot, i) => {
+    const [h, m] = spot.windowStart.split(":").map(Number)
+    return `EM-${String(i + 1).padStart(3, "0")},FCR,${spot.airDate},${String(h! + 1).padStart(2, "0")}:${String(m! + 15).padStart(2, "0")},${spot.materialId}`
+  })
+  const auroraEmissionsCsv = ["event_id,station_code,air_date,air_time,material_id", ...auroraEmissionRows].join("\n") + "\n"
+  const auroraMetricRows: string[] = []
+  for (let d = 9; d <= 15; d++) {
+    const date = `2027-03-${String(d).padStart(2, "0")}`
+    auroraMetricRows.push(`${date},line_meta,USD,40000,90000,1300,4`)
+    auroraMetricRows.push(`${date},line_google,USD,30000,40000,1200,6`)
+    auroraMetricRows.push(`${date},line_tiktok,USD,15000,70000,900,2`)
+    auroraMetricRows.push(`${date},line_ctv,USD,16000,60000,150,2`)
+  }
+  const auroraMetricsCsv = ["date,line_key,currency,spend_minor,impressions,clicks,conversions", ...auroraMetricRows].join("\n") + "\n"
   const enc = (t: string) => new TextEncoder().encode(t)
   const creativeExtraction = (w: number, h: number, sec: number) => ({ label: "Prepared demo extraction", fields: { width: w, height: h, durationSeconds: sec } })
   const files: SeedFile[] = [
     { key: "file_demo_aurora_hero_asset", name: "aurora-spring-hero-film-proof.pdf", format: "pdf", job: "job_demo_aurora", bytes: syntheticPdf(["DEMO - SYNTHETIC DOCUMENT", "Aurora spring hero film - delivery proof v1", "Lumen Production Demo (fictional vendor)."]), extraction: creativeExtraction(1920, 1080, 30) },
     { key: "file_demo_aurora_creative_feed", name: "aurora-feed-creative-1x1.pdf", format: "pdf", job: "job_demo_aurora", bytes: syntheticPdf(["DEMO - SYNTHETIC DOCUMENT", "Aurora feed creative 1:1 (1080x1080, 15 s)", "Fictional creative for simulated activation."]), extraction: creativeExtraction(1080, 1080, 15) },
+    { key: "file_demo_aurora_monitoring_csv", name: "aurora-fcr-emissions-demo.csv", format: "csv", job: "job_demo_aurora", bytes: enc(auroraEmissionsCsv) },
+    { key: "file_demo_aurora_metrics_csv", name: "aurora-campaign-metrics-demo.csv", format: "csv", job: "job_demo_aurora", bytes: enc(auroraMetricsCsv) },
     { key: "file_demo_lab_creative", name: "lab-feed-creative-1x1.pdf", format: "pdf", job: LAB_OPS_JOB, bytes: syntheticPdf(["DEMO - SYNTHETIC DOCUMENT", "Lab feed creative 1:1 (1080x1080, 15 s)", "demo-lab exercise."]), extraction: creativeExtraction(1080, 1080, 15) },
     { key: "file_demo_lab_asset", name: "lab-hero-proof.pdf", format: "pdf", job: LAB_OPS_JOB, bytes: syntheticPdf(["DEMO - SYNTHETIC DOCUMENT", "Lab hero proof", "demo-lab production exercise (rights valid)."]), extraction: creativeExtraction(1920, 1080, 30) },
     { key: "file_demo_lab_asset_expired", name: "lab-archive-proof.pdf", format: "pdf", job: LAB_OPS_JOB, bytes: syntheticPdf(["DEMO - SYNTHETIC DOCUMENT", "Lab archive proof", "demo-lab production exercise (usage right expired)."]), extraction: creativeExtraction(1920, 1080, 30) },
@@ -245,7 +263,8 @@ export async function seedCore2(tx: SeedTx, ids: SeedIds): Promise<void> {
       fixtureKey: f.key,
       logicalId: id,
       version: 1,
-      jobId: f.job ? F(f.job) : null,
+      // from_intake: the Aurora job does not exist yet; linking the file to it is a user step.
+      jobId: f.job && !(ids.mode === "from_intake" && f.job === "job_demo_aurora") ? F(f.job) : null,
       originalName: f.name,
       format: f.format,
       mimeType: f.format === "pdf" ? "application/pdf" : "text/csv",

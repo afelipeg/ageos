@@ -47,6 +47,7 @@ export const catalog: typeof en = {
     pendingTitle: "Cambios de configuración pendientes",
     pendingHelp: "Cada cambio queda ligado a su huella y a la revisión publicada desde la que se calculó.",
     pendingLabel: "Revisión r{n}",
+    digest: "Huella {d}…",
     comment: "Comentario de la decisión (obligatorio para rechazar)",
     approve: "Aprobar y publicar",
     reject: "Rechazar",

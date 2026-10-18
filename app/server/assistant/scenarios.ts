@@ -11,6 +11,7 @@ import { withTenant } from "@/server/db/tenant"
 import { createProposal } from "@/server/kernel/approvals"
 import { DomainError } from "@/server/kernel/errors"
 
+import { INVESTOR_SCENARIOS } from "./investor-scenarios"
 import { authorizedJob, findJobByName, marginParts, ruleDetails, type ProfitOutput } from "./scenario-helpers"
 import { normalizeAlias, text, type DelegationRecord, type Scenario, type ToolCallRecord } from "./scenario-types"
 import { featuredSkillAliases, SKILL_SCENARIOS } from "./skill-scenarios"
@@ -22,7 +23,7 @@ export * from "./scenario-types"
 // scenario per catalog skill (ERP-01..ERP-42, ./skill-scenarios). Wording is
 // hardcoded; every figure, state and reference comes from server handlers.
 
-export const SCENARIO_CATALOG_VERSION = "erp-42@2.0.0"
+export const SCENARIO_CATALOG_VERSION = "erp-42@2.1.0"
 
 // ── S-MARGIN-EXPLAIN: query through a scripted delegation to `rentabilidad` ──
 
@@ -361,7 +362,8 @@ const jobCreateScenario: Scenario = {
   ],
 }
 
-export const SCENARIOS: readonly Scenario[] = [marginScenario, jobCreateScenario, ...SKILL_SCENARIOS]
+// Investor-script prompts first (featured order in the composer), then the J07 journeys and ERP-01..42.
+export const SCENARIOS: readonly Scenario[] = [...INVESTOR_SCENARIOS, marginScenario, jobCreateScenario, ...SKILL_SCENARIOS]
 
 export function scenarioById(id: string, version?: string, registry: readonly Scenario[] = SCENARIOS) {
   return registry.find((s) => s.id === id && (!version || s.version === version)) ?? null
@@ -392,9 +394,13 @@ export function scenarioForPreset(presetId: string, registry: readonly Scenario[
   return registry.find((s) => s.presets.some((p) => p.presetId === presetId)) ?? null
 }
 
-/** All presets are offered; permissions are enforced when a scenario starts. */
-export function allSuggestions(registry: readonly Scenario[] = SCENARIOS): SuggestionView[] {
-  return registry.flatMap((s) => s.presets)
+/**
+ * Presets offered to this viewer. Presenter-only demo tools appear only for an
+ * authorized presenter session; every other permission is enforced when a
+ * scenario starts (and again by the command).
+ */
+export function allSuggestions(registry: readonly Scenario[] = SCENARIOS, viewer: { presenter: boolean } = { presenter: false }): SuggestionView[] {
+  return registry.flatMap((s) => s.presets).filter((p) => !p.presenterOnly || viewer.presenter)
 }
 
 export const CONFIRM_ALIASES = ["yes", "confirm", "si", "sí", "confirmar", "confirmo"].map(normalizeAlias)

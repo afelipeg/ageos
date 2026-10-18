@@ -15,6 +15,7 @@ import {
   assistantRun,
   assistantSourceReference,
   assistantToolCall,
+  fileObject,
   job,
 } from "@/server/db/schema"
 import { withTenant } from "@/server/db/tenant"
@@ -22,6 +23,7 @@ import { env } from "@/server/env"
 import { currentAggregateRevision } from "@/server/kernel/approvals"
 import { toJsonSafe } from "@/server/kernel/commands"
 import { DomainError, isDomainError } from "@/server/kernel/errors"
+import { canSeeFile } from "@/server/queries/library"
 
 import {
   allSuggestions,
@@ -39,6 +41,7 @@ import {
   type ToolCallRecord,
 } from "./scenarios"
 import { assistantBusinessDate } from "./clock"
+import { ATTACH_SCENARIO_ID } from "./investor-scenarios"
 import {
   activeRun,
   addRunEvent,
@@ -85,6 +88,8 @@ export interface AssistantDriver {
   cancel(ctx: AgencyContext, input: { conversationId: string; runId: string }): Promise<{ conversationId: string }>
   /** Reconciles a `running` run whose worker vanished, from its last checkpoint. */
   resume(ctx: AgencyContext, input: { conversationId: string; runId: string }): Promise<{ conversationId: string; resumed: boolean }>
+  /** attach_authorized_file: cite a library file the viewer may read in this agency (no upload). */
+  attachFile(ctx: AgencyContext, input: { conversationId: string | null; fileId: string; clientMessageId: string }): Promise<{ conversationId: string }>
 }
 
 export type DriverOptions = {
@@ -137,12 +142,12 @@ class ScriptedAssistantDriver implements AssistantDriver {
     this.hooks = opts.hooks ?? {}
   }
 
-  suggestions(): SuggestionView[] {
-    return allSuggestions(this.registry)
+  suggestions(ctx: AgencyContext): SuggestionView[] {
+    return allSuggestions(this.registry, ctx)
   }
 
-  private suggestionsPart(): MessagePart {
-    return { type: "suggestions", heading: SUPPORTED_HEADING, items: allSuggestions(this.registry) }
+  private suggestionsPart(ctx: AgencyContext): MessagePart {
+    return { type: "suggestions", heading: SUPPORTED_HEADING, items: allSuggestions(this.registry, ctx) }
   }
 
   async handleTurn(ctx: AgencyContext, raw: TurnInput) {
@@ -200,7 +205,7 @@ class ScriptedAssistantDriver implements AssistantDriver {
         appendMessage(tx, ctx, {
           conversationId,
           role: "assistant",
-          parts: [t(matches.length > 1 ? "assistant.ambiguous" : "assistant.unsupported"), matches.length > 1 ? { type: "suggestions", heading: SUPPORTED_HEADING, items: matches.flatMap((m) => m.presets) } : this.suggestionsPart()],
+          parts: [t(matches.length > 1 ? "assistant.ambiguous" : "assistant.unsupported"), matches.length > 1 ? { type: "suggestions", heading: SUPPORTED_HEADING, items: matches.flatMap((m) => m.presets) } : this.suggestionsPart(ctx)],
         })
       )
       return { conversationId }
@@ -232,7 +237,7 @@ class ScriptedAssistantDriver implements AssistantDriver {
     } catch (e) {
       if (!isDomainError(e)) throw e
       await withTenant(ctx.tenant.id, (tx) =>
-        appendMessage(tx, ctx, { conversationId, role: "assistant", parts: [t("assistant.needsJobContext"), this.suggestionsPart()] })
+        appendMessage(tx, ctx, { conversationId, role: "assistant", parts: [t("assistant.needsJobContext"), this.suggestionsPart(ctx)] })
       )
       return { conversationId }
     }
@@ -400,6 +405,61 @@ class ScriptedAssistantDriver implements AssistantDriver {
     if (!this.isStale(run)) return { conversationId: parsed.conversationId, resumed: false }
     const resumed = await this.advance(ctx, parsed.conversationId, run.id)
     return { conversationId: parsed.conversationId, resumed }
+  }
+
+  async attachFile(ctx: AgencyContext, raw: { conversationId: string | null; fileId: string; clientMessageId: string }) {
+    if (!ctx.permissions.has("assistant.use")) throw new DomainError("forbidden", "Assistant not available for this role")
+    if (!ctx.permissions.has("files.read")) throw new DomainError("forbidden", "Your role cannot read library files", { permission: "files.read" })
+    const input = z.object({ conversationId: z.string().uuid().nullable(), fileId: z.string().uuid(), clientMessageId: z.string().uuid() }).strict().parse(raw)
+    const asOf = await assistantBusinessDate()
+    return withTenant(ctx.tenant.id, async (tx) => {
+      // Same agency only (tenant + RLS) and the library's visibility rule; a
+      // foreign or hidden file is a uniform not_found, never attached.
+      const [f] = await tx.select().from(fileObject).where(and(eq(fileObject.tenantId, ctx.tenant.id), eq(fileObject.id, input.fileId))).limit(1)
+      if (!f || !canSeeFile(ctx, f.visibility)) throw new DomainError("not_found", "File not found")
+      const conv = input.conversationId
+        ? await getOwnedConversation(tx, ctx, input.conversationId)
+        : await createConversation(tx, ctx, f.originalName.slice(0, 60))
+      const [dup] = await tx
+        .select({ id: assistantMessage.id })
+        .from(assistantMessage)
+        .where(and(eq(assistantMessage.tenantId, ctx.tenant.id), eq(assistantMessage.conversationId, conv.id), eq(assistantMessage.clientMessageId, input.clientMessageId)))
+        .limit(1)
+      if (dup) return { conversationId: conv.id }
+      // A completed tool run (never the conversation's active run): it does not interrupt a waiting scenario.
+      const [run] = await tx
+        .insert(assistantRun)
+        .values({
+          tenantId: ctx.tenant.id,
+          conversationId: conv.id,
+          scenarioId: ATTACH_SCENARIO_ID,
+          scenarioVersion: "1.0.0",
+          status: "completed",
+          state: { params: { file: f.id }, results: {}, stepIndex: 1, rev: 1, lease: null, messageId: null },
+          actorUserId: ctx.user.id,
+          currentStep: "attach_authorized_file",
+          completedAt: this.now(),
+        })
+        .returning()
+      await appendMessage(tx, ctx, { conversationId: conv.id, role: "user", parts: [{ type: "user_text", text: ctx.user.locale === "es" ? `Adjuntar ${f.originalName}` : `Attach ${f.originalName}` }], clientMessageId: input.clientMessageId, runId: run!.id })
+      const ref = { recordType: "file", recordId: f.id, revision: f.version, label: `${f.originalName} · v${f.version}`, href: `/a/${ctx.tenant.slug}/library/${f.id}`, asOf }
+      const parts: MessagePart[] = [t("assistant.attach.added", { name: f.originalName, version: f.version }), { type: "sources", refs: [ref] }]
+      await this.appendRunParts(tx, ctx, conv.id, run!.id, null, parts)
+      await tx.insert(assistantToolCall).values({
+        tenantId: ctx.tenant.id,
+        runId: run!.id,
+        callId: "attach_authorized_file",
+        toolFamily: "attach_authorized_file",
+        skillId: null,
+        handler: "library.fileObject",
+        handlerVersion: "chassis-2",
+        input: { fileId: f.id },
+        status: "succeeded",
+        result: { fileId: f.id, version: f.version, sha256: f.sha256 },
+      })
+      await addRunEvent(tx, ctx.tenant.id, run!.id, { stepId: "attach_authorized_file", stepType: "query", outcome: "succeeded", detail: { fileId: f.id, version: f.version } })
+      return { conversationId: conv.id }
+    })
   }
 
   private async loadRun(ctx: AgencyContext, runId: string) {

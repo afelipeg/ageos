@@ -65,4 +65,5 @@ export const workbench: typeof en = {
   runsEmpty: "Aún no hay ejecuciones.",
   runColumns: { started: "Inicio", state: "Estado", origin: "Origen", actor: "Actor" },
   examplesNote: "Los valores de ejemplo son valores editables alineados con los fixtures de la demo.",
+  prefilledNote: "Precargado desde el recorrido demo",
 }

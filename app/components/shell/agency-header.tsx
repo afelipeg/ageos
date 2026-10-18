@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useId, useRef, useState } from "react"
+import { useCallback, useEffect, useId, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { BriefcaseBusinessIcon, ContactRoundIcon, MessagesSquareIcon, SearchIcon } from "lucide-react"
@@ -31,7 +31,17 @@ import type { ShellAgency } from "./agency-sidebar"
 
 type SearchHit = { kind: "job" | "client"; id: string; title: string; subtitle: string; href: string }
 
-function SearchDialog({ slug, open, onOpenChange }: { slug: string; open: boolean; onOpenChange: (o: boolean) => void }) {
+function SearchDialog({
+  slug,
+  open,
+  onOpenChange,
+  finalFocus,
+}: {
+  slug: string
+  open: boolean
+  onOpenChange: (o: boolean) => void
+  finalFocus: () => HTMLElement | null
+}) {
   const { t } = useI18n()
   const router = useRouter()
   const inputId = useId()
@@ -67,7 +77,7 @@ function SearchDialog({ slug, open, onOpenChange }: { slug: string; open: boolea
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md gap-2 px-4 py-2">
+      <DialogContent className="max-w-md gap-2 px-4 py-2" finalFocus={finalFocus}>
         <DialogHeader className="sr-only">
           <DialogTitle>{t("common.search")}</DialogTitle>
           <DialogDescription>{t("header.searchPlaceholder")}</DialogDescription>
@@ -79,7 +89,6 @@ function SearchDialog({ slug, open, onOpenChange }: { slug: string; open: boolea
             value={q}
             onChange={(e) => setQ(e.target.value)}
             className="h-10 border-none p-0 shadow-none outline-none focus-visible:ring-0"
-            autoFocus
             placeholder={t("header.searchPlaceholder")}
             aria-label={t("header.searchPlaceholder")}
             onKeyDown={(e) => {
@@ -124,19 +133,39 @@ export function AgencyHeader({ agency }: { agency: ShellAgency }) {
   const pathname = usePathname()
   const assistant = useAssistant()
   const [searchOpen, setSearchOpen] = useState(false)
+  const searchTriggerRef = useRef<HTMLButtonElement>(null)
+  const searchIconTriggerRef = useRef<HTMLButtonElement>(null)
+  const searchOpenerRef = useRef<HTMLElement | null>(null)
   const activeId = activeEntryId(pathname, agency.slug)
   const entry = [...NAV_GROUPS.flatMap((g) => g.entries), CATALOG_ENTRY].find((e) => e.id === activeId)
+
+  // The dialog is controlled and has no Base UI Trigger, so Base UI cannot
+  // infer what to refocus on close. Remember the opener (the clicked trigger,
+  // or the element focused when the shortcut fired) and fall back to the
+  // visible trigger when nothing was focused. The search Input must not use
+  // autoFocus: it would take focus before Base UI records the previously
+  // focused element, and focus would be lost on close.
+  const openSearch = useCallback((opener?: HTMLElement) => {
+    const active = document.activeElement
+    searchOpenerRef.current = opener ?? (active instanceof HTMLElement && active !== document.body ? active : null)
+    setSearchOpen(true)
+  }, [])
+  const searchFinalFocus = () => {
+    const opener = searchOpenerRef.current
+    if (opener?.isConnected) return opener
+    return [searchTriggerRef.current, searchIconTriggerRef.current].find((el) => el && el.offsetParent !== null) ?? null
+  }
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       if (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
         event.preventDefault()
-        setSearchOpen(true)
+        openSearch()
       }
     }
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [])
+  }, [openSearch])
 
   return (
     // The header is a size container: what collapses (demo badge, search field,
@@ -179,9 +208,10 @@ export function AgencyHeader({ agency }: { agency: ShellAgency }) {
         </Badge>
 
         <button
+          ref={searchTriggerRef}
           type="button"
           aria-label={t("common.search")}
-          onClick={() => setSearchOpen(true)}
+          onClick={(e) => openSearch(e.currentTarget)}
           className="hidden w-56 cursor-pointer rounded-4xl outline-none focus-visible:ring-3 focus-visible:ring-ring/30 @3xl:flex"
         >
           <InputGroup className="pointer-events-none">
@@ -197,7 +227,14 @@ export function AgencyHeader({ agency }: { agency: ShellAgency }) {
             </InputGroupAddon>
           </InputGroup>
         </button>
-        <Button variant="outline" size="icon-sm" className="@3xl:hidden" aria-label={t("common.search")} onClick={() => setSearchOpen(true)}>
+        <Button
+          ref={searchIconTriggerRef}
+          variant="outline"
+          size="icon-sm"
+          className="@3xl:hidden"
+          aria-label={t("common.search")}
+          onClick={(e) => openSearch(e.currentTarget)}
+        >
           <SearchIcon aria-hidden="true" />
         </Button>
 
@@ -216,7 +253,7 @@ export function AgencyHeader({ agency }: { agency: ShellAgency }) {
           </Button>
         )}
       </div>
-      <SearchDialog slug={agency.slug} open={searchOpen} onOpenChange={setSearchOpen} />
+      <SearchDialog slug={agency.slug} open={searchOpen} onOpenChange={setSearchOpen} finalFocus={searchFinalFocus} />
     </header>
   )
 }

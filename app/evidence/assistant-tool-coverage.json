@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-10-18T16:02:29.261Z",
-  "driver": "scripted · catalog erp-42@2.0.0",
+  "generatedAt": "2026-10-18T16:53:21.806Z",
+  "driver": "scripted · catalog erp-42@2.1.0",
   "test": "tests/integration/assistant-acceptance.test.ts",
   "rule": "covered = the scripted orchestrator ran the skill's scenario and persisted a tool call or delegation to exactly that skill id (via the shared runner)",
   "totals": {
@@ -33,7 +33,7 @@
             "agency-orchestrator"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "1cd84f52-6f19-4f40-8f3e-0ddc37e3f05d"
+          "childWorkflowRunId": "22f7c4e2-67da-4c33-98b1-e3eeb4362a64"
         }
       ],
       "partTypes": [
@@ -70,7 +70,7 @@
             "agency-integrations"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "48500506-0187-4bf9-a3fd-ebd751748d2b"
+          "childWorkflowRunId": "b8c43fea-d27b-4e0f-914f-5f628806e47f"
         }
       ],
       "partTypes": [
@@ -107,7 +107,7 @@
             "agency-access-governance"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "a9069be1-512d-435d-a557-0171b79cd987"
+          "childWorkflowRunId": "f3248824-8079-4d5e-9a12-8c513f41a99b"
         }
       ],
       "partTypes": [
@@ -145,7 +145,7 @@
             "agency-master-data"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "93a77c43-a645-4d6b-ac8e-6c9998fdedc7"
+          "childWorkflowRunId": "2af27811-9900-4314-aaa0-e75f41e6e6e3"
         }
       ],
       "partTypes": [
@@ -182,7 +182,7 @@
             "agency-onboarding"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "45a187f1-0e33-4adf-b3b9-0425954ac9b8"
+          "childWorkflowRunId": "3df0f044-8a9a-4be5-bfb8-abf8547439a8"
         }
       ],
       "partTypes": [
@@ -222,7 +222,7 @@
             "agency-job-lifecycle"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "0486b0ff-ab55-4ef0-b744-6a94d3fa1dec"
+          "childWorkflowRunId": "e99a3341-cbad-464d-910e-897e61313788"
         }
       ],
       "partTypes": [
@@ -259,7 +259,7 @@
             "agency-contract-po"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "564d3b21-e1ce-47fc-9b3e-cee44463629e"
+          "childWorkflowRunId": "f7dad009-263b-481b-9ecb-3cd05d6771af"
         }
       ],
       "partTypes": [
@@ -299,7 +299,7 @@
             "agency-budget-control"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "00d7e131-a217-40b6-908e-705150558bc9"
+          "childWorkflowRunId": "c2adbbc7-5b56-4586-8a73-beb3a633775d"
         }
       ],
       "partTypes": [
@@ -337,7 +337,7 @@
             "agency-fee-contracts"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "98dc3dfb-ba3e-4e5e-8808-bd8a303b91de"
+          "childWorkflowRunId": "07e3bfee-52ad-465a-b811-980c49912870"
         }
       ],
       "partTypes": [
@@ -375,7 +375,7 @@
             "agency-billing-requirements"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "07d05e8e-0c4e-4bab-a922-934a899d7d21"
+          "childWorkflowRunId": "4f622659-fa68-46d7-b501-b921bac374df"
         }
       ],
       "partTypes": [
@@ -412,7 +412,7 @@
             "agency-tasks-timesheets"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "ae690a61-46fe-4dd3-a88b-ee207020243c"
+          "childWorkflowRunId": "712fa557-4831-4151-b08b-9e97f6204d13"
         }
       ],
       "partTypes": [
@@ -450,7 +450,7 @@
             "agency-production-estimating"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "d44aacc4-69de-4a1c-9bba-95566147d12e"
+          "childWorkflowRunId": "bd47fef8-db4c-4b03-9d1c-ae3587723f4d"
         }
       ],
       "partTypes": [
@@ -487,7 +487,7 @@
             "agency-production"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "698f6fff-7eee-45fd-8a91-2b3dd901e9d7"
+          "childWorkflowRunId": "ea39518b-227f-4010-80c1-a57dcb44f9a5"
         }
       ],
       "partTypes": [
@@ -524,7 +524,7 @@
             "agency-media-ranking"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "147c3661-c48f-4626-aa94-9482ddd8a1a6"
+          "childWorkflowRunId": "e242a3b9-5ef6-4a4d-841a-6771c25ce1eb"
         }
       ],
       "partTypes": [
@@ -560,7 +560,7 @@
             "agency-media-planning"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "b7f4c378-c5d0-49e8-b94c-7e039c0108da"
+          "childWorkflowRunId": "e0760c44-374b-4644-a264-8f1630c179e3"
         }
       ],
       "partTypes": [
@@ -598,7 +598,7 @@
             "agency-tv-radio-planning"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "4b60fc0c-ecb3-422e-a997-fa462aaa576e"
+          "childWorkflowRunId": "3a82776b-350c-404b-8083-b4c4d329f615"
         }
       ],
       "partTypes": [
@@ -635,7 +635,7 @@
             "agency-ooh-planning"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "0c273b50-bed1-42b6-a1e0-f237b7cb827d"
+          "childWorkflowRunId": "a111d3eb-86c1-46fe-baa3-5edb2eaccb48"
         }
       ],
       "partTypes": [
@@ -672,7 +672,7 @@
             "agency-digital-planning"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "cfe0e95e-b552-4024-9475-54f68ed3a3fa"
+          "childWorkflowRunId": "f38f7fe7-0a92-4f55-9714-696758f335e6"
         }
       ],
       "partTypes": [
@@ -708,7 +708,7 @@
             "agency-plan-changes"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "868703ad-899a-4594-b8f3-e7aed53baef0"
+          "childWorkflowRunId": "c19c5006-0a52-40fe-a80d-890cadc52684"
         }
       ],
       "partTypes": [
@@ -746,7 +746,7 @@
             "agency-rate-cards-contracts"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "902f33e2-e6b9-4a15-8b94-2460a8988218"
+          "childWorkflowRunId": "04e50901-37b7-4b03-b612-e73771bdd646"
         }
       ],
       "partTypes": [
@@ -784,7 +784,7 @@
             "agency-media-buying"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "d709bdff-0b4f-4e64-87a4-bd209934fb58"
+          "childWorkflowRunId": "c4199477-196a-4dac-aa67-c6c1fa1d6d38"
         }
       ],
       "partTypes": [
@@ -822,7 +822,7 @@
             "agency-campaign-activation"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "e67f4b92-429e-47a8-b51c-54cf3178d828"
+          "childWorkflowRunId": "60d7c189-eed7-434c-a03c-f7121f7ed42d"
         }
       ],
       "partTypes": [
@@ -860,7 +860,7 @@
             "agency-campaign-optimization"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "504f37f0-a992-410c-bc64-cf26a698fdc7"
+          "childWorkflowRunId": "1c38b9c5-a39c-4773-9370-88568300529d"
         }
       ],
       "partTypes": [
@@ -898,7 +898,7 @@
             "agency-transmission-control"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "d3a37e79-6815-4bdc-b7a9-51068b2e5c81"
+          "childWorkflowRunId": "5def050c-22c0-4980-b898-275a4db0e023"
         }
       ],
       "partTypes": [
@@ -935,7 +935,7 @@
             "agency-ooh-inventory"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "72eeba0f-d4a7-498e-b234-ff20a33df6b9"
+          "childWorkflowRunId": "02e7ed77-c12b-43dd-8e4d-8829ec0dd9aa"
         }
       ],
       "partTypes": [
@@ -972,7 +972,7 @@
             "agency-delivery-reconciliation"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "da30789e-acb6-4fcc-b93e-8e17ad200c22"
+          "childWorkflowRunId": "20626269-8f13-48f6-a261-afd8e7ab1891"
         }
       ],
       "partTypes": [
@@ -1009,7 +1009,7 @@
             "agency-payables"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "e4976ebc-e755-418b-aac7-619722ccf482"
+          "childWorkflowRunId": "3f5d3459-3e46-4190-a19d-0636c0faeb9c"
         }
       ],
       "partTypes": [
@@ -1028,7 +1028,7 @@
       "text": "Run demo: agency-payment-run",
       "covered": true,
       "answered": [
-        "connection=78fa5489-3e7a-4a58-b669-49e2a66fadae"
+        "connection=9ac25afe-447a-480a-b529-4fb6c34f08f0"
       ],
       "scenarioId": "ERP-28",
       "scenarioVersion": "2.0.0",
@@ -1047,7 +1047,7 @@
             "agency-payment-run"
           ],
           "state": "blocked",
-          "childWorkflowRunId": "b395ca4c-b21b-48bf-8f52-ff5f8eab3a1b"
+          "childWorkflowRunId": "82ca9928-838f-46b0-9a6f-3e1900151213"
         }
       ],
       "partTypes": [
@@ -1067,7 +1067,7 @@
       "text": "Run demo: agency-cash-settlement",
       "covered": true,
       "answered": [
-        "connection=1d340bec-020c-426a-a47b-ce9536696028",
+        "connection=73328ca4-d836-4f72-a687-20f89300d466",
         "statementFile=5320c2f3-e3c2-5d1e-9b76-165f3f3add79"
       ],
       "scenarioId": "ERP-29",
@@ -1087,7 +1087,7 @@
             "agency-cash-settlement"
           ],
           "state": "blocked",
-          "childWorkflowRunId": "1b979b66-aca7-471d-b17a-5ca8dd28a96e"
+          "childWorkflowRunId": "fb610ca1-472b-46ba-adbb-ce8a4530091c"
         }
       ],
       "partTypes": [
@@ -1124,7 +1124,7 @@
             "agency-expenses"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "4532d727-7fc9-436e-8705-32da85ba6a51"
+          "childWorkflowRunId": "81f8a422-b293-42a8-aba5-c2a63a33a082"
         }
       ],
       "partTypes": [
@@ -1163,7 +1163,7 @@
             "agency-client-billing"
           ],
           "state": "blocked",
-          "childWorkflowRunId": "01b060bd-6758-4e27-bf04-ff7fb26da628"
+          "childWorkflowRunId": "258d75b0-cb04-4163-9cfb-4f63128acc6a"
         }
       ],
       "partTypes": [
@@ -1202,7 +1202,7 @@
             "agency-collections"
           ],
           "state": "blocked",
-          "childWorkflowRunId": "5d8230a1-8946-41e4-866d-904285a2b8a8"
+          "childWorkflowRunId": "e8681d4d-ebe9-48c6-930a-70421df82b59"
         }
       ],
       "partTypes": [
@@ -1239,7 +1239,7 @@
             "agency-rebates"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "c760d5e9-afb7-4359-8b08-f4a31571fab8"
+          "childWorkflowRunId": "f0d44dcd-a5c1-4a16-a378-8179fafc53e4"
         }
       ],
       "partTypes": [
@@ -1277,7 +1277,7 @@
             "agency-tax-compliance"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "32dbc924-281a-417b-8084-e184791ee2bf"
+          "childWorkflowRunId": "1c80ed3e-cf2e-430b-8869-b2aec98137a2"
         }
       ],
       "partTypes": [
@@ -1313,7 +1313,7 @@
             "agency-general-ledger"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "681ab464-e72a-4ed8-a31f-f2ebeecf8c3e"
+          "childWorkflowRunId": "a1e7fa7e-bfab-4a78-9d8f-a85177432c6e"
         }
       ],
       "partTypes": [
@@ -1350,7 +1350,7 @@
             "agency-accruals-revaluation"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "31116383-0b0c-4397-bfd7-02dbdf6aa387"
+          "childWorkflowRunId": "ca403fd4-a696-4652-8dd1-50bff8cc42d7"
         }
       ],
       "partTypes": [
@@ -1387,7 +1387,7 @@
             "agency-fixed-assets"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "bde81383-b824-4acc-8373-d9b72af7b0a9"
+          "childWorkflowRunId": "70c7e618-6c20-4cc9-97a8-6c89f40e2a40"
         }
       ],
       "partTypes": [
@@ -1425,7 +1425,7 @@
             "agency-period-close"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "4c5e904b-a18a-434a-a7fb-169a46085d0f"
+          "childWorkflowRunId": "6c240a2a-5a56-4ac4-8dea-7c6a68ca13d2"
         }
       ],
       "partTypes": [
@@ -1463,7 +1463,7 @@
             "agency-profitability"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "3fdc56a3-e789-4857-94a5-c909a27ec774"
+          "childWorkflowRunId": "d3a21112-2e1b-4652-aa02-69500ad79ec5"
         }
       ],
       "partTypes": [
@@ -1501,7 +1501,7 @@
             "agency-revenue-budget"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "cb7e0558-6542-4719-a906-2b0bc13e2521"
+          "childWorkflowRunId": "9d6400d6-d735-4c19-9b43-9babba2ce60d"
         }
       ],
       "partTypes": [
@@ -1539,7 +1539,7 @@
             "agency-cash-forecast"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "7b822394-0df9-4cd0-8cd6-1f4bd895ed5e"
+          "childWorkflowRunId": "c98f26fe-08e5-445c-941b-5cdedd931fa8"
         }
       ],
       "partTypes": [
@@ -1575,7 +1575,7 @@
             "agency-management-reporting"
           ],
           "state": "succeeded",
-          "childWorkflowRunId": "558a92b4-ae28-43b0-bcd2-78eba83942b4"
+          "childWorkflowRunId": "141db8ec-4975-4d6f-957a-e12a8f1820ba"
         }
       ],
       "partTypes": [

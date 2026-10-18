@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { advanceBusinessClockAction, loadCheckpointAction, resetDemoTenantAction, switchPersonaAction } from "@/server/actions/session"
 import { queueSimulationOutcomeAction } from "@/server/actions/ui/presenter"
+import { loadSampleScopeRequestAction } from "@/server/assistant/presenter-actions"
 
 type Msg = { ok: boolean; title: string; body?: string } | null
 
@@ -81,6 +82,45 @@ export function PersonaSwitcher({ personas }: { personas: { key: string; name: s
 }
 
 /** Reset the demo run of a demo tenant or load a checkpoint, each behind a typed confirmation. */
+/**
+ * Demo tool of the investor script: "Load sample scope request" introduces the
+ * 40-hour scope change on Aurora through the real production-estimating
+ * command (J04.2). Presenter-only, audited, idempotent per demo run.
+ */
+function SampleScopeRequest() {
+  const { t, messages, pct } = useI18n()
+  const router = useRouter()
+  const [pending, start] = useTransition()
+  const [msg, setMsg] = useState<Msg>(null)
+  return (
+    <div className="flex flex-col gap-2 border-t border-border pt-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="flex items-center gap-2 text-sm font-medium">
+          <FlaskConicalIcon aria-hidden="true" className="size-4 text-muted-foreground" />
+          {t("assistant.presenterTools.title")}
+        </span>
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={pending}
+          onClick={() =>
+            start(async () => {
+              const res = await loadSampleScopeRequestAction()
+              if (!res.ok) return setMsg({ ok: false, title: codeLabel(messages, t, res.error.code), body: res.error.message })
+              setMsg({ ok: true, title: t(`assistant.presenterScope.${res.data.state}`), body: t("assistant.presenterTools.done", { margin: pct(res.data.marginBpsAfter) }) })
+              router.refresh()
+            })
+          }
+        >
+          {t("assistant.presenterTools.action")}
+        </Button>
+      </div>
+      <p className="text-xs text-muted-foreground">{t("assistant.presenterTools.body")}</p>
+      <Result msg={msg} />
+    </div>
+  )
+}
+
 export function ResetPanel({ tenants, checkpoints }: { tenants: string[]; checkpoints: string[] }) {
   const { t, messages } = useI18n()
   const router = useRouter()
@@ -148,6 +188,7 @@ export function ResetPanel({ tenants, checkpoints }: { tenants: string[]; checkp
         </Field>
       </div>
       <Result msg={msg} />
+      <SampleScopeRequest />
       <AlertDialog open={target !== null} onOpenChange={(o) => !o && !pending && setTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>

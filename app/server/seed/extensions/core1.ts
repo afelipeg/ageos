@@ -67,6 +67,7 @@ export async function seedCore1(tx: SeedTx, ids: SeedIds): Promise<void> {
 
   // ── Integrations: a revoked lab connection (dependent actions blocked) ──
   await tx.insert(s.connection).values({
+    id: F("connection_demo_lab_revoked"),
     tenantId: RAYO,
     provider: "meta_ads",
     category: "ads",

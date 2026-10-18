@@ -96,6 +96,38 @@ export const assistant: typeof en = {
     unavailableBody: "No se pudo validar o mostrar la vista visual. Las mismas cifras se listan abajo.",
     series: { actual: "Real", forecast: "Pronóstico", simulated: "Simulado" },
   },
+  attention: {
+    title: "Requiere atención",
+    summary: "{count} elemento(s) requieren atención en {job}. Cada uno enlaza a su registro; esta respuesta guionada solo lee registros que usted puede ver.",
+    none: "Nada requiere atención en {job} ahora: no hay alertas de reglas abiertas, aprobaciones pendientes ni ejecuciones bloqueadas.",
+    empty: "Nada abierto para este trabajo.",
+    sources: { attention: "Regla", approval: "Aprobación", run: "Ejecución bloqueada" },
+    owner: "Responsable",
+  },
+  marginChange: {
+    notLoaded: "{job} aún no tiene un cambio de alcance registrado: su proyección usa la estimación de costos original. No se preparó nada.",
+    askPresenter: "En esta demo, el presentador lo introduce con Cargar solicitud de alcance de ejemplo (herramientas de demo).",
+    explained: "Proyectado: {hours} de mano de obra adicional ({cost} de costo adicional, estimación {from} → {to}) reducen el margen proyectado de {job} de {before} a {after}. El ERP lo calculó con el honorario aprobado y las estimaciones citadas abajo.",
+    preparing: "Siguiente paso preparado para revisión: una enmienda de honorario de {delta} (nuevo honorario {fee}). Nada cambia financieramente hasta que un aprobador elegible de finanzas la apruebe, y el solicitante no puede aprobar su propia solicitud.",
+    alreadyPriced: "El cambio de alcance de {job} ya está valorizado: honorario aprobado {fee}, margen proyectado {margin}. No se preparó un ajuste nuevo.",
+  },
+  presenterScope: {
+    loaded: "Cambio de alcance de ejemplo (demo) registrado con el comando de estimación de producción, como en el paso J04.2. El expediente y el asistente ya leen la nueva proyección.",
+    replayed: "Este cambio de alcance de ejemplo ya se cargó en esta ejecución de demo; no se registró dos veces.",
+    already_loaded: "El cambio de alcance ya está registrado para este trabajo; no se registró dos veces.",
+  },
+  presenterTools: {
+    title: "Cambio de alcance de ejemplo (demo)",
+    body: "Introduce la solicitud de 40 horas adicionales en Aurora Spring Launch con el comando real de estimación de producción (recorrido J04.2). Solo presentador, auditado, una vez por ejecución de demo.",
+    action: "Cargar solicitud de alcance de ejemplo",
+    done: "Margen ahora {margin}",
+  },
+  attach: {
+    added: "Se adjuntó {name} (v{version}) como fuente de esta conversación. Sigue en la biblioteca privada; solo quienes pueden leerlo lo ven aquí.",
+    action: "Adjuntar de la biblioteca",
+    heading: "Archivos autorizados de la biblioteca",
+    empty: "No hay archivos de la biblioteca disponibles para usted",
+  },
   margin: {
     aboveFloor: "{job} se mantiene sobre el mínimo de margen proyectado de {floor}. Las cifras provienen del presupuesto aprobado y de la estimación de costos vigente.",
     belowFloor: "{job} está bajo el mínimo de margen proyectado de {floor}: el costo subió sin cambio de fee. Revise el cambio de alcance y proponga una enmienda de fee.",

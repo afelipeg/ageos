@@ -10,14 +10,16 @@ import { CAPABILITY_CONTRACTS } from "@/lib/capabilities/catalog.generated"
 import { GOVERNANCE } from "@/lib/capabilities/governance"
 import { INPUT_FIELDS } from "@/lib/capabilities/input-fields"
 import type { CapabilityContract, FieldSpec } from "@/lib/capabilities/types"
-import { fmtMoney } from "@/lib/format"
+import { fmtMoney, fmtPct } from "@/lib/format"
 import { parseDecimalToMinor } from "@/lib/money"
 import type { Permission } from "@/lib/policy"
 import type { AgencyContext } from "@/server/auth/context"
 import { FIXTURES, HANDLERS } from "@/server/capabilities/registry"
+import { margin } from "@/server/calculators"
 import { runCapability, type RunOutcome } from "@/server/capabilities/runner"
 import { actionProposal, approvalRequest } from "@/server/db/schema"
 import { withTenant } from "@/server/db/tenant"
+import { estimateTotals, loadJobFinancials } from "@/server/domain/profitability"
 import { loadReferenceOptions, type RefOptions } from "@/server/domain/references"
 import { digestOf } from "@/server/kernel/approvals"
 import { toJsonSafe } from "@/server/kernel/commands"
@@ -254,6 +256,39 @@ async function resultParts(rt: StepRuntime, contract: CapabilityContract, outcom
   return parts
 }
 
+type ProposalPreview = { before: Record<string, string>; impact: { label: Localized; value: string }[] }
+
+/**
+ * Read-only impact previews shown on a proposal before confirmation. Figures
+ * come from the domain (current approved budget and estimate) and the shared
+ * margin calculator; the command recomputes and validates them on execution.
+ */
+const PROPOSAL_PREVIEW: Partial<Record<string, (ctx: AgencyContext, params: Record<string, string>, currency: string) => Promise<ProposalPreview | null>>> = {
+  "agency-fee-contracts": async (ctx, params, currency) => {
+    if (!params.job || !params.newAgencyFee) return null
+    const fin = await withTenant(ctx.tenant.id, (tx) => loadJobFinancials(tx, ctx.tenant.id, params.job!))
+    if (!fin.approvedBudget) return null
+    const c = fin.job.currency ?? currency
+    const fee = fin.approvedBudget.agencyFeeMinor
+    const media = fin.approvedBudget.managedMediaMinor
+    const next = parseDecimalToMinor(params.newAgencyFee, c)
+    const cost = estimateTotals(fin, fin.currentEstimate?.id ?? null).totalMinor
+    const m0 = margin({ currency: c, agencyRevenueMinor: fee, agencyCostMinor: cost, managedSpendMinor: media })
+    const m1 = margin({ currency: c, agencyRevenueMinor: next, agencyCostMinor: cost, managedSpendMinor: media })
+    const delta = next - fee
+    const loc = ctx.user.locale
+    return {
+      before: { newAgencyFee: fmtMoney(fee, c, loc) },
+      impact: [
+        { label: { en: "Fee change", es: "Cambio de honorario" }, value: `${delta >= 0n ? "+" : "−"}${fmtMoney(delta >= 0n ? delta : -delta, c, loc)}` },
+        { label: { en: "Projected margin (Forecast)", es: "Margen proyectado (Proyectado)" }, value: `${fmtPct(m0.marginBps, loc)} → ${fmtPct(m1.marginBps, loc)}` },
+        { label: { en: "Client authority required", es: "Autoridad del cliente requerida" }, value: fmtMoney(next + media, c, loc) },
+        { label: { en: "Financial effect", es: "Efecto financiero" }, value: loc === "es" ? "Ninguno hasta que finanzas apruebe" : "None until finance approves" },
+      ],
+    }
+  },
+}
+
 function buildSkillScenario(contract: CapabilityContract): Scenario {
   const skillId = contract.skillId
   const g = GOVERNANCE[skillId]!
@@ -350,9 +385,10 @@ function buildSkillScenario(contract: CapabilityContract): Scenario {
       const digest = digestOf(payload)
       const refs = await refsFor(ctx, fields)
       const currency = recordCurrency(ctx, params, j?.currency ?? null)
+      const preview = PROPOSAL_PREVIEW[skillId] ? await PROPOSAL_PREVIEW[skillId]!(ctx, params, currency) : null
       const rows = fields
         .filter((f) => params[f.key] !== undefined)
-        .map((f) => ({ label: f.label, before: null, after: displayValue(ctx, f, params[f.key]!, refs, currency) }))
+        .map((f) => ({ label: f.label, before: preview?.before[f.key] ?? null, after: displayValue(ctx, f, params[f.key]!, refs, currency) }))
       const approval = g.approval.mode === "approval"
       const [p] = await withTenant(ctx.tenant.id, (tx) =>
         tx
@@ -378,6 +414,7 @@ function buildSkillScenario(contract: CapabilityContract): Scenario {
       )
       const impact: { label: Localized; value: string }[] = [{ label: { en: "Policy", es: "Política" }, value: pickL(g.approval.note, ctx) }]
       if (approval) impact.push({ label: { en: "Eligible approvers", es: "Aprobadores elegibles" }, value: (g.approval.eligibleRoles ?? []).join(", ") })
+      if (preview) impact.push(...preview.impact)
       if (expectedRevision !== null && j) impact.push({ label: { en: "Job revision bound", es: "Revisión del trabajo" }, value: `${j.displayReference} · r${expectedRevision}` })
       return {
         kind: "wait_confirmation",
@@ -497,7 +534,7 @@ function buildSkillScenario(contract: CapabilityContract): Scenario {
         label: { en: `Run demo: ${contract.label.en}`, es: `Ejecuta demo: ${contract.label.es}` },
         description: contract.primaryAction,
         group: contract.moduleKey,
-        featured: skillId === "agency-fee-contracts",
+        featured: false,
         scenarioId: erp,
       },
     ],
@@ -516,6 +553,17 @@ function buildSkillScenario(contract: CapabilityContract): Scenario {
 }
 
 export const SKILL_SCENARIOS: readonly Scenario[] = CAPABILITY_CONTRACTS.filter((c) => !FEATURED_OWNERS[c.skillId]).map(buildSkillScenario)
+
+/**
+ * The check → clarify → propose → delegate steps of one skill scenario, for
+ * composite scenarios that pre-fill parameters (e.g. the investor-script fee
+ * adjustment reuses ERP-09 exactly: same proposal, confirmation and command).
+ */
+export function skillScenarioSteps(skillId: string) {
+  const s = SKILL_SCENARIOS.find((x) => x.skillIds.includes(skillId))
+  if (!s) throw new Error(`no skill scenario for ${skillId}`)
+  return s.steps
+}
 
 /** Aliases a featured scenario takes over for its skill (e.g. ERP-06 → S-JOB-CREATE). */
 export function featuredSkillAliases(skillId: string) {

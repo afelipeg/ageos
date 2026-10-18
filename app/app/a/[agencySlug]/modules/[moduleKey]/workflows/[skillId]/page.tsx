@@ -8,8 +8,10 @@ import { StateBadge } from "@/components/app/state-badge"
 import { BlockedState, PendingHandlerState } from "@/components/app/states"
 import { Badge } from "@/components/reui/badge"
 import { Frame, FrameDescription, FrameHeader, FramePanel, FrameTitle } from "@/components/reui/frame"
+import { prefillFromParams } from "@/components/workbench/prefill"
 import { WorkbenchForm } from "@/components/workbench/workbench-form"
 import type { FieldType } from "@/lib/capabilities/types"
+import { fixtureUuid } from "@/lib/fixture-ids"
 import { requireAgency } from "@/server/auth/request"
 import { getCapability, HANDLERS } from "@/server/capabilities/registry"
 import { loadReferenceOptions, recentRuns } from "@/server/domain/references"
@@ -26,7 +28,7 @@ export default async function WorkbenchPage({
   searchParams,
 }: {
   params: Promise<{ agencySlug: string; moduleKey: string; skillId: string }>
-  searchParams: Promise<Record<string, string | undefined>>
+  searchParams: Promise<Record<string, string | string[] | undefined>>
 }) {
   const { agencySlug, moduleKey, skillId } = await params
   const sp = await searchParams
@@ -46,8 +48,11 @@ export default async function WorkbenchPage({
   const handler = HANDLERS[skillId]
   const revisionOf = handler && handler.kind === "command" ? (handler.revisionOf ?? null) : null
   const preset: Record<string, string> = {}
-  if (sp.job && refs.job?.some((o) => o.value === sp.job)) preset.job = sp.job
-  if (sp.client && refs.client?.some((o) => o.value === sp.client)) preset.client = sp.client
+  if (typeof sp.job === "string" && refs.job?.some((o) => o.value === sp.job)) preset.job = sp.job
+  if (typeof sp.client === "string" && refs.client?.some((o) => o.value === sp.client)) preset.client = sp.client
+  // Demo-journey links (`f.<field>`): tenant-checked prefill, never a submission.
+  const prefill = prefillFromParams(cap.inputFields, refs, sp, fixtureUuid)
+  Object.assign(preset, prefill)
   const blockedReason = !enabled ? "disabled" : !canExecute ? "forbidden" : null
   const base = `/a/${ctx.tenant.slug}`
 
@@ -109,6 +114,7 @@ export default async function WorkbenchPage({
             fields={cap.inputFields}
             refs={refs}
             preset={preset}
+            prefilled={Object.keys(prefill).length > 0}
             currency={ctx.tenant.baseCurrency}
             implemented={implemented}
             revisionOf={revisionOf}

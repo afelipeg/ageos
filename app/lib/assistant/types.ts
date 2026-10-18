@@ -33,6 +33,8 @@ export type SuggestionView = {
   featured?: boolean
   /** Catalog scenario id (ERP-01..ERP-42 or S-*). */
   scenarioId?: string
+  /** Offered only to an authorized presenter session (demo tools). */
+  presenterOnly?: boolean
 }
 
 /** Typed display value: money stays exact (minor units as a decimal string). */
@@ -49,7 +51,7 @@ export type OpenUIViewPart = {
   type: "openui_view"
   version: typeof OPENUI_VIEW_VERSION
   /** Fixed server template that produced `source`. */
-  template: "margin_dashboard" | "capability_result"
+  template: "margin_dashboard" | "margin_change" | "capability_result"
   skillId: string
   title: Localized
   /** OpenUI Lang program composed by the server from the template + authorized data. */
@@ -153,6 +155,21 @@ export type MessagePart =
       href: string
     }
   | OpenUIViewPart
+  | {
+      /** Authorized attention for one job (rule items, approvals, blocked runs), read-only. */
+      type: "attention_items"
+      job: { id: string; name: string; displayReference: string; href: string }
+      asOf: string
+      items: {
+        key: string
+        source: "attention" | "approval" | "run"
+        title: Localized
+        severity: string
+        state: string
+        href: string
+        owner: string | null
+      }[]
+    }
   | {
       /** Server-side redaction: content withheld under the viewer's current permissions. */
       type: "restricted"

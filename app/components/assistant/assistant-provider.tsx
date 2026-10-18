@@ -63,6 +63,9 @@ type AssistantActions = {
   resumeRun: () => Promise<void>
   newConversation: () => Promise<void>
   openConversation: (id: string) => Promise<void>
+  /** attach_authorized_file: cite an authorized library file in the current thread. */
+  attachFile: (fileId: string) => Promise<void>
+  listAttachableFiles: () => Promise<{ id: string; name: string; version: number; format: string }[]>
   setPinned: (pin: PinnedRecord) => void
   setDraft: (v: string) => void
   /** Bumped when a prefill should move focus into the composer. */
@@ -398,6 +401,24 @@ export function AssistantProvider({ slug, children }: { slug: string; children: 
         if (g === gen.current) setError((e as Error).message)
       }
     },
+    attachFile: async (fileId) => {
+      const key = currentKey
+      if (pendingKeys.includes(key)) return
+      const g = gen.current
+      markPending(key, true)
+      try {
+        const view = await api<View>(`${base}/attachments`, {
+          method: "POST",
+          body: JSON.stringify({ conversationId: selected.current, fileId, clientMessageId: crypto.randomUUID() }),
+        })
+        if (applyIfCurrent(g, view)) syncUrl(view.conversation?.id ?? null)
+      } catch (e) {
+        if (g === gen.current) setError((e as Error).message)
+      } finally {
+        markPending(key, false)
+      }
+    },
+    listAttachableFiles: async () => (await api<{ files: { id: string; name: string; version: number; format: string }[] }>(`${base}/files`)).files,
     openConversation: async (id) => {
       const g = ++gen.current
       try {

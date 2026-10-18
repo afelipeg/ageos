@@ -293,6 +293,7 @@ export async function seedDemo(
     // ── Simulated connections ──
     await tx.insert(s.connection).values(
       DEMO_CONNECTIONS.map((c) => ({
+        id: F(`connection_${c.alias}`),
         tenantId: c.tenant,
         provider: c.provider,
         category: c.category,
@@ -418,6 +419,10 @@ export async function seedDemo(
     const parsed = parseCsv(csv, ",")
     await tx.insert(s.importProfile).values({ id: F("import_profile_demo_media_orders"), tenantId: RAYO, profileKey: "import_profile_demo_media_orders", delimiter: ",", expectedHeaders: expected, profileRevision: 1 })
     await tx.insert(s.importProfileRevision).values({ tenantId: RAYO, profileId: F("import_profile_demo_media_orders"), profileRevision: 1, delimiter: ",", expectedHeaders: expected, diff: { origin: "seed" } })
+    // Published jobs import profile (Jobs → Import jobs; server/domain/job-import.ts).
+    const jobHeaders = ["client_code", "job_name", "job_type", "billing_code", "period"]
+    await tx.insert(s.importProfile).values({ id: F("import_profile_jobs"), tenantId: RAYO, profileKey: "import_profile_jobs", delimiter: ",", expectedHeaders: jobHeaders, profileRevision: 1 })
+    await tx.insert(s.importProfileRevision).values({ tenantId: RAYO, profileId: F("import_profile_jobs"), profileRevision: 1, delimiter: ",", expectedHeaders: jobHeaders, diff: { origin: "seed" } })
     await tx.insert(s.platformIncident).values({
       id: F("ops_csv_delimiter_mismatch"),
       tenantId: RAYO,

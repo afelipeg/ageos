@@ -7,7 +7,7 @@ import { fixtureUuid as F } from "@/lib/fixture-ids"
 import type { AgencyContext } from "@/server/auth/context"
 import { decideApprovalCommand } from "@/server/domain/approvals"
 import { evaluateBillingReadiness } from "@/server/domain/billing-requirements"
-import { applyClientAuthority, applyFeeAmendment, proposeFeeAmendment, recordClientAuthority, reserveBudget } from "@/server/domain/budget"
+import { applyClientAuthority, applyFeeAmendment, applyInitialBudget, proposeFeeAmendment, recordClientAuthority, reserveBudget } from "@/server/domain/budget"
 import { createClientIntake } from "@/server/domain/clients"
 import { getJobRevision, openOrCloseJob } from "@/server/domain/jobs"
 import { executeCommand } from "@/server/kernel/commands"
@@ -188,8 +188,9 @@ export const capabilities: ModuleCapabilities = {
       },
     },
     // ERP-09: fee schedule with instalment, media/production split, job
-    // allocation and an hourly settlement over approved hours only.
-    // Negative: no approved budget to amend.
+    // allocation and an hourly settlement over approved hours only (an
+    // amendment; a job without a budget gets its initial budget instead).
+    // Negative: an initial budget needs an approved client PO.
     "agency-fee-contracts": {
       positive: async (ctx) => ({
         actorKey: "user_demo_operator",
@@ -206,13 +207,14 @@ export const capabilities: ModuleCapabilities = {
         },
       }),
       negative: async (ctx) => {
-        const jobId = await openLabJob(ctx, "fee-no-budget")
+        // A new job without an approved client PO cannot get its initial budget.
+        const jobId = await openLabJob(ctx, "fee-no-authority")
         return {
           actorKey: "user_demo_operator",
-          input: { job: jobId, newAgencyFee: "500.00", reason: "No approved fee to amend." },
+          input: { job: jobId, newAgencyFee: "500.00", reason: "Initial fee without client authority." },
           expectedRevision: await getJobRevision(await ctx("user_demo_operator"), jobId),
           expectCode: "blocked_by_rule",
-          expectRule: "approved_budget_required",
+          expectRule: "client_authority_required",
         }
       },
     },
@@ -244,6 +246,11 @@ export const capabilities: ModuleCapabilities = {
       permission: "budget.propose",
       skillId: "agency-fee-contracts",
       run: (tx, ctx, payload, mode) => applyFeeAmendment(tx, ctx, payload as Parameters<typeof applyFeeAmendment>[2], mode),
+    },
+    "budget.initial": {
+      permission: "budget.propose",
+      skillId: "agency-fee-contracts",
+      run: (tx, ctx, payload, mode) => applyInitialBudget(tx, ctx, payload as Parameters<typeof applyInitialBudget>[2], mode),
     },
     "contract.client_authority": {
       permission: "budget.propose",

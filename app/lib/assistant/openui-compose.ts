@@ -199,6 +199,104 @@ export function marginDashboardView(input: MarginDashboardInput): OpenUIViewPart
   }
 }
 
+// ── Template: margin change between two cost estimates (investor script 40–58 s) ──
+
+export type MarginChangeInput = {
+  skillId: string
+  job: { name: string; revision: number }
+  asOf: string
+  currency: string
+  before: { estimateNumber: number; laborMinutes: number; costMinor: string; marginMinor: string; marginBps: number | null }
+  after: { estimateNumber: number; laborMinutes: number; costMinor: string; marginMinor: string; marginBps: number | null }
+  floorBps: number
+  sources: SourceRefView[]
+}
+
+export function marginChangeView(input: MarginChangeInput): OpenUIViewPart {
+  const c = input.currency
+  const { before, after } = input
+  const addedMinutes = Math.max(0, after.laborMinutes - before.laborMinutes)
+  const addedCost = BigInt(after.costMinor) - BigInt(before.costMinor)
+  const below = after.marginBps !== null && after.marginBps < input.floorBps
+  const costs = [
+    { label: L(`Cost estimate r${before.estimateNumber}`, `Estimación r${before.estimateNumber}`), minor: BigInt(before.costMinor) },
+    { label: L(`Cost estimate r${after.estimateNumber}`, `Estimación r${after.estimateNumber}`), minor: BigInt(after.costMinor) },
+  ]
+  const maxMinor = costs.reduce((m, x) => (x.minor > m ? x.minor : m), 0n)
+  const title = L(`${input.job.name} · margin change`, `${input.job.name} · cambio de margen`)
+  const sources = input.sources.slice(0, OPENUI_LIMITS.rows)
+  const statements: Statement[] = [
+    {
+      id: "root",
+      component: "Dashboard",
+      args: [
+        title,
+        { asOf: input.asOf, currency: c, revision: input.job.revision, basis: "forecast" },
+        [ref("before"), ref("after"), ref("hours"), ref("cost"), ref("costs"), ref("sources")],
+        L("Forecast basis: approved agency fee minus the current cost estimate; managed media excluded.", "Base proyectada: honorario aprobado menos la estimación vigente; medios administrados excluidos."),
+      ],
+    },
+    { id: "before", component: "MetricCard", args: [L("Projected margin before", "Margen proyectado antes"), bpsLit(before.marginBps), money(before.marginMinor, c)] },
+    {
+      id: "after",
+      component: "MetricCard",
+      args: [
+        L("Projected margin now", "Margen proyectado ahora"),
+        bpsLit(after.marginBps),
+        money(after.marginMinor, c),
+        below ? L("Below the 40% floor", "Por debajo del mínimo de 40%") : L("At or above the 40% floor", "En o por encima del mínimo de 40%"),
+        below ? "warning" : "positive",
+      ],
+    },
+    { id: "hours", component: "MetricCard", args: [L("Additional hours", "Horas adicionales"), { kind: "minutes", minutes: addedMinutes }] },
+    { id: "cost", component: "MetricCard", args: [L("Additional cost", "Costo adicional"), money(addedCost < 0n ? 0n : addedCost, c)] },
+    {
+      id: "costs",
+      component: "BarChart",
+      args: [
+        L("Agency cost by estimate revision", "Costo de agencia por revisión de estimación"),
+        c,
+        costs.map((x) => ({ label: x.label, valueMinor: x.minor.toString(), plot: plotOf(x.minor, maxMinor) })),
+      ],
+    },
+    {
+      id: "sources",
+      component: "RecordTable",
+      args: [
+        L("Sources", "Fuentes"),
+        [
+          { key: "record", label: L("Record", "Registro") },
+          { key: "type", label: L("Type", "Tipo") },
+          { key: "revision", label: L("Revision", "Revisión"), align: "end" },
+        ],
+        sources.map((s) => ({
+          cells: [{ kind: "text", text: s.label }, { kind: "text", text: s.recordType }, s.revision === null ? { kind: "text", text: "—" } : { kind: "count", count: signed(s.revision) }],
+          href: s.href,
+        })),
+      ],
+    },
+  ]
+  return {
+    type: "openui_view",
+    version: OPENUI_VIEW_VERSION,
+    template: "margin_change",
+    skillId: input.skillId,
+    title,
+    source: program(statements),
+    asOf: input.asOf,
+    currency: c,
+    revision: input.job.revision,
+    fallback: [
+      { label: L("Projected margin before", "Margen proyectado antes"), value: { kind: "bps", bps: before.marginBps } },
+      { label: L("Projected margin now", "Margen proyectado ahora"), value: { kind: "bps", bps: after.marginBps } },
+      { label: L("Additional hours", "Horas adicionales"), value: { kind: "minutes", minutes: addedMinutes } },
+      { label: L("Additional cost", "Costo adicional"), value: money(addedCost < 0n ? 0n : addedCost, c) },
+      { label: L("Agency cost before", "Costo de agencia antes"), value: money(before.costMinor, c) },
+      { label: L("Agency cost now", "Costo de agencia ahora"), value: money(after.costMinor, c) },
+    ],
+  }
+}
+
 // ── Template: generic capability result (other ERP scenarios) ──
 
 export function humanizeKey(key: string): string {

@@ -146,9 +146,12 @@ export function PendingCapabilityChange({
       router.refresh()
     })
   return (
-    <div className="flex flex-col gap-2 text-sm">
+    <div role="group" aria-label={t("catalog.change.pendingLabel", { n: number })} className="flex flex-col gap-2 text-sm">
       <div className="flex flex-wrap items-center gap-2">
         <span className="font-medium">{t("catalog.change.pendingLabel", { n: number })}</span>
+        <span className="font-mono text-xs text-muted-foreground" title={digest}>
+          {t("catalog.change.digest", { d: digest.slice(0, 12) })}
+        </span>
         {(diff?.enabled ?? []).map((s) => (
           <Badge key={`e-${s}`} variant="success-light" className="font-mono">
             +{s}

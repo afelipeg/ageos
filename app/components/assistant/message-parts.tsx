@@ -308,6 +308,58 @@ export function MessageParts({ parts }: { parts: MessagePart[] }) {
                 </AlertDescription>
               </Alert>
             )
+          case "attention_items":
+            return (
+              <Card key={idx} size="sm" className="w-full">
+                <CardHeader>
+                  <CardTitle>{t("assistant.attention.title")}</CardTitle>
+                  <CardDescription className="flex flex-wrap items-center gap-1.5">
+                    {internal(part.job.href, assistant.slug) ? (
+                      <Link href={part.job.href} className="font-medium text-foreground underline-offset-3 hover:underline">
+                        {part.job.displayReference} · {part.job.name}
+                      </Link>
+                    ) : (
+                      <span>
+                        {part.job.displayReference} · {part.job.name}
+                      </span>
+                    )}
+                    <Badge variant="outline">{t("common.demoShort")}</Badge>
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {part.items.length === 0 ? (
+                    <p className="text-sm text-muted-foreground">{t("assistant.attention.empty")}</p>
+                  ) : (
+                    <ul className="flex flex-col divide-y divide-border">
+                      {part.items.map((i) => (
+                        <li key={i.key} className="flex flex-wrap items-center justify-between gap-2 py-1.5 text-sm">
+                          <span className="flex min-w-0 flex-col">
+                            {internal(i.href, assistant.slug) ? (
+                              <Link href={i.href} className="font-medium underline-offset-3 hover:underline">
+                                {pick(i.title)}
+                              </Link>
+                            ) : (
+                              <span className="font-medium">{pick(i.title)}</span>
+                            )}
+                            {i.owner ? (
+                              <span className="text-xs text-muted-foreground">
+                                {t("assistant.attention.owner")}: {i.owner}
+                              </span>
+                            ) : null}
+                          </span>
+                          <span className="flex shrink-0 items-center gap-1.5">
+                            <Badge variant={i.severity === "blocked" ? "warning-light" : i.severity === "approval" ? "primary-light" : "outline"}>{t(`assistant.attention.sources.${i.source}`)}</Badge>
+                            <Badge variant="outline" className="font-mono">
+                              {i.state}
+                            </Badge>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </CardContent>
+              </Card>
+            )
           case "restricted":
             return (
               <p key={idx} className="flex items-center gap-1.5 rounded-md border border-dashed border-border px-2.5 py-1.5 text-xs text-muted-foreground">

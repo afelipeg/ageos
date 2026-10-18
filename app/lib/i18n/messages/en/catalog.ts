@@ -45,6 +45,7 @@ export const catalog = {
     pendingTitle: "Pending configuration changes",
     pendingHelp: "Each change is bound to its digest and to the published revision it was computed from.",
     pendingLabel: "Revision r{n}",
+    digest: "Digest {d}…",
     comment: "Decision comment (required to reject)",
     approve: "Approve and publish",
     reject: "Reject",

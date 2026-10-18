@@ -17,11 +17,13 @@ import {
   budgetRevision,
   client,
   costEstimate,
+  fileObject,
   job,
 } from "@/server/db/schema"
 import { withTenant } from "@/server/db/tenant"
 import { HANDLERS } from "@/server/capabilities/registry"
 import { DomainError } from "@/server/kernel/errors"
+import { canSeeFile } from "@/server/queries/library"
 
 import type { RunLease, Scenario } from "./scenario-types"
 
@@ -219,11 +221,12 @@ export function partPermissions(part: MessagePart, scenario: Pick<Scenario, "rea
   }
 }
 
-type SourceCheck = (tx: Tx, tenantId: string, ids: string[]) => Promise<Set<string>>
+type SourceCheck = (tx: Tx, ctx: AgencyContext, ids: string[]) => Promise<Set<string>>
 
 const existing =
   (table: typeof job | typeof budgetRevision | typeof costEstimate | typeof client): SourceCheck =>
-  async (tx, tenantId, ids) => {
+  async (tx, ctx, ids) => {
+    const tenantId = ctx.tenant.id
     if (!ids.length) return new Set()
     const rows = await tx.select({ id: table.id }).from(table).where(and(eq(table.tenantId, tenantId), inArray(table.id, ids)))
     return new Set(rows.map((r) => r.id))
@@ -234,6 +237,12 @@ const SOURCE_CHECKS: Record<string, SourceCheck> = {
   budget_revision: existing(budgetRevision),
   cost_estimate: existing(costEstimate),
   client: existing(client),
+  // Attached library files: still in the agency AND visible to the viewer's current role.
+  file: async (tx, ctx, ids) => {
+    if (!ids.length) return new Set()
+    const rows = await tx.select({ id: fileObject.id, visibility: fileObject.visibility }).from(fileObject).where(and(eq(fileObject.tenantId, ctx.tenant.id), inArray(fileObject.id, ids)))
+    return new Set(rows.filter((r) => canSeeFile(ctx, r.visibility)).map((r) => r.id))
+  },
 }
 
 /**
@@ -327,7 +336,7 @@ export async function conversationView(
     const refsByType = new Map<string, Set<string>>()
     for (const p of allParts) if (p.type === "sources") for (const r of p.refs) if (SOURCE_CHECKS[r.recordType] && /^[0-9a-f-]{36}$/i.test(r.recordId)) refsByType.set(r.recordType, (refsByType.get(r.recordType) ?? new Set()).add(r.recordId))
     const present = new Map<string, Set<string>>()
-    for (const [type, ids] of refsByType) present.set(type, await SOURCE_CHECKS[type]!(tx, ctx.tenant.id, [...ids]))
+    for (const [type, ids] of refsByType) present.set(type, await SOURCE_CHECKS[type]!(tx, ctx, [...ids]))
     const available = (r: SourceRefView) => (SOURCE_CHECKS[r.recordType] ? Boolean(present.get(r.recordType)?.has(r.recordId)) : true)
 
     const live = (parts: MessagePart[]) =>

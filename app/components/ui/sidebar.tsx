@@ -542,13 +542,18 @@ function SidebarMenuButton({
     }
   }
 
+  // A tooltip whose content is hidden must also be disabled: an enabled one
+  // still opens on focus and swallows the first Escape meant for the mobile
+  // Sheet (Base UI's tooltip dismiss stops propagation).
+  const tooltipHidden = state !== "collapsed" || isMobile
+
   return (
-    <Tooltip>
+    <Tooltip disabled={tooltipHidden}>
       {comp}
       <TooltipContent
         side="right"
         align="center"
-        hidden={state !== "collapsed" || isMobile}
+        hidden={tooltipHidden}
         {...tooltip}
       />
     </Tooltip>

@@ -23,6 +23,13 @@ const fontMono = Geist_Mono({
 
 const APP_NAME = "AgeOS"
 
+// Resolves the stored theme ("light" | "dark" | "system"; missing means the
+// "dark" default) with next-themes' defaults (storageKey "theme", class
+// attribute). next-themes injects its own script inside <body>, which runs
+// after the first content is already painted; this one sits first in <head>
+// so the correct class and color-scheme exist before any paint.
+const THEME_BOOTSTRAP = `(function(){try{var t=localStorage.getItem("theme");var r=t==="light"||t==="dark"?t:t==="system"?(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):"dark";var e=document.documentElement;e.classList.remove("light","dark");e.classList.add(r);e.style.colorScheme=r}catch(_){}})()`
+
 export const metadata: Metadata = {
   title: {
     default: `${APP_NAME} — Build your agency on AgeOS`,
@@ -44,8 +51,11 @@ export default async function RootLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={cn("antialiased", fontSans.variable, fontMono.variable, "font-sans")}
+      className={cn("antialiased", "dark", fontSans.variable, fontMono.variable, "font-sans")}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP }} />
+      </head>
       <body suppressHydrationWarning>
         <ThemeProvider>
           <Suspense fallback={null}>

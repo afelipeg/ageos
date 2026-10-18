@@ -94,6 +94,38 @@ export const assistant = {
     unavailableBody: "The visual could not be validated or rendered. The same figures are listed below.",
     series: { actual: "Actual", forecast: "Forecast", simulated: "Simulated" },
   },
+  attention: {
+    title: "Needs attention",
+    summary: "{count} item(s) need attention on {job}. Each one links to its record; this scripted answer reads only records you are authorized to see.",
+    none: "Nothing needs attention on {job} right now: no open rule items, pending approvals or blocked runs.",
+    empty: "Nothing open for this job.",
+    sources: { attention: "Rule", approval: "Approval", run: "Blocked run" },
+    owner: "Owner",
+  },
+  marginChange: {
+    notLoaded: "{job} has no scope change on record yet: its forecast still uses the original cost estimate. Nothing was prepared.",
+    askPresenter: "In this demo the presenter introduces it with Load sample scope request (demo tools).",
+    explained: "Forecast: {hours} of additional labor ({cost} of additional cost, cost estimate {from} → {to}) reduce {job}'s projected margin from {before} to {after}. The ERP calculated it from the approved fee and the cost estimates cited below.",
+    preparing: "Next step prepared for review: a fee amendment of {delta} (new fee {fee}). Nothing changes financially until an eligible finance approver approves it, and the requester cannot approve their own request.",
+    alreadyPriced: "The scope change on {job} is already priced: approved fee {fee}, projected margin {margin}. No new adjustment was prepared.",
+  },
+  presenterScope: {
+    loaded: "Sample scope change (demo) recorded through the production-estimating command, as in journey step J04.2. The dossier and the assistant now read the new forecast.",
+    replayed: "This sample scope change was already loaded in this demo run; nothing was recorded twice.",
+    already_loaded: "The scope change is already on record for this job; nothing was recorded twice.",
+  },
+  presenterTools: {
+    title: "Sample scope change (demo)",
+    body: "Introduces the 40-hour scope request on Aurora Spring Launch through the real production-estimating command (journey J04.2). Presenter only, audited, once per demo run.",
+    action: "Load sample scope request",
+    done: "Margin now {margin}",
+  },
+  attach: {
+    added: "Attached {name} (v{version}) as a source for this conversation. It stays in the private library; only people allowed to read it see it here.",
+    action: "Attach from library",
+    heading: "Authorized library files",
+    empty: "No library files available to you",
+  },
   margin: {
     aboveFloor: "{job} stays above the {floor} projected-margin floor. The figures come from the approved budget and the current cost estimate.",
     belowFloor: "{job} is below the {floor} projected-margin floor: cost rose without a fee change. Review the scope change and propose a fee amendment.",

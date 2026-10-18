@@ -63,4 +63,5 @@ export const workbench = {
   runsEmpty: "No runs yet.",
   runColumns: { started: "Started", state: "State", origin: "Origin", actor: "Actor" },
   examplesNote: "Example values are editable defaults aligned with the demo fixtures.",
+  prefilledNote: "Prefilled from demo journey",
 }

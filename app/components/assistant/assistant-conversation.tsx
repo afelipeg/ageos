@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect, useId, useRef, type FormEvent, type KeyboardEvent } from "react"
+import { useEffect, useId, useRef, useState, type FormEvent, type KeyboardEvent } from "react"
 import {
   ArrowUpIcon,
+  PaperclipIcon,
   HistoryIcon,
   Maximize2Icon,
   MessagesSquareIcon,
@@ -60,11 +61,14 @@ function Header({ variant }: { variant: "panel" | "page" }) {
   const { t, timestamp } = useI18n()
   const a = useAssistant()
   const run = a.conversation?.activeRun
+  // The full page owns the document's <h1>; the docked panel is a region of
+  // another page, so its title stays plain text.
+  const Title = variant === "page" ? "h1" : "span"
   return (
     <div className="flex shrink-0 flex-col gap-1.5 border-b border-border px-4 py-2">
       <div className="flex min-h-8 items-center gap-2">
         <MessagesSquareIcon aria-hidden="true" className="size-4 shrink-0 text-primary" />
-        <span className="min-w-0 truncate text-sm font-semibold">{t("assistant.title")}</span>
+        <Title className="min-w-0 truncate text-sm font-semibold">{t("assistant.title")}</Title>
         <Tooltip>
           <TooltipTrigger render={<Badge variant="primary-light" className="shrink-0">{t("assistant.mode")}</Badge>} />
           <TooltipContent className="max-w-64">{t("assistant.modeHelp")}</TooltipContent>
@@ -282,6 +286,53 @@ function Thread() {
   )
 }
 
+/** attach_authorized_file: lists only library files this viewer may read in this agency. */
+function AttachMenu() {
+  const { t } = useI18n()
+  const a = useAssistant()
+  const [files, setFiles] = useState<{ id: string; name: string; version: number; format: string }[] | null>(null)
+  return (
+    <DropdownMenu
+      onOpenChange={(open) => {
+        if (open && files === null) void a.listAttachableFiles().then(setFiles, () => setFiles([]))
+      }}
+    >
+      <Tooltip>
+        <TooltipTrigger render={<span className="flex" />}>
+          <DropdownMenuTrigger render={<InputGroupButton type="button" size="icon-sm" variant="ghost" disabled={a.sending} aria-label={t("assistant.attach.action")} />}>
+            <PaperclipIcon aria-hidden="true" />
+          </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>{t("assistant.attach.action")}</TooltipContent>
+      </Tooltip>
+      <DropdownMenuContent align="start" className="w-72">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>{t("assistant.attach.heading")}</DropdownMenuLabel>
+          {files === null ? (
+            <DropdownMenuItem disabled>
+              <Spinner className="size-3.5" aria-hidden="true" />
+              {t("common.loading")}
+            </DropdownMenuItem>
+          ) : files.length === 0 ? (
+            <DropdownMenuItem disabled>{t("assistant.attach.empty")}</DropdownMenuItem>
+          ) : (
+            files.map((f) => (
+              <DropdownMenuItem key={f.id} onClick={() => void a.attachFile(f.id)}>
+                <span className="flex min-w-0 flex-col">
+                  <span className="truncate text-sm">{f.name}</span>
+                  <span className="text-xs text-muted-foreground uppercase">
+                    {f.format} · v{f.version}
+                  </span>
+                </span>
+              </DropdownMenuItem>
+            ))
+          )}
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
 function Composer() {
   const { t } = useI18n()
   const a = useAssistant()
@@ -336,7 +387,10 @@ function Composer() {
               className="field-sizing-content max-h-32 min-h-10"
             />
             <InputGroupAddon align="block-end" className="justify-between gap-2">
-              <span className="truncate text-xs text-muted-foreground">{t("common.demoBadge")}</span>
+              <span className="flex min-w-0 items-center gap-1">
+                <AttachMenu />
+                <span className="truncate text-xs text-muted-foreground">{t("common.demoBadge")}</span>
+              </span>
               <div className="flex items-center gap-1">
                 {run && ["waiting_input", "waiting_confirmation", "running"].includes(run.status) ? (
                   <InputGroupButton type="button" size="sm" variant="outline" onClick={() => void a.cancelRun()} aria-label={t("assistant.stop")}>
