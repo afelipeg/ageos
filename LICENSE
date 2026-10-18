@@ -1,0 +1,25 @@
+AgeOS Proprietary License — NOT open source software.
+
+Copyright (c) 2026 Andrés Felipe Gutiérrez. All rights reserved.
+
+This repository and everything in it (source code, specifications, data
+contracts, documentation, fixtures and other materials, together the
+"Software") is confidential and proprietary to Andrés Felipe Gutiérrez.
+
+No use, copying, modification, merging, distribution, publication,
+sublicensing, sale or creation of derivative works of the Software, in whole or
+in part, is permitted without the prior written permission of the copyright
+holder.
+
+Access to this repository, including the ability to read, clone or download
+it, does not grant any license or right in the Software, express or implied,
+by estoppel or otherwise.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR ITS USE.
+
+Third-party components are not covered by this license. They remain governed
+by their own licenses and terms; see THIRD-PARTY-NOTICES.md.
