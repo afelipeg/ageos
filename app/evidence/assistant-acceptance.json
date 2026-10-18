@@ -1,0 +1,114 @@
+{
+  "generatedAt": "2026-10-18T15:48:42.300Z",
+  "driver": "scripted · catalog erp-42@2.0.0",
+  "test": "tests/integration/assistant-acceptance.test.ts",
+  "cases": [
+    {
+      "id": "A02",
+      "title": "margin follows the checkpoint: 45.0% → 35.0% after 40h → 43.5% only after the approved amendment (EN and ES alias)",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A03",
+      "title": "create a job: asks for the missing client and name, proposes, confirms once and saves one job",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A07",
+      "title": "a viewer asking for a payment run is blocked server-side with no effect",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A08",
+      "title": "a material change after the proposal makes its confirmation stale; nothing executes",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A09",
+      "title": "a conversation id from another agency or another member resolves to not_found",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A10",
+      "title": "the run's context snapshot keeps the job it started on, whatever the later page context is",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A11",
+      "title": "the same client message id sent twice is one user message and one run",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A12",
+      "title": "Stop on a waiting run cancels it and its pending proposal; the view after reload shows it stopped",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A14",
+      "title": "instructions inside user text are data: an injection attempt runs nothing and changes nothing",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A15",
+      "title": "revoking reports.view restricts the saved margin answer and its sources on read",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A16",
+      "title": "unknown text offers the supported scenarios and creates no run or business effect",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A17",
+      "title": "a forged digest or another user's proposal cannot be confirmed",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    },
+    {
+      "id": "A04",
+      "title": "media plan via orchestrator (completed)",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts",
+      "detail": "parts: user_text,proposal,text,delegation,capability_result,approval_request,openui_view"
+    },
+    {
+      "id": "A05",
+      "title": "campaign activation via orchestrator → approval → simulated effect (completed)",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts",
+      "detail": "approved by finance_approver; executed=true; sim receipts=1"
+    },
+    {
+      "id": "A06",
+      "title": "42/42 skills delegated through the orchestrator",
+      "status": "passed",
+      "layer": "domain/driver (vitest)",
+      "test": "tests/integration/assistant-acceptance.test.ts"
+    }
+  ]
+}

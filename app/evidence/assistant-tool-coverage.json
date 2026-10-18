@@ -1,0 +1,1591 @@
+{
+  "generatedAt": "2026-10-18T15:48:42.300Z",
+  "driver": "scripted · catalog erp-42@2.0.0",
+  "test": "tests/integration/assistant-acceptance.test.ts",
+  "rule": "covered = the scripted orchestrator ran the skill's scenario and persisted a tool call or delegation to exactly that skill id (via the shared runner)",
+  "totals": {
+    "skills": 42,
+    "covered": 42
+  },
+  "skills": [
+    {
+      "erp": "ERP-01",
+      "skillId": "agency-orchestrator",
+      "moduleKey": "setup",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-orchestrator",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-01",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-orchestrator",
+          "handler": "recomputeJobReadiness",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "coordinador",
+          "skillIds": [
+            "agency-orchestrator"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "c6645cd2-5e3f-462c-99d6-f07377f1a062"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-02",
+      "skillId": "agency-integrations",
+      "moduleKey": "setup",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-integrations",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-02",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-integrations",
+          "handler": "configureDemoConnection",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "coordinador",
+          "skillIds": [
+            "agency-integrations"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "57257d51-c38a-4550-88a2-2ebfddc7500c"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-03",
+      "skillId": "agency-access-governance",
+      "moduleKey": "setup",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-access-governance",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-03",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-access-governance",
+          "handler": "proposeAccessChange",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "coordinador",
+          "skillIds": [
+            "agency-access-governance"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "7ec0d854-4a6e-4267-b762-e6e582c4d290"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-04",
+      "skillId": "agency-master-data",
+      "moduleKey": "setup",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-master-data",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-04",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-master-data",
+          "handler": "upsertMasterRecord",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "coordinador",
+          "skillIds": [
+            "agency-master-data"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "5479a9f6-4d2d-4de1-8f3b-8d74ad422c14"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-05",
+      "skillId": "agency-onboarding",
+      "moduleKey": "clients-contracts",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-onboarding",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-05",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-onboarding",
+          "handler": "createClientIntake",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "clientes",
+          "skillIds": [
+            "agency-onboarding"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "1727f8a0-1fc0-4610-8b31-0e7099a2057b"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-06",
+      "skillId": "agency-job-lifecycle",
+      "moduleKey": "clients-contracts",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-job-lifecycle",
+      "covered": true,
+      "answered": [
+        "client=dc5560aa-cd76-55a6-93b5-c5792aca6890",
+        "jobName=Aurora Spring Launch"
+      ],
+      "scenarioId": "S-JOB-CREATE",
+      "scenarioVersion": "1.1.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-job-lifecycle",
+          "handler": "jobs.openOrClose",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "clientes",
+          "skillIds": [
+            "agency-job-lifecycle"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "d96d76d6-352c-4465-82c0-cad3c54392ba"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "text",
+        "input_request",
+        "proposal",
+        "delegation",
+        "receipt"
+      ]
+    },
+    {
+      "erp": "ERP-07",
+      "skillId": "agency-contract-po",
+      "moduleKey": "clients-contracts",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-contract-po",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-07",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-contract-po",
+          "handler": "recordClientAuthority",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "clientes",
+          "skillIds": [
+            "agency-contract-po"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "0d306ef7-0e23-4e06-bb8c-bb2ccf1fffcc"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-08",
+      "skillId": "agency-budget-control",
+      "moduleKey": "clients-contracts",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-budget-control",
+      "covered": true,
+      "answered": [
+        "job=c88349e2-4b0d-5c10-9b79-3fb363bcef22"
+      ],
+      "scenarioId": "ERP-08",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-budget-control",
+          "handler": "reserveBudget",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "clientes",
+          "skillIds": [
+            "agency-budget-control"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "caf27e38-5ca1-48b8-9ac0-fd1c5d732da1"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "text",
+        "input_request",
+        "proposal",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-09",
+      "skillId": "agency-fee-contracts",
+      "moduleKey": "clients-contracts",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-fee-contracts",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-09",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-fee-contracts",
+          "handler": "calculateFeeSchedule",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "clientes",
+          "skillIds": [
+            "agency-fee-contracts"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "c94e1464-f91b-4df5-b75b-ef454f57caa6"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-10",
+      "skillId": "agency-billing-requirements",
+      "moduleKey": "clients-contracts",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-billing-requirements",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-10",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-billing-requirements",
+          "handler": "evaluateBillingReadiness",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "clientes",
+          "skillIds": [
+            "agency-billing-requirements"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "5ef0b566-b6f0-45f0-a87d-3ab8c4ebdfe8"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-11",
+      "skillId": "agency-tasks-timesheets",
+      "moduleKey": "work-production",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-tasks-timesheets",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-11",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-tasks-timesheets",
+          "handler": "submitAndApproveTimesheet",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "produccion",
+          "skillIds": [
+            "agency-tasks-timesheets"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "558b97d3-e7cc-404e-9e21-146c72169789"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-12",
+      "skillId": "agency-production-estimating",
+      "moduleKey": "work-production",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-production-estimating",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-12",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-production-estimating",
+          "handler": "createProductionEstimate",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "produccion",
+          "skillIds": [
+            "agency-production-estimating"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "3a87f34a-ee33-408b-acc9-2de58ed886ed"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-13",
+      "skillId": "agency-production",
+      "moduleKey": "work-production",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-production",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-13",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-production",
+          "handler": "reviewProductionDelivery",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "produccion",
+          "skillIds": [
+            "agency-production"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "3da71a9c-8e23-458a-884f-212996baaf9c"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-14",
+      "skillId": "agency-media-ranking",
+      "moduleKey": "media-planning",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-media-ranking",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-14",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-media-ranking",
+          "handler": "rankMediaOptions",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "planificacion",
+          "skillIds": [
+            "agency-media-ranking"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "3dc7def8-7f15-4e67-bb1c-e59608361a37"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "delegation",
+        "capability_result",
+        "openui_view",
+        "text"
+      ]
+    },
+    {
+      "erp": "ERP-15",
+      "skillId": "agency-media-planning",
+      "moduleKey": "media-planning",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-media-planning",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-15",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-media-planning",
+          "handler": "saveMediaPlanRevision",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "planificacion",
+          "skillIds": [
+            "agency-media-planning"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "4dfc4029-b102-493d-af07-76299a7b8333"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-16",
+      "skillId": "agency-tv-radio-planning",
+      "moduleKey": "media-planning",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-tv-radio-planning",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-16",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-tv-radio-planning",
+          "handler": "buildBroadcastSchedule",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "planificacion",
+          "skillIds": [
+            "agency-tv-radio-planning"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "47389697-216b-4cf4-adfc-62dd5033c7f2"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-17",
+      "skillId": "agency-ooh-planning",
+      "moduleKey": "media-planning",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-ooh-planning",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-17",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-ooh-planning",
+          "handler": "proposeOOHPlan",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "planificacion",
+          "skillIds": [
+            "agency-ooh-planning"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "bfbf221c-4b20-42c2-871f-0f59766329cd"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-18",
+      "skillId": "agency-digital-planning",
+      "moduleKey": "media-planning",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-digital-planning",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-18",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-digital-planning",
+          "handler": "validateDigitalPlan",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "planificacion",
+          "skillIds": [
+            "agency-digital-planning"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "39edfcbe-5c16-4cb2-bcde-4675ea1281bc"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "delegation",
+        "capability_result",
+        "openui_view",
+        "text"
+      ]
+    },
+    {
+      "erp": "ERP-19",
+      "skillId": "agency-plan-changes",
+      "moduleKey": "media-planning",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-plan-changes",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-19",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-plan-changes",
+          "handler": "proposePlanRevisionChange",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "planificacion",
+          "skillIds": [
+            "agency-plan-changes"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "d9f3e24f-1198-4c15-a8cb-1d0f40f36f48"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-20",
+      "skillId": "agency-rate-cards-contracts",
+      "moduleKey": "media-buying",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-rate-cards-contracts",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-20",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-rate-cards-contracts",
+          "handler": "saveRateCardAgreement",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "compra",
+          "skillIds": [
+            "agency-rate-cards-contracts"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "47f37850-c483-4b2c-a256-feadcd2d34a5"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-21",
+      "skillId": "agency-media-buying",
+      "moduleKey": "media-buying",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-media-buying",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-21",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-media-buying",
+          "handler": "issueMediaOrder",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "compra",
+          "skillIds": [
+            "agency-media-buying"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "2e64e099-4eb1-4191-bcf1-24e5f149355c"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-22",
+      "skillId": "agency-campaign-activation",
+      "moduleKey": "media-buying",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-campaign-activation",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-22",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-campaign-activation",
+          "handler": "activateDemoCampaign",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "compra",
+          "skillIds": [
+            "agency-campaign-activation"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "14bc2f18-5fcf-41be-bd2d-37f26baf4c03"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-23",
+      "skillId": "agency-campaign-optimization",
+      "moduleKey": "media-buying",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-campaign-optimization",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-23",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-campaign-optimization",
+          "handler": "proposeCampaignOptimization",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "compra",
+          "skillIds": [
+            "agency-campaign-optimization"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "e42594c1-209a-4ed1-9a36-72137cbec987"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-24",
+      "skillId": "agency-transmission-control",
+      "moduleKey": "media-buying",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-transmission-control",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-24",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-transmission-control",
+          "handler": "reconcileBroadcastDelivery",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "compra",
+          "skillIds": [
+            "agency-transmission-control"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "983bd281-5073-4043-aca1-2721829056c0"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-25",
+      "skillId": "agency-ooh-inventory",
+      "moduleKey": "media-buying",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-ooh-inventory",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-25",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-ooh-inventory",
+          "handler": "reserveOOHFace",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "compra",
+          "skillIds": [
+            "agency-ooh-inventory"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "0c0fb4a3-743d-47b7-97e2-3627f5f195c1"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-26",
+      "skillId": "agency-delivery-reconciliation",
+      "moduleKey": "suppliers-payments",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-delivery-reconciliation",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-26",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-delivery-reconciliation",
+          "handler": "reconcileDeliveryInvoice",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "proveedores",
+          "skillIds": [
+            "agency-delivery-reconciliation"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "af2693df-7f13-4014-8e89-cced25b37397"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-27",
+      "skillId": "agency-payables",
+      "moduleKey": "suppliers-payments",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-payables",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-27",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-payables",
+          "handler": "approveSupplierInvoice",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "proveedores",
+          "skillIds": [
+            "agency-payables"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "1ae3b6bc-4e48-4222-9716-1b7cc5d44c6b"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result"
+      ]
+    },
+    {
+      "erp": "ERP-28",
+      "skillId": "agency-payment-run",
+      "moduleKey": "suppliers-payments",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-payment-run",
+      "covered": true,
+      "answered": [
+        "connection=c8ea16eb-6e7b-47bd-b57f-e1b1a9a1fdb0"
+      ],
+      "scenarioId": "ERP-28",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "blocked",
+      "toolCalls": [
+        {
+          "skillId": "agency-payment-run",
+          "handler": "executeDemoPaymentBatch",
+          "status": "blocked"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "proveedores",
+          "skillIds": [
+            "agency-payment-run"
+          ],
+          "state": "blocked",
+          "childWorkflowRunId": "1a3dab9e-62ed-4d0c-85d1-3b4fe2cdafe8"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "text",
+        "input_request",
+        "proposal",
+        "delegation",
+        "blocked"
+      ]
+    },
+    {
+      "erp": "ERP-29",
+      "skillId": "agency-cash-settlement",
+      "moduleKey": "suppliers-payments",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-cash-settlement",
+      "covered": true,
+      "answered": [
+        "connection=9cbca011-012d-4fb5-8034-354a4fb92291",
+        "statementFile=5320c2f3-e3c2-5d1e-9b76-165f3f3add79"
+      ],
+      "scenarioId": "ERP-29",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "blocked",
+      "toolCalls": [
+        {
+          "skillId": "agency-cash-settlement",
+          "handler": "reconcileBankTransaction",
+          "status": "blocked"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "proveedores",
+          "skillIds": [
+            "agency-cash-settlement"
+          ],
+          "state": "blocked",
+          "childWorkflowRunId": "e3edbcfb-efb4-48e2-9537-a5144bb2598c"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "text",
+        "input_request",
+        "proposal",
+        "delegation",
+        "blocked"
+      ]
+    },
+    {
+      "erp": "ERP-30",
+      "skillId": "agency-expenses",
+      "moduleKey": "suppliers-payments",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-expenses",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-30",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-expenses",
+          "handler": "submitAndApproveExpense",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "proveedores",
+          "skillIds": [
+            "agency-expenses"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "af6e469b-30cb-47a5-b8d0-acf33381b92f"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-31",
+      "skillId": "agency-client-billing",
+      "moduleKey": "billing-collections",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-client-billing",
+      "covered": true,
+      "answered": [
+        "job=c88349e2-4b0d-5c10-9b79-3fb363bcef22"
+      ],
+      "scenarioId": "ERP-31",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "blocked",
+      "toolCalls": [
+        {
+          "skillId": "agency-client-billing",
+          "handler": "issueDemoClientInvoice",
+          "status": "blocked"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "facturacion",
+          "skillIds": [
+            "agency-client-billing"
+          ],
+          "state": "blocked",
+          "childWorkflowRunId": "2b687eee-5a97-488d-bad1-1d60e8d10024"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "text",
+        "input_request",
+        "proposal",
+        "delegation",
+        "blocked"
+      ]
+    },
+    {
+      "erp": "ERP-32",
+      "skillId": "agency-collections",
+      "moduleKey": "billing-collections",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-collections",
+      "covered": true,
+      "answered": [
+        "job=c88349e2-4b0d-5c10-9b79-3fb363bcef22"
+      ],
+      "scenarioId": "ERP-32",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "blocked",
+      "toolCalls": [
+        {
+          "skillId": "agency-collections",
+          "handler": "allocateCollection",
+          "status": "blocked"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "facturacion",
+          "skillIds": [
+            "agency-collections"
+          ],
+          "state": "blocked",
+          "childWorkflowRunId": "bd55e910-f6d6-45a2-8625-ee298a9fd275"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "text",
+        "input_request",
+        "proposal",
+        "delegation",
+        "blocked"
+      ]
+    },
+    {
+      "erp": "ERP-33",
+      "skillId": "agency-rebates",
+      "moduleKey": "billing-collections",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-rebates",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-33",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-rebates",
+          "handler": "calculateRebateSettlement",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "facturacion",
+          "skillIds": [
+            "agency-rebates"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "eb7bea7c-d005-4431-a36e-5ddaafb835f0"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-34",
+      "skillId": "agency-tax-compliance",
+      "moduleKey": "billing-collections",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-tax-compliance",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-34",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-tax-compliance",
+          "handler": "validateDemoTaxProfile",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "facturacion",
+          "skillIds": [
+            "agency-tax-compliance"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "0f435323-e210-4f8f-a717-f586706fee89"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "delegation",
+        "capability_result",
+        "openui_view",
+        "text"
+      ]
+    },
+    {
+      "erp": "ERP-35",
+      "skillId": "agency-general-ledger",
+      "moduleKey": "accounting-close",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-general-ledger",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-35",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-general-ledger",
+          "handler": "postDemoJournal",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "contabilidad",
+          "skillIds": [
+            "agency-general-ledger"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "ae736ec9-7600-4c61-ae3b-a4465b720b33"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request"
+      ]
+    },
+    {
+      "erp": "ERP-36",
+      "skillId": "agency-accruals-revaluation",
+      "moduleKey": "accounting-close",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-accruals-revaluation",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-36",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-accruals-revaluation",
+          "handler": "proposeAccrualOrFXAdjustment",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "contabilidad",
+          "skillIds": [
+            "agency-accruals-revaluation"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "6fed48e9-53cb-484a-b08f-da9e960e6a06"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request"
+      ]
+    },
+    {
+      "erp": "ERP-37",
+      "skillId": "agency-fixed-assets",
+      "moduleKey": "accounting-close",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-fixed-assets",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-37",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-fixed-assets",
+          "handler": "calculateAssetDepreciation",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "contabilidad",
+          "skillIds": [
+            "agency-fixed-assets"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "98c5d078-2768-46fc-8027-0ecbd1c38027"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-38",
+      "skillId": "agency-period-close",
+      "moduleKey": "accounting-close",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-period-close",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-38",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-period-close",
+          "handler": "closeAccountingPeriod",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "contabilidad",
+          "skillIds": [
+            "agency-period-close"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "de183bf9-4adf-4844-b59e-f6f680d6e960"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-39",
+      "skillId": "agency-profitability",
+      "moduleKey": "profitability",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-profitability",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-39",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-profitability",
+          "handler": "calculateJobProfitability",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "rentabilidad",
+          "skillIds": [
+            "agency-profitability"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "3009e5fe-ce83-4a44-8ec3-9314831052b4"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "delegation",
+        "capability_result",
+        "margin_result",
+        "openui_view",
+        "text",
+        "sources"
+      ]
+    },
+    {
+      "erp": "ERP-40",
+      "skillId": "agency-revenue-budget",
+      "moduleKey": "profitability",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-revenue-budget",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-40",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-revenue-budget",
+          "handler": "saveRevenueBudgetScenario",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "rentabilidad",
+          "skillIds": [
+            "agency-revenue-budget"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "0fea9d0e-33a8-4cbe-b394-97ac3b582afe"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "approval_request",
+        "openui_view"
+      ]
+    },
+    {
+      "erp": "ERP-41",
+      "skillId": "agency-cash-forecast",
+      "moduleKey": "profitability",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-cash-forecast",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-41",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-cash-forecast",
+          "handler": "calculateCashScenario",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "rentabilidad",
+          "skillIds": [
+            "agency-cash-forecast"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "e555edb9-0ddc-49fb-a105-0719850e1313"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "delegation",
+        "capability_result",
+        "openui_view",
+        "text"
+      ]
+    },
+    {
+      "erp": "ERP-42",
+      "skillId": "agency-management-reporting",
+      "moduleKey": "profitability",
+      "actor": "user_demo_owner",
+      "text": "Run demo: agency-management-reporting",
+      "covered": true,
+      "answered": [],
+      "scenarioId": "ERP-42",
+      "scenarioVersion": "2.0.0",
+      "runStatus": "completed",
+      "toolCalls": [
+        {
+          "skillId": "agency-management-reporting",
+          "handler": "generateManagementSnapshot",
+          "status": "succeeded"
+        }
+      ],
+      "delegations": [
+        {
+          "subagentKey": "rentabilidad",
+          "skillIds": [
+            "agency-management-reporting"
+          ],
+          "state": "succeeded",
+          "childWorkflowRunId": "1b504d58-f551-4eb3-9623-57f8ebb422de"
+        }
+      ],
+      "partTypes": [
+        "user_text",
+        "proposal",
+        "text",
+        "delegation",
+        "capability_result",
+        "openui_view"
+      ]
+    }
+  ]
+}

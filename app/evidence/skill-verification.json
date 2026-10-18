@@ -1,0 +1,477 @@
+{
+  "generatedAt": "2026-10-18T15:40:09.177Z",
+  "handlerVersion": "chassis-2",
+  "harness": "tests/integration/skills-acceptance.test.ts",
+  "database": "ageos_test_coord",
+  "summary": {
+    "skills": 42,
+    "positivePassed": 42,
+    "negativePassed": 42,
+    "pending": 0,
+    "failed": 0
+  },
+  "skills": {
+    "agency-orchestrator": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:44.720Z",
+      "notes": [
+        "negative blocked: revision_conflict / outdated_revision"
+      ]
+    },
+    "agency-integrations": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:45.460Z",
+      "notes": [
+        "negative blocked: connection_revoked / connection_revoked"
+      ]
+    },
+    "agency-access-governance": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:46.146Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / self_role_change"
+      ]
+    },
+    "agency-master-data": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:46.562Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / conflicting_legal_identity"
+      ]
+    },
+    "agency-onboarding": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:47.038Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / billing_identity_missing"
+      ]
+    },
+    "agency-job-lifecycle": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:47.747Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / job_close_gate"
+      ]
+    },
+    "agency-contract-po": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:48.267Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / po_expired"
+      ]
+    },
+    "agency-budget-control": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:48.749Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / budget_available"
+      ]
+    },
+    "agency-fee-contracts": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:49.391Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / approved_budget_required"
+      ]
+    },
+    "agency-billing-requirements": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:49.781Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / billing_requirements_missing"
+      ]
+    },
+    "agency-tasks-timesheets": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:50.154Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / duplicate_timesheet"
+      ]
+    },
+    "agency-production-estimating": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:50.886Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / quote_incomplete"
+      ]
+    },
+    "agency-production": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:51.436Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / rights_expired"
+      ]
+    },
+    "agency-media-ranking": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "query",
+      "ranAt": "2026-10-18T15:39:51.867Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / no_comparable_sources"
+      ]
+    },
+    "agency-media-planning": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:52.354Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / exceeds_managed_media_authority"
+      ]
+    },
+    "agency-tv-radio-planning": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:52.952Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / unsupported_duration"
+      ]
+    },
+    "agency-ooh-planning": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:53.434Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / faces_unavailable"
+      ]
+    },
+    "agency-digital-planning": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "query",
+      "ranAt": "2026-10-18T15:39:53.911Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / account_unmapped"
+      ]
+    },
+    "agency-plan-changes": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:54.286Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / below_commitment"
+      ]
+    },
+    "agency-rate-cards-contracts": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:54.809Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / rate_card_expired"
+      ]
+    },
+    "agency-media-buying": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:55.353Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / plan_revision_not_approved"
+      ]
+    },
+    "agency-campaign-activation": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:55.769Z",
+      "notes": [
+        "negative blocked: connection_revoked / connection_revoked"
+      ]
+    },
+    "agency-campaign-optimization": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:56.163Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / stale_metrics_source"
+      ]
+    },
+    "agency-transmission-control": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:56.655Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / missing_spots_require_makegood"
+      ]
+    },
+    "agency-ooh-inventory": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:57.124Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / face_overlap"
+      ]
+    },
+    "agency-delivery-reconciliation": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:57.595Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / no_order_for_supplier"
+      ]
+    },
+    "agency-payables": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:58.020Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / duplicate_supplier_invoice"
+      ]
+    },
+    "agency-payment-run": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:58.435Z",
+      "notes": [
+        "negative blocked: insufficient_funds / insufficient_funds"
+      ]
+    },
+    "agency-cash-settlement": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:59.157Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / duplicate_bank_transaction"
+      ]
+    },
+    "agency-expenses": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:39:59.902Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / receipt_missing"
+      ]
+    },
+    "agency-client-billing": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:40:00.265Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / media_recovery_not_recognized"
+      ]
+    },
+    "agency-collections": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:40:00.865Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / allocation_exceeds_outstanding"
+      ]
+    },
+    "agency-rebates": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:40:01.587Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / outside_eligibility"
+      ]
+    },
+    "agency-tax-compliance": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "query",
+      "ranAt": "2026-10-18T15:40:01.946Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / no_fiscal_profile"
+      ]
+    },
+    "agency-general-ledger": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:40:02.324Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / journal_unbalanced"
+      ]
+    },
+    "agency-accruals-revaluation": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:40:04.152Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / fx_rate_missing"
+      ]
+    },
+    "agency-fixed-assets": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:40:05.164Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / residual_exceeds_cost"
+      ]
+    },
+    "agency-period-close": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:40:05.957Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / unmatched_supplier_invoice"
+      ]
+    },
+    "agency-profitability": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "query",
+      "ranAt": "2026-10-18T15:40:06.828Z",
+      "notes": [
+        "negative blocked: not_found"
+      ]
+    },
+    "agency-revenue-budget": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:40:07.406Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / baseline_locked"
+      ]
+    },
+    "agency-cash-forecast": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "query",
+      "ranAt": "2026-10-18T15:40:08.188Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / opening_cash_not_confirmed"
+      ]
+    },
+    "agency-management-reporting": {
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "handlerVersion": "chassis-2",
+      "handlerKind": "command",
+      "ranAt": "2026-10-18T15:40:08.763Z",
+      "notes": [
+        "negative blocked: blocked_by_rule / period_not_configured"
+      ]
+    }
+  }
+}

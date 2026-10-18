@@ -1,0 +1,22 @@
+// English messages: client record.
+export const clients = {
+  edit: "Edit in master data",
+  newJob: "New job for client",
+  tabsLabel: "Client sections",
+  tabs: { overview: "Overview", jobs: "Jobs", contracts: "Contracts", invoices: "Invoices", files: "Files" },
+  briefs: "Briefs",
+  noBriefs: "No brief recorded for this client.",
+  profile: "Billing profile",
+  owner: "Account owner",
+  billingCurrency: "Billing currency",
+  creditLimit: "Credit limit",
+  fiscalProfile: "Fiscal profile (demo)",
+  jobCount: "Jobs",
+  noJobs: "This client has no jobs yet.",
+  noContracts: "No contract or PO recorded for this client.",
+  contractsHelp: "Client authority. Internal approval never stands in for it.",
+  invoicesPendingTitle: "Client invoices — backend in progress",
+  invoicesPendingBody: "Invoices come from Billing & collections (agency-client-billing). This tab lists them once that service exposes them; no figures are shown meanwhile.",
+  noFiles: "No files on this client's jobs.",
+  openLibrary: "Open library",
+}

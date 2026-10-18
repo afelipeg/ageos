@@ -1,0 +1,1 @@
+ALTER TABLE "workflow_run" ADD CONSTRAINT "workflow_run_idem_uq" UNIQUE("tenant_id","skill_id","idempotency_key");

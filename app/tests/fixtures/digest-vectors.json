@@ -1,0 +1,69 @@
+{
+ "generator": "python3 json.dumps(sort_keys=True, separators=(\",\",\":\"), ensure_ascii=False, allow_nan=False) + sha256",
+ "canonicalization": "python-json-sorted-v1",
+ "vectors": [
+  {
+   "input": {
+    "b": 2,
+    "a": 1
+   },
+   "canonical": "{\"a\":1,\"b\":2}",
+   "sha256": "43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777"
+  },
+  {
+   "input": {
+    "payload": {
+     "jobId": "j-1",
+     "toAgencyFeeMinor": 2300000,
+     "currency": "USD",
+     "nested": {
+      "z": [
+       3,
+       2,
+       1
+      ],
+      "a": null,
+      "t": true
+     }
+    }
+   },
+   "canonical": "{\"payload\":{\"currency\":\"USD\",\"jobId\":\"j-1\",\"nested\":{\"a\":null,\"t\":true,\"z\":[3,2,1]},\"toAgencyFeeMinor\":2300000}}",
+   "sha256": "4e1d6d31837695b415e349ef23e2bc7acf5e40f6f0e2f997e7220c48da0e748e"
+  },
+  {
+   "input": {
+    "unicode": "Año ñandú — “quotes” 日本 😀",
+    "ctrl": "line\nbreak\ttab\u0001\u001f",
+    "quote": "\"q\" \\ back"
+   },
+   "canonical": "{\"ctrl\":\"line\\nbreak\\ttab\\u0001\\u001f\",\"quote\":\"\\\"q\\\" \\\\ back\",\"unicode\":\"Año ñandú — “quotes” 日本 😀\"}",
+   "sha256": "0e2d917dae0c347576e8bb39fda3b4f93fc832e3353b0199172a82bd3107a4d8"
+  },
+  {
+   "input": {
+    "é": 1,
+    "e": 2,
+    "Z": 3,
+    "a": 4,
+    "😀": 5,
+    "日": 6
+   },
+   "canonical": "{\"Z\":3,\"a\":4,\"e\":2,\"é\":1,\"日\":6,\"😀\":5}",
+   "sha256": "332e823ca4ceca2b629bf9d58aac3c787e004294534b43a0c3f8c2da8b8d195e"
+  },
+  {
+   "input": [],
+   "canonical": "[]",
+   "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+   "input": {
+    "big": 9007199254740991,
+    "neg": -42,
+    "zero": 0
+   },
+   "canonical": "{\"big\":9007199254740991,\"neg\":-42,\"zero\":0}",
+   "sha256": "2c94976a5419a37e61093c89e04772ce50c87ba9dfc421685a394a6a39dc54c9"
+  }
+ ]
+}

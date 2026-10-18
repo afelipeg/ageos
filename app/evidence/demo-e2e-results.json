@@ -1,0 +1,821 @@
+{
+  "generatedAt": "2026-10-18T15:16:56.828Z",
+  "startedAt": "2026-10-18T15:16:56.824Z",
+  "overall": "passed",
+  "baseURL": "http://localhost:3100",
+  "database": null,
+  "command": "pnpm exec playwright test",
+  "totals": {},
+  "journeys": {
+    "J01": {
+      "name": "Build and activate an agency",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 11,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    },
+    "J02": {
+      "name": "Client to production",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 8,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    },
+    "J03": {
+      "name": "Media plan to campaign",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 10,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    },
+    "J04": {
+      "name": "Scope change protects margin",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 7,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    },
+    "J05": {
+      "name": "Supplier reconciliation and payment",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 8,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    },
+    "J06": {
+      "name": "Accounting close and reporting",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 5,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    },
+    "J07": {
+      "name": "Assistant page and right panel",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 5,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    },
+    "J08": {
+      "name": "Files, connections and isolation",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 7,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    },
+    "J09": {
+      "name": "Operate the platform",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 6,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    },
+    "J10": {
+      "name": "All capabilities and guarded failures",
+      "status": "not_run",
+      "stepsPassed": 0,
+      "stepsTotal": 43,
+      "test": "tests/e2e/journeys.spec.ts",
+      "error": null,
+      "steps": []
+    }
+  },
+  "skills": {
+    "ERP-01": {
+      "skillId": "agency-orchestrator",
+      "moduleKey": "setup",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: revision_conflict / outdated_revision"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-02": {
+      "skillId": "agency-integrations",
+      "moduleKey": "setup",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: connection_revoked / connection_revoked"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-03": {
+      "skillId": "agency-access-governance",
+      "moduleKey": "setup",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / self_role_change"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-04": {
+      "skillId": "agency-master-data",
+      "moduleKey": "setup",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / conflicting_legal_identity"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-05": {
+      "skillId": "agency-onboarding",
+      "moduleKey": "clients-contracts",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / billing_identity_missing"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-06": {
+      "skillId": "agency-job-lifecycle",
+      "moduleKey": "clients-contracts",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / job_close_gate"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-07": {
+      "skillId": "agency-contract-po",
+      "moduleKey": "clients-contracts",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / po_expired"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-08": {
+      "skillId": "agency-budget-control",
+      "moduleKey": "clients-contracts",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / budget_available"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-09": {
+      "skillId": "agency-fee-contracts",
+      "moduleKey": "clients-contracts",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / approved_budget_required"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-10": {
+      "skillId": "agency-billing-requirements",
+      "moduleKey": "clients-contracts",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / billing_requirements_missing"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-11": {
+      "skillId": "agency-tasks-timesheets",
+      "moduleKey": "work-production",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / duplicate_timesheet"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-12": {
+      "skillId": "agency-production-estimating",
+      "moduleKey": "work-production",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / quote_incomplete"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-13": {
+      "skillId": "agency-production",
+      "moduleKey": "work-production",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / rights_expired"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-14": {
+      "skillId": "agency-media-ranking",
+      "moduleKey": "media-planning",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / no_comparable_sources"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-15": {
+      "skillId": "agency-media-planning",
+      "moduleKey": "media-planning",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / exceeds_managed_media_authority"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-16": {
+      "skillId": "agency-tv-radio-planning",
+      "moduleKey": "media-planning",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / unsupported_duration"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-17": {
+      "skillId": "agency-ooh-planning",
+      "moduleKey": "media-planning",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / faces_unavailable"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-18": {
+      "skillId": "agency-digital-planning",
+      "moduleKey": "media-planning",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / account_unmapped"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-19": {
+      "skillId": "agency-plan-changes",
+      "moduleKey": "media-planning",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / below_commitment"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-20": {
+      "skillId": "agency-rate-cards-contracts",
+      "moduleKey": "media-buying",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / rate_card_expired"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-21": {
+      "skillId": "agency-media-buying",
+      "moduleKey": "media-buying",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / plan_revision_not_approved"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-22": {
+      "skillId": "agency-campaign-activation",
+      "moduleKey": "media-buying",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: connection_revoked / connection_revoked"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-23": {
+      "skillId": "agency-campaign-optimization",
+      "moduleKey": "media-buying",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / stale_metrics_source"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-24": {
+      "skillId": "agency-transmission-control",
+      "moduleKey": "media-buying",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / missing_spots_require_makegood"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-25": {
+      "skillId": "agency-ooh-inventory",
+      "moduleKey": "media-buying",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / face_overlap"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-26": {
+      "skillId": "agency-delivery-reconciliation",
+      "moduleKey": "suppliers-payments",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / no_order_for_supplier"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-27": {
+      "skillId": "agency-payables",
+      "moduleKey": "suppliers-payments",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / duplicate_supplier_invoice"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-28": {
+      "skillId": "agency-payment-run",
+      "moduleKey": "suppliers-payments",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: insufficient_funds / insufficient_funds"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-29": {
+      "skillId": "agency-cash-settlement",
+      "moduleKey": "suppliers-payments",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / duplicate_bank_transaction"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-30": {
+      "skillId": "agency-expenses",
+      "moduleKey": "suppliers-payments",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / receipt_missing"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-31": {
+      "skillId": "agency-client-billing",
+      "moduleKey": "billing-collections",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / media_recovery_not_recognized"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-32": {
+      "skillId": "agency-collections",
+      "moduleKey": "billing-collections",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / allocation_exceeds_outstanding"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-33": {
+      "skillId": "agency-rebates",
+      "moduleKey": "billing-collections",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / outside_eligibility"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-34": {
+      "skillId": "agency-tax-compliance",
+      "moduleKey": "billing-collections",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / no_fiscal_profile"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-35": {
+      "skillId": "agency-general-ledger",
+      "moduleKey": "accounting-close",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / journal_unbalanced"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-36": {
+      "skillId": "agency-accruals-revaluation",
+      "moduleKey": "accounting-close",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / fx_rate_missing"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-37": {
+      "skillId": "agency-fixed-assets",
+      "moduleKey": "accounting-close",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / residual_exceeds_cost"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-38": {
+      "skillId": "agency-period-close",
+      "moduleKey": "accounting-close",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / unmatched_supplier_invoice"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-39": {
+      "skillId": "agency-profitability",
+      "moduleKey": "profitability",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: not_found"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-40": {
+      "skillId": "agency-revenue-budget",
+      "moduleKey": "profitability",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / baseline_locked"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-41": {
+      "skillId": "agency-cash-forecast",
+      "moduleKey": "profitability",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / opening_cash_not_confirmed"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    },
+    "ERP-42": {
+      "skillId": "agency-management-reporting",
+      "moduleKey": "profitability",
+      "positive": "passed",
+      "negative": "passed",
+      "replay": "passed",
+      "harness": {
+        "test": "tests/integration/skills-acceptance.test.ts",
+        "ranAt": "2026-10-18T15:10:05.911Z",
+        "notes": [
+          "negative blocked: blocked_by_rule / period_not_configured"
+        ]
+      },
+      "ui": {
+        "status": "not_run"
+      }
+    }
+  },
+  "routes": [],
+  "visual": [],
+  "assistant": [],
+  "tests": []
+}

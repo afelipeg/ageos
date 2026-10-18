@@ -1,0 +1,59 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# local agent config (per-developer, never shared)
+.claude/settings.local.json
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+
+# Internal dev tooling — exclude from the buyer package (not needed to run)
+.agents/
+.claude/skills/
+.mcp.json
+skills-lock.json
+AGENTS.md
+
+# local runtime data: private uploads, per-agent test files, WIP migrations
+/.data/
+
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+
+# playwright artifacts saved before outputDir moved under .data/
+/tests/e2e/.output/

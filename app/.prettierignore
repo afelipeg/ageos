@@ -1,0 +1,20 @@
+dist/
+node_modules/
+.next/
+.turbo/
+coverage/
+pnpm-lock.yaml
+.pnpm-store/
+
+# Vendored agent skills: pulled from upstream by .claude/skills/reui-template/scripts/update.sh.
+# Formatting them would churn third-party files and be overwritten on the next refresh.
+.agents/
+.claude/
+
+# CLI-owned primitives, vendored verbatim from ReUI/shadcn and re-fetched by
+# `shadcn add`. They ship exactly as the vendor wrote them, so formatting them
+# would be an edit to a file we do not own — and the next add would undo it.
+# The day-one 28px primitive edits are the only sanctioned change in here.
+components/ui/
+components/reui/
+hooks/use-mobile.ts
